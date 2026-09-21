@@ -1,0 +1,298 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Zenkai design tokens
+
+   One accent (azure) carries the brand. Green / amber / rose are reserved
+   exclusively for verification state and deadline urgency, so a colour never
+   means two things at once.
+   ========================================================================== */
+
+:root {
+  --bg: #fbfbfa;
+  --bg-subtle: #f4f4f2;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: #e4e4e1;
+  --border-strong: #d2d2ce;
+
+  --text: #16181d;
+  --text-muted: #61656e;
+  --text-faint: #6c7079;
+
+  --accent: #0b6bcb;
+  --accent-hover: #095aad;
+  --accent-soft: #e8f1fc;
+  --accent-ring: #0b6bcb33;
+
+  --verified: #0f7d4f;
+  --verified-soft: #e6f4ed;
+  --review: #9a6300;
+  --review-soft: #fdf2dd;
+  --expired: #b3261e;
+  --expired-soft: #fbeae9;
+
+  --critical: #b3261e;
+  --critical-soft: #fbeae9;
+  --soon: #9a6300;
+  --soon-soft: #fdf2dd;
+  --calm: #4a5058;
+  --calm-soft: #f0f0ee;
+
+  --shadow-sm: 0 1px 2px rgb(16 18 23 / 0.05);
+  --shadow-md: 0 4px 16px -4px rgb(16 18 23 / 0.10), 0 1px 2px rgb(16 18 23 / 0.04);
+  --shadow-lg: 0 16px 48px -12px rgb(16 18 23 / 0.16);
+
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0c0e12;
+  --bg-subtle: #121519;
+  --surface: #14171c;
+  --surface-raised: #1a1e24;
+  --border: #252a31;
+  --border-strong: #343a43;
+
+  --text: #eceef1;
+  --text-muted: #9aa1ab;
+  --text-faint: #79808a;
+
+  --accent: #4f9df7;
+  --accent-hover: #6cadf8;
+  --accent-soft: #14243a;
+  --accent-ring: #4f9df766;
+
+  --verified: #3fca8d;
+  --verified-soft: #0f2a1f;
+  --review: #e0a838;
+  --review-soft: #2d2415;
+  --expired: #f07a72;
+  --expired-soft: #2e1817;
+
+  --critical: #f07a72;
+  --critical-soft: #2e1817;
+  --soon: #e0a838;
+  --soon-soft: #2d2415;
+  --calm: #9aa1ab;
+  --calm-soft: #1b1f25;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 16px -4px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 16px 48px -12px rgb(0 0 0 / 0.6);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c0e12;
+    --bg-subtle: #121519;
+    --surface: #14171c;
+    --surface-raised: #1a1e24;
+    --border: #252a31;
+    --border-strong: #343a43;
+
+    --text: #eceef1;
+    --text-muted: #9aa1ab;
+    --text-faint: #79808a;
+
+    --accent: #4f9df7;
+    --accent-hover: #6cadf8;
+    --accent-soft: #14243a;
+    --accent-ring: #4f9df766;
+
+    --verified: #3fca8d;
+    --verified-soft: #0f2a1f;
+    --review: #e0a838;
+    --review-soft: #2d2415;
+    --expired: #f07a72;
+    --expired-soft: #2e1817;
+
+    --critical: #f07a72;
+    --critical-soft: #2e1817;
+    --soon: #e0a838;
+    --soon-soft: #2d2415;
+    --calm: #9aa1ab;
+    --calm-soft: #1b1f25;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 4px 16px -4px rgb(0 0 0 / 0.5), 0 1px 2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 16px 48px -12px rgb(0 0 0 / 0.6);
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-faint: var(--text-faint);
+
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-verified: var(--verified);
+  --color-verified-soft: var(--verified-soft);
+  --color-review: var(--review);
+  --color-review-soft: var(--review-soft);
+  --color-expired: var(--expired);
+  --color-expired-soft: var(--expired-soft);
+
+  --color-critical: var(--critical);
+  --color-critical-soft: var(--critical-soft);
+  --color-soon: var(--soon);
+  --color-soon-soft: var(--soon-soft);
+  --color-calm: var(--calm);
+  --color-calm-soft: var(--calm-soft);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono-family), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-card: var(--radius);
+  --radius-panel: var(--radius-lg);
+
+  --shadow-card: var(--shadow-sm);
+  --shadow-float: var(--shadow-md);
+  --shadow-panel: var(--shadow-lg);
+}
+
+/* --- Base ---------------------------------------------------------------- */
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* A single, consistent focus treatment across every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* Tabular figures keep metrics and countdowns from shifting as they update. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* --- Scrollbars ---------------------------------------------------------- */
+
+@media (pointer: fine) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 6px;
+    border: 3px solid var(--bg);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-faint);
+  }
+}
+
+/* --- Motion -------------------------------------------------------------- */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes radar-ping {
+  0%   { opacity: 0; transform: scale(0.6); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.9); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position: 200% 0; }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-subtle) 25%,
+    var(--border) 50%,
+    var(--bg-subtle) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Theme-conditional visibility ---------------------------------------
+   Lets a control show a different glyph per theme without React state, using
+   exactly the same precedence as the token blocks above.
+   ------------------------------------------------------------------------ */
+
+.theme-dark-only {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-light-only {
+  display: none;
+}
+:root[data-theme="dark"] .theme-dark-only {
+  display: inline-block;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .theme-light-only {
+    display: none;
+  }
+  :root:not([data-theme="light"]) .theme-dark-only {
+    display: inline-block;
+  }
+}

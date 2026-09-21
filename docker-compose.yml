@@ -1,0 +1,27 @@
+# PostgreSQL for local development.
+#
+#   docker compose up -d
+#   export DATABASE_URL=postgresql+psycopg://studentos:studentos@localhost:5432/studentos
+#   cd backend && .venv/bin/python -m app.seed.run --reset
+#
+# The application also runs on SQLite with no container at all — see DEVELOPMENT.md.
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: studentos-db
+    environment:
+      POSTGRES_USER: studentos
+      POSTGRES_PASSWORD: studentos
+      POSTGRES_DB: studentos
+    ports:
+      - "5432:5432"
+    volumes:
+      - studentos-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U studentos -d studentos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  studentos-pgdata:
