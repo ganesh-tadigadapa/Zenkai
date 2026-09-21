@@ -1,0 +1,98 @@
+# Render blueprint for the Zenkai backend.
+#
+# The frontend is NOT here: it stays on Vercel. This file describes the two
+# backend units — the FastAPI service and the discovery cron — plus the
+# PostgreSQL instance they share.
+#
+#   Render Dashboard -> New -> Blueprint -> point at this repository.
+#
+# Secrets are deliberately absent. Every `sync: false` value must be set by
+# hand in the dashboard on first deploy; Render will prompt for each one.
+# Nothing secret belongs in this file, because this file is committed.
+
+databases:
+  - name: zenkai-db
+    databaseName: zenkai
+    user: zenkai
+    plan: basic-256mb
+    postgresMajorVersion: "16"
+
+services:
+  # ---------------------------------------------------------------------
+  # The API. Stateless; scale it horizontally if it ever needs to be.
+  # ---------------------------------------------------------------------
+  - type: web
+    name: zenkai-api
+    runtime: python
+    plan: starter # not `free`: a free instance sleeps, and its cold start
+      # becomes the user's page load because the frontend is
+      # server-rendered.
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+
+      # SQLAlchemy needs an explicit driver in the scheme. Render's own
+      # connection string starts `postgres://`, which SQLAlchemy cannot
+      # resolve a driver from, so the value is entered by hand with the
+      # scheme rewritten to `postgresql+psycopg://`.
+      - key: DATABASE_URL
+        sync: false
+
+      - key: ENV
+        value: production # stops create_all() at startup AND demo fallback
+      - key: DEBUG
+        value: "false"
+
+      # The Vercel origin. allow_credentials=True is set on the middleware,
+      # so "*" is not a legal value here — origins must be explicit.
+      - key: CORS_ORIGINS
+        sync: false
+
+      - key: AI_PROVIDER
+        value: stub # heuristic-only; needs no API key
+
+      # Service-account secret for /api/v1/admin/*. Must match the Vercel
+      # project's ZENKAI_ADMIN_TOKEN exactly.
+      - key: ADMIN_TOKEN
+        sync: false
+
+      # The seeded demo accounts' passwords. The defaults in config.py are
+      # published in the README, so both MUST be overridden here.
+      - key: DEMO_USER_PASSWORD
+        sync: false
+      - key: DEMO_ADMIN_PASSWORD
+        sync: false
+
+      # ALLOW_DEMO_FALLBACK is deliberately NOT set. It defaults to off
+      # whenever ENV != development. Setting it true would let every
+      # signed-out visitor act as the same demo student.
+
+  # ---------------------------------------------------------------------
+  # Discovery. Ships suspended: it writes unreviewed records into the
+  # review queue, so the catalogue should be confirmed healthy first.
+  # Un-suspend from the dashboard when you want it running.
+  # ---------------------------------------------------------------------
+  - type: cron
+    name: zenkai-discovery
+    runtime: python
+    plan: starter
+    rootDir: backend
+    schedule: "0 */12 * * *" # matches DEFAULT_CHECK_FREQUENCY_MINUTES=720
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run_discovery.py
+    suspended: "yes"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DATABASE_URL
+        sync: false
+      - key: ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: AI_PROVIDER
+        value: stub
