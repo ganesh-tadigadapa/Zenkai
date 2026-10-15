@@ -1,0 +1,29 @@
+# Keeps the free Render API awake.
+#
+# A free instance sleeps after 15 idle minutes and takes 30-60s to wake, which
+# lands on whoever opens the site next. Pinging every 10 minutes keeps it up;
+# one always-on service fits inside Render's 750 free instance-hours a month.
+#
+# It pings the website's /api/health route, which calls the API's /health. That
+# touches no database, so Neon's compute still suspends when idle.
+name: keep-warm
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: keep-warm
+  cancel-in-progress: true
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping the API through the website
+        run: |
+          curl --silent --show-error --fail-with-body --max-time 120 \
+            --retry 2 --retry-delay 10 \
+            https://zenkai-iota.vercel.app/api/health
