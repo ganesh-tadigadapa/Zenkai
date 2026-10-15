@@ -36,7 +36,36 @@ jobs:
           python-version: "3.11.9"
           cache: pip
           cache-dependency-path: backend/requirements.txt
-      - name: Check the database secret is set
-        run: test -n "$DATABASE_URL" || { echo "::error::Repository secret ZENK_AI_DB is not set"; exit 1; }
+      - name: Check the database secret
+        # Reports what is wrong with the connection string without printing
+        # the password: stray whitespace or quotes, the scheme, the host's
+        # shape, and whether the host resolves from here.
+        shell: python
+        run: |
+          import os, socket, sys
+          from urllib.parse import urlsplit
+          raw = os.environ.get("DATABASE_URL", "")
+          if not raw:
+              sys.exit("::error::Repository secret ZENK_AI_DB is not set")
+          if raw != raw.strip():
+              print("::warning::the secret has leading or trailing whitespace")
+          url = raw.strip().strip("'\"")
+          if url != raw.strip():
+              print("::warning::the secret is wrapped in quotes")
+          if url.startswith("DATABASE_URL="):
+              print("::warning::the secret starts with 'DATABASE_URL=' — paste only the value")
+              url = url.split("=", 1)[1]
+          parts = urlsplit(url)
+          host = parts.hostname or ""
+          shown = host if host.endswith(".neon.tech") else (host[:4] + "…" if host else "(none)")
+          print(f"scheme={parts.scheme or '(none)'} host={shown} database={parts.path.lstrip('/') or '(none)'}")
+          if not host:
+              sys.exit("::error::no host found — the secret is not a postgresql:// URL")
+          try:
+              socket.getaddrinfo(host, parts.port or 5432)
+          except OSError as exc:
+              hint = " (a Render-internal host only resolves inside Render — use the external/Neon URL)" if host.startswith("dpg-") else ""
+              sys.exit(f"::error::host does not resolve: {exc}{hint}")
+          print("host resolves")
       - run: pip install -r requirements.txt
       - run: python run_discovery.py
