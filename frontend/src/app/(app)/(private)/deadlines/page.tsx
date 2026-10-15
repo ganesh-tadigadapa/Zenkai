@@ -139,7 +139,7 @@ export default async function DeadlinesPage({
             caption="Last chance to apply."
             tone="critical"
             opportunities={payload.today}
-            total={payload.counts.today}
+            total={payload.counts?.today ?? payload.today.length}
             seeAllHref="/opportunities?sort=deadline&deadline_within_days=1"
           />
           <Group
@@ -147,7 +147,7 @@ export default async function DeadlinesPage({
             caption="Closing within the next seven days."
             tone="soon"
             opportunities={payload.this_week}
-            total={payload.counts.this_week}
+            total={payload.counts?.this_week ?? payload.this_week.length}
             seeAllHref="/opportunities?sort=deadline&deadline_within_days=7"
           />
           <Group
@@ -155,7 +155,7 @@ export default async function DeadlinesPage({
             caption="Further out — worth preparing for."
             tone="calm"
             opportunities={payload.upcoming}
-            total={payload.counts.upcoming}
+            total={payload.counts?.upcoming ?? payload.upcoming.length}
             seeAllHref="/opportunities?sort=deadline&deadline_within_days=90"
           />
         </div>
