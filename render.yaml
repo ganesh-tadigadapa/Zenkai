@@ -1,8 +1,9 @@
-# Render blueprint for the Zenkai backend.
+# Render blueprint for the Zenkai API — free tier.
 #
-# The frontend is NOT here: it stays on Vercel. This file describes the two
-# backend units — the FastAPI service and the discovery cron — plus the
-# PostgreSQL instance they share.
+# The frontend is NOT here: it stays on Vercel. The database is NOT here
+# either: it is a free Neon Postgres, because Render deletes free databases
+# after 30 days. Discovery runs on GitHub Actions
+# (.github/workflows/discovery.yml), because Render has no free cron.
 #
 #   Render Dashboard -> New -> Blueprint -> point at this repository.
 #
@@ -10,41 +11,33 @@
 # hand in the dashboard on first deploy; Render will prompt for each one.
 # Nothing secret belongs in this file, because this file is committed.
 
-databases:
-  - name: zenkai-db
-    databaseName: zenkai
-    user: zenkai
-    plan: basic-256mb
-    postgresMajorVersion: "16"
-
 services:
   # ---------------------------------------------------------------------
-  # The API. Stateless; scale it horizontally if it ever needs to be.
+  # The API. A free instance sleeps after 15 minutes idle, and because the
+  # frontend is server-rendered, waking it becomes the first visitor's page
+  # load (roughly 30-60s). Move to `starter` to remove that.
   # ---------------------------------------------------------------------
   - type: web
     name: zenkai-api
     runtime: python
-    plan: starter # not `free`: a free instance sleeps, and its cold start
-      # becomes the user's page load because the frontend is
-      # server-rendered.
+    plan: free
     rootDir: backend
-    buildCommand: pip install -r requirements.txt
     # ENV=production skips create_all() at startup, so the schema and the
-    # catalogue are put in place here. The seeder is idempotent: it creates
-    # missing tables and skips records that already exist.
-    preDeployCommand: python -m app.seed.run
+    # catalogue are put in place here. Free instances have no pre-deploy
+    # step, so seeding runs in the build, which can reach Neon over the
+    # public internet. The seeder is idempotent: it creates missing tables
+    # and skips records that already exist.
+    buildCommand: pip install -r requirements.txt && python -m app.seed.run
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
 
-      # Render's connection string starts `postgres://`; config.py rewrites
-      # it to `postgresql+psycopg://` so SQLAlchemy picks the psycopg driver.
+      # Neon connection string (postgresql://...?sslmode=require). config.py
+      # rewrites the scheme to `postgresql+psycopg://`.
       - key: DATABASE_URL
-        fromDatabase:
-          name: zenkai-db
-          property: connectionString
+        sync: false
 
       - key: ENV
         value: production # stops create_all() at startup AND demo fallback
@@ -74,32 +67,3 @@ services:
       # ALLOW_DEMO_FALLBACK is deliberately NOT set. It defaults to off
       # whenever ENV != development. Setting it true would let every
       # signed-out visitor act as the same demo student.
-
-  # ---------------------------------------------------------------------
-  # Discovery: every 6 hours, reads each due, enabled source — Devpost, MLH,
-  # Unstop, SimplifyJobs, Microsoft Learn, the GitHub Student Pack, Outreachy
-  # and the scholarship feeds. Adds new listings, applies changes to ones it
-  # already holds, closes ones a source withdrew and ones whose deadline has
-  # passed. New records land as "Needs verification" until reviewed.
-  # ---------------------------------------------------------------------
-  - type: cron
-    name: zenkai-discovery
-    runtime: python
-    plan: starter
-    rootDir: backend
-    schedule: "0 */6 * * *" # the fastest source cadence (check_frequency "high")
-    buildCommand: pip install -r requirements.txt
-    startCommand: python run_discovery.py
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.9
-      - key: DATABASE_URL
-        fromDatabase:
-          name: zenkai-db
-          property: connectionString
-      - key: ENV
-        value: production
-      - key: DEBUG
-        value: "false"
-      - key: AI_PROVIDER
-        value: stub

@@ -1,0 +1,40 @@
+# Discovery: every 6 hours, reads each due, enabled source — Devpost, MLH,
+# Unstop, SimplifyJobs, Microsoft Learn, the GitHub Student Pack, Outreachy
+# and the scholarship feeds. Adds new listings, applies changes to ones it
+# already holds, closes ones a source withdrew and ones whose deadline has
+# passed. New records land as "Needs verification" until reviewed.
+#
+# Runs here rather than on Render because Render has no free cron. Needs one
+# repository secret: DATABASE_URL, the same Neon string the API uses.
+name: discovery
+
+on:
+  schedule:
+    - cron: "0 */6 * * *" # the fastest source cadence (check_frequency "high")
+  workflow_dispatch: {}
+
+concurrency:
+  group: discovery
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      ENV: production
+      DEBUG: "false"
+      AI_PROVIDER: stub
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.9"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: python run_discovery.py

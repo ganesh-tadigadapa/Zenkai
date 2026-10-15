@@ -79,9 +79,15 @@ Then seed the catalogue:
 python -m app.seed.run
 ```
 
-On Render, `render.yaml` runs this as the `preDeployCommand` on every deploy,
-and wires `DATABASE_URL` straight from the `zenkai-db` database. A `postgres://`
-URL is rewritten to `postgresql+psycopg://` automatically.
+On Render, `render.yaml` deploys the API on the free plan and runs the seeder
+as part of the build (free instances have no pre-deploy step). The database is
+a free [Neon](https://neon.tech) Postgres; paste its connection string as
+`DATABASE_URL`. A `postgres://` or `postgresql://` URL is rewritten to
+`postgresql+psycopg://` automatically.
+
+Discovery runs on GitHub Actions (`.github/workflows/discovery.yml`) every 6
+hours, since Render has no free cron. Add the same Neon string as the
+repository secret `DATABASE_URL`, then trigger it once from the Actions tab.
 
 ### Before a real launch
 
