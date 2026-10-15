@@ -109,3 +109,15 @@ def test_dashboard_stats_reflect_the_database(db, client, student):
     assert stats["total"] == 3
     assert stats["closing_soon"] >= 1
     assert stats["saved"] == 1
+
+
+def test_deadline_groups_are_capped_but_report_their_full_size(db, client):
+    for n in range(5):
+        make_opportunity(db, title=f"Closing soon {n}", deadline_days=3)
+    db.flush()
+
+    body = client.get("/api/v1/deadlines?per_group=2").json()
+
+    assert len(body["this_week"]) == 2
+    assert body["counts"]["this_week"] == 5
+    assert body["total"] == 5

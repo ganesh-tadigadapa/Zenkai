@@ -103,18 +103,45 @@ def list_opportunities(
     saved = saved_ids(db, user.id if user else None)
     now = datetime.now(timezone.utc)
 
-    decorated = [(row, decorate(row, prefs=prefs, saved=saved, now=now)) for row in rows]
-
     if q.sort == "relevance":
-        decorated.sort(
-            key=lambda pair: (
-                -(pair[1]["match"]["score"] if pair[1]["match"] else 0),
-                pair[0].deadline or datetime.max.replace(tzinfo=timezone.utc),
+        # Every candidate is needed to rank, but only the page being shown is
+        # decorated: scoring is cheap, building a card for all 1,400 is not.
+        if prefs:
+            ranked = sorted(
+                ((row, score_opportunity(row, prefs, now).score) for row in rows),
+                key=_relevance_key,
             )
-        )
-        decorated = decorated[q.offset : q.offset + q.limit]
+            rows = [row for row, _ in ranked]
+        rows = rows[q.offset : q.offset + q.limit]
 
+    decorated = [(row, decorate(row, prefs=prefs, saved=saved, now=now)) for row in rows]
     return decorated, total
+
+
+_FAR_FUTURE = datetime.max.replace(tzinfo=timezone.utc)
+
+
+def _relevance_key(pair: tuple[Opportunity, int]):
+    """Best match first; ties go to whichever closes soonest."""
+    row, score = pair
+    return (-score, _aware(row.deadline) if row.deadline else _FAR_FUTURE)
+
+
+def scored_candidates(db: Session, user: User | None) -> list[tuple[Opportunity, int]]:
+    """Every public opportunity with this user's match score, best first.
+
+    Computed once per dashboard view and shared by the recommendations shelf
+    and the "matched to you" count, which previously each loaded the catalogue.
+    Empty when the user has no preferences to match against.
+    """
+    if not (user and user.preferences):
+        return []
+    rows, _ = repo.search(db, _public(OpportunityQuery(sort="relevance", limit=1)))
+    now = datetime.now(timezone.utc)
+    return sorted(
+        ((row, score_opportunity(row, user.preferences, now).score) for row in rows),
+        key=_relevance_key,
+    )
 
 
 def get_detail(db: Session, identifier: str, user: User | None = None) -> tuple[Opportunity, dict] | None:
@@ -139,15 +166,29 @@ def _public(q: OpportunityQuery) -> OpportunityQuery:
     return q
 
 
-def recommended(db: Session, user: User | None, limit: int = 6):
-    q = _public(OpportunityQuery(sort="relevance", limit=limit))
-    items, _ = list_opportunities(db, q, user)
-    return items[:limit]
+def recommended(
+    db: Session,
+    user: User | None,
+    limit: int = 6,
+    scored: list[tuple[Opportunity, int]] | None = None,
+):
+    if not (user and user.preferences):
+        # Nothing to rank by: soonest-closing first, straight from the database.
+        items, _ = list_opportunities(db, _public(OpportunityQuery(sort="deadline", limit=limit)), user)
+        return items
+    scored = scored if scored is not None else scored_candidates(db, user)
+    saved = saved_ids(db, user.id)
+    now = datetime.now(timezone.utc)
+    return [
+        (row, decorate(row, prefs=user.preferences, saved=saved, now=now))
+        for row, _ in scored[:limit]
+    ]
 
 
 def new_today(db: Session, user: User | None, limit: int = 6):
     cutoff = datetime.now(timezone.utc) - timedelta(hours=NEW_TODAY_HOURS)
-    q = _public(OpportunityQuery(sort="newest", limit=200))
+    # Newest first, so the fresh rows are a prefix of the newest `limit`.
+    q = _public(OpportunityQuery(sort="newest", limit=limit))
     rows, _ = repo.search(db, q)
     fresh = [r for r in rows if _aware(r.discovered_at) >= cutoff][:limit]
     if not fresh:  # seeded databases can be older than 24h — fall back to newest
@@ -173,7 +214,9 @@ def _aware(value: datetime) -> datetime:
     return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
 
 
-def stats(db: Session, user: User | None) -> dict:
+def stats(
+    db: Session, user: User | None, scored: list[tuple[Opportunity, int]] | None = None
+) -> dict:
     now = datetime.now(timezone.utc)
     today = repo.start_of_day(now)
     live = (
@@ -213,8 +256,8 @@ def stats(db: Session, user: User | None) -> dict:
 
     matched = 0
     if user and user.preferences:
-        rows, _ = repo.search(db, _public(OpportunityQuery(limit=500)))
-        matched = sum(1 for r in rows if score_opportunity(r, user.preferences, now).score >= 60)
+        scored = scored if scored is not None else scored_candidates(db, user)
+        matched = sum(1 for _, score in scored if score >= 60)
 
     return {
         "total": int(total),

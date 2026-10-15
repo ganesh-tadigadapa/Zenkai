@@ -284,6 +284,8 @@ export interface DeadlinesPayload {
   this_week: Opportunity[];
   upcoming: Opportunity[];
   total: number;
+  /** Full size of each group; the lists carry only the nearest few. */
+  counts: { today: number; this_week: number; upcoming: number };
 }
 
 export interface AdminStats {

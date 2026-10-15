@@ -31,9 +31,11 @@ def dashboard(
     def shelf(pairs) -> list[OpportunityOut]:
         return [_serialize(p) for p in pairs]
 
+    # Scored once, shared by the shelf and the "matched" count.
+    scored = svc.scored_candidates(db, user)
     return {
-        "stats": svc.stats(db, user),
-        "recommended": shelf(svc.recommended(db, user, limit)),
+        "stats": svc.stats(db, user, scored=scored),
+        "recommended": shelf(svc.recommended(db, user, limit, scored=scored)),
         "new_today": shelf(svc.new_today(db, user, limit)),
         "closing_soon": shelf(svc.closing_soon(db, user, limit)),
         "recently_updated": shelf(svc.recently_updated(db, user, limit)),

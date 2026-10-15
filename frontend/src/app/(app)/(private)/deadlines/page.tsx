@@ -21,11 +21,15 @@ function Group({
   caption,
   tone,
   opportunities,
+  total,
+  seeAllHref,
 }: {
   title: string;
   caption: string;
   tone: "critical" | "soon" | "calm";
   opportunities: Opportunity[];
+  total: number;
+  seeAllHref: string;
 }) {
   if (opportunities.length === 0) return null;
 
@@ -47,7 +51,7 @@ function Group({
       <div className="mb-3 flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
         <h2 className="text-[15px] font-semibold tracking-[-0.01em] text-text">{title}</h2>
         <span className={cx("tnum rounded-md px-1.5 py-0.5 text-[11px] font-semibold", count)}>
-          {opportunities.length}
+          {total}
         </span>
         <p className="text-[12.5px] text-muted">{caption}</p>
       </div>
@@ -56,6 +60,14 @@ function Group({
           <OpportunityRow key={opportunity.id} opportunity={opportunity} />
         ))}
       </div>
+      {total > opportunities.length ? (
+        <Link
+          href={seeAllHref}
+          className="mt-3 inline-block text-[12.5px] font-medium text-accent hover:underline"
+        >
+          See all {total} →
+        </Link>
+      ) : null}
     </section>
   );
 }
@@ -127,18 +139,24 @@ export default async function DeadlinesPage({
             caption="Last chance to apply."
             tone="critical"
             opportunities={payload.today}
+            total={payload.counts.today}
+            seeAllHref="/opportunities?sort=deadline&deadline_within_days=1"
           />
           <Group
             title="This week"
             caption="Closing within the next seven days."
             tone="soon"
             opportunities={payload.this_week}
+            total={payload.counts.this_week}
+            seeAllHref="/opportunities?sort=deadline&deadline_within_days=7"
           />
           <Group
             title="Upcoming"
             caption="Further out — worth preparing for."
             tone="calm"
             opportunities={payload.upcoming}
+            total={payload.counts.upcoming}
+            seeAllHref="/opportunities?sort=deadline&deadline_within_days=90"
           />
         </div>
       )}

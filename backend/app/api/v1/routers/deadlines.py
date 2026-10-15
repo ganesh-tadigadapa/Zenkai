@@ -18,6 +18,8 @@ class DeadlinesOut(BaseModel):
     this_week: list[OpportunityOut]
     upcoming: list[OpportunityOut]
     total: int
+    #: Full size of each group; the lists above carry at most `per_group`.
+    counts: dict[str, int]
 
 
 @router.get("", response_model=DeadlinesOut, summary="Deadlines bucketed by urgency")
@@ -26,7 +28,8 @@ def deadlines(
     user: User | None = Depends(get_optional_user),
     horizon_days: int = Query(default=60, ge=1, le=365),
     saved_only: bool = False,
+    per_group: int = Query(default=deadline_service.DEFAULT_PER_GROUP, ge=1, le=500),
 ):
-    buckets = deadline_service.grouped(db, user, horizon_days, saved_only)
+    buckets, counts = deadline_service.grouped(db, user, horizon_days, saved_only, per_group)
     out = {key: [_serialize(p) for p in value] for key, value in buckets.items()}
-    return DeadlinesOut(**out, total=sum(len(v) for v in out.values()))
+    return DeadlinesOut(**out, total=sum(counts.values()), counts=counts)
