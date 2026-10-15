@@ -159,13 +159,6 @@ export const api = {
   categories: () =>
     request<CategoryInfo[]>("/api/v1/categories", { revalidate: 120, anonymous: true }),
 
-  /** Anonymous listing for the landing page: cacheable, identical for everyone. */
-  publicFeed: (params: Parameters<typeof qs>[0] = {}) =>
-    request<Page<Opportunity>>(`/api/v1/opportunities${qs(params)}`, {
-      revalidate: 120,
-      anonymous: true,
-    }),
-
   dashboard: (limit = 6) =>
     request<DashboardPayload>(`/api/v1/dashboard${qs({ limit })}`),
 
