@@ -618,6 +618,549 @@ CERTIFICATIONS = [
         benefits=["Free certificate", "Self-paced modules"],
         status="needs_review",
     ),
+    dict(
+        title="AWS Certified Solutions Architect — Associate",
+        org="Amazon Web Services", org_url="https://aws.amazon.com",
+        category="certifications", type="exam",
+        summary="AWS's associate-level architecture certification, the usual next step after Cloud Practitioner.",
+        description=(
+            "The AWS Certified Solutions Architect — Associate validates the ability to design "
+            "solutions on AWS: choosing services, designing for resilience and performance, and "
+            "designing secure and cost-optimised architectures. AWS publishes free preparatory "
+            "training on Skill Builder along with an exam guide and sample questions; the exam "
+            "itself is paid and is taken at a test centre or online with a proctor."
+        ),
+        eligibility="No formal prerequisites. AWS recommends around one year of hands-on AWS experience.",
+        who_can_apply=["Students", "Developers", "Cloud engineers"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+        source_url="https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+        skills=["AWS", "Cloud Architecture", "Networking", "Security"],
+        tags=["cloud", "aws", "certification", "associate"],
+        benefits=["Widely recognised cloud architecture credential", "Free exam preparation on AWS Skill Builder"],
+        status="curated",
+    ),
+    dict(
+        title="AWS Certified AI Practitioner",
+        org="Amazon Web Services", org_url="https://aws.amazon.com",
+        category="certifications", type="exam",
+        summary="AWS's foundational certification covering AI, machine learning and generative AI on AWS.",
+        description=(
+            "The AWS Certified AI Practitioner is a foundational credential covering artificial "
+            "intelligence, machine learning and generative AI concepts, and the AWS services that "
+            "implement them. It is aimed at people who use or work alongside AI systems rather "
+            "than at engineers building models from scratch. Preparatory material is published "
+            "free on AWS Skill Builder; the exam is paid."
+        ),
+        eligibility="No formal prerequisites. AWS recommends familiarity with AWS services and AI concepts.",
+        who_can_apply=["Students", "Analysts", "Developers"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://aws.amazon.com/certification/certified-ai-practitioner/",
+        source_url="https://aws.amazon.com/certification/certified-ai-practitioner/",
+        skills=["AI", "Machine Learning", "Generative AI", "AWS"],
+        tags=["ai", "aws", "certification", "foundational"],
+        benefits=["Foundational AI credential from a major cloud provider", "Free preparation material"],
+        status="curated",
+    ),
+    dict(
+        title="Microsoft Certified: Azure Fundamentals (AZ-900)",
+        org="Microsoft", org_url="https://learn.microsoft.com",
+        category="certifications", type="exam",
+        summary="Microsoft's entry-level Azure certification, with free training on Microsoft Learn.",
+        description=(
+            "Azure Fundamentals covers cloud concepts, core Azure services, Azure management and "
+            "governance, and Azure pricing and support. The full learning path is free on "
+            "Microsoft Learn; the AZ-900 exam is paid, though Microsoft periodically offers "
+            "reduced or waived exam pricing for verified students. Confirm current pricing and "
+            "student eligibility on the official certification page."
+        ),
+        eligibility="No prerequisites. Suitable as a first cloud certification.",
+        who_can_apply=["Students", "Career changers", "Non-technical roles"],
+        location="Global", remote=True, cost="exam_fee", rolling=True,
+        url="https://learn.microsoft.com/en-us/credentials/certifications/azure-fundamentals/",
+        source_url="https://learn.microsoft.com/en-us/credentials/certifications/azure-fundamentals/",
+        skills=["Azure", "Cloud", "Governance"],
+        tags=["cloud", "azure", "certification", "entry-level"],
+        benefits=["Free learning path on Microsoft Learn", "Recognised entry-level cloud credential"],
+        status="curated",
+    ),
+    dict(
+        title="Microsoft Certified: Azure AI Fundamentals (AI-900)",
+        org="Microsoft", org_url="https://learn.microsoft.com",
+        category="certifications", type="exam",
+        summary="Foundational certification in AI and machine learning workloads on Azure.",
+        description=(
+            "Azure AI Fundamentals covers machine learning concepts, computer vision, natural "
+            "language processing and generative AI, and the Azure services that provide them. "
+            "Microsoft Learn hosts the full learning path free of charge; the AI-900 exam is "
+            "paid. It carries no prerequisites and assumes no data science background."
+        ),
+        eligibility="No prerequisites. Familiarity with basic computing concepts is enough.",
+        who_can_apply=["Students", "Analysts", "Developers"],
+        location="Global", remote=True, cost="exam_fee", rolling=True,
+        url="https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/",
+        source_url="https://learn.microsoft.com/en-us/credentials/certifications/azure-ai-fundamentals/",
+        skills=["Azure", "AI", "Machine Learning"],
+        tags=["ai", "azure", "certification", "entry-level"],
+        benefits=["Free learning path on Microsoft Learn", "Vendor-recognised AI fundamentals credential"],
+        status="curated",
+    ),
+    dict(
+        title="Google Cloud Associate Cloud Engineer",
+        org="Google Cloud", org_url="https://cloud.google.com",
+        category="certifications", type="exam",
+        summary="Google Cloud's associate certification for deploying and operating cloud workloads.",
+        description=(
+            "The Associate Cloud Engineer certification covers setting up a cloud environment, "
+            "planning and configuring solutions, deploying and operating them, and configuring "
+            "access and security on Google Cloud. Google publishes an exam guide, sample "
+            "questions and a learning path on Cloud Skills Boost; the exam is paid and is taken "
+            "remotely with a proctor or at a test centre."
+        ),
+        eligibility="No formal prerequisites. Google recommends around six months of hands-on Google Cloud experience.",
+        who_can_apply=["Students", "Cloud engineers", "Developers"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://cloud.google.com/learn/certification/cloud-engineer",
+        source_url="https://cloud.google.com/learn/certification/cloud-engineer",
+        skills=["Google Cloud", "Kubernetes", "Networking", "IAM"],
+        tags=["cloud", "gcp", "certification", "associate"],
+        benefits=["Recognised Google Cloud credential", "Official learning path on Cloud Skills Boost"],
+        status="curated",
+    ),
+    dict(
+        title="Google Data Analytics Professional Certificate",
+        org="Google", org_url="https://grow.google",
+        category="certifications", type="certification",
+        summary="Google's beginner data analytics programme on Coursera, with a hands-on capstone.",
+        description=(
+            "The Google Data Analytics Professional Certificate is a multi-course programme "
+            "covering the analysis process, spreadsheets, SQL, R, Tableau and data visualisation, "
+            "finishing with a capstone case study. It is delivered on Coursera under a "
+            "subscription, and Coursera offers financial aid to learners who apply. No degree or "
+            "prior experience is required."
+        ),
+        eligibility="Open to anyone; no degree or prior experience required.",
+        who_can_apply=["Students", "Career changers", "Beginners"],
+        location="Global", remote=True, cost="subscription", rolling=True,
+        url="https://grow.google/certificates/data-analytics/",
+        source_url="https://grow.google/certificates/data-analytics/",
+        skills=["SQL", "R", "Tableau", "Spreadsheets", "Data Analysis"],
+        tags=["data", "analytics", "beginner", "career-certificate"],
+        benefits=["Portfolio capstone project", "Financial aid available through Coursera"],
+        status="curated",
+    ),
+    dict(
+        title="Meta Front-End Developer Professional Certificate",
+        org="Meta", org_url="https://about.meta.com",
+        category="certifications", type="certification",
+        summary="Meta's front-end development programme on Coursera, built around React.",
+        description=(
+            "Meta's Front-End Developer Professional Certificate covers HTML, CSS, JavaScript, "
+            "version control, React and UI/UX principles, ending in a portfolio project. It is "
+            "delivered on Coursera under a subscription, with financial aid available on "
+            "application. No prior programming experience is assumed."
+        ),
+        eligibility="Open to anyone; no prior experience required.",
+        who_can_apply=["Students", "Career changers", "Beginners"],
+        location="Global", remote=True, cost="subscription", rolling=True,
+        url="https://www.coursera.org/professional-certificates/meta-front-end-developer",
+        source_url="https://www.coursera.org/professional-certificates/meta-front-end-developer",
+        skills=["React", "JavaScript", "HTML", "CSS", "UI/UX"],
+        tags=["web-development", "react", "front-end", "career-certificate"],
+        benefits=["Portfolio project", "Financial aid available through Coursera"],
+        status="curated",
+    ),
+    dict(
+        title="IBM Data Science Professional Certificate",
+        org="IBM", org_url="https://www.ibm.com",
+        category="certifications", type="certification",
+        summary="IBM's data science programme on Coursera, covering Python, SQL and machine learning.",
+        description=(
+            "IBM's Data Science Professional Certificate is a multi-course programme covering "
+            "Python, databases and SQL, data analysis and visualisation, machine learning and a "
+            "final capstone project, with hands-on work in Jupyter notebooks. It is delivered on "
+            "Coursera under a subscription, with financial aid available on application."
+        ),
+        eligibility="Open to anyone; no prior programming or data science experience required.",
+        who_can_apply=["Students", "Career changers", "Beginners"],
+        location="Global", remote=True, cost="subscription", rolling=True,
+        url="https://www.coursera.org/professional-certificates/ibm-data-science",
+        source_url="https://www.coursera.org/professional-certificates/ibm-data-science",
+        skills=["Python", "SQL", "Machine Learning", "Data Visualisation"],
+        tags=["data-science", "python", "machine-learning", "career-certificate"],
+        benefits=["Capstone project for a portfolio", "Financial aid available through Coursera"],
+        status="curated",
+    ),
+    dict(
+        title="DeepLearning.AI Machine Learning Specialization",
+        org="DeepLearning.AI", org_url="https://www.deeplearning.ai",
+        category="certifications", type="course",
+        summary="Andrew Ng's foundational machine learning specialization, auditable free on Coursera.",
+        description=(
+            "The Machine Learning Specialization, taught by Andrew Ng, covers supervised learning, "
+            "advanced learning algorithms, and unsupervised learning with recommender systems and "
+            "reinforcement learning, using Python, NumPy and scikit-learn. Coursera allows the "
+            "course material to be audited at no cost; a certificate requires a paid subscription, "
+            "for which financial aid can be requested."
+        ),
+        eligibility="Basic Python and high-school mathematics are recommended.",
+        who_can_apply=["Students", "Engineers", "Beginners in ML"],
+        location="Global", remote=True, cost="freemium", rolling=True,
+        url="https://www.coursera.org/specializations/machine-learning-introduction",
+        source_url="https://www.deeplearning.ai/courses/machine-learning-specialization/",
+        skills=["Machine Learning", "Python", "NumPy", "scikit-learn"],
+        tags=["machine-learning", "ai", "python", "foundational"],
+        benefits=["Course material can be audited free", "Financial aid available for the certificate"],
+        status="curated",
+    ),
+    dict(
+        title="Harvard CS50x — Introduction to Computer Science",
+        org="Harvard University", org_url="https://www.harvard.edu",
+        category="certifications", type="course",
+        summary="Harvard's introductory computer science course, free to take on edX.",
+        description=(
+            "CS50x is Harvard's introduction to computer science and programming, covering "
+            "abstraction, algorithms, data structures, memory, and programming in C, Python and "
+            "SQL alongside web development with HTML, CSS and JavaScript. The course material and "
+            "problem sets are free; a verified certificate from edX is paid, and Harvard also "
+            "issues a free CS50 certificate on completion. Check both options on the course page."
+        ),
+        eligibility="Open to anyone. No prior programming experience required.",
+        who_can_apply=["Anyone", "Students", "Self-taught programmers"],
+        location="Global", remote=True, cost="freemium", rolling=True,
+        url="https://cs50.harvard.edu/x/",
+        source_url="https://pll.harvard.edu/course/cs50-introduction-computer-science",
+        skills=["C", "Python", "SQL", "Algorithms", "Data Structures"],
+        tags=["computer-science", "free", "university", "foundational"],
+        benefits=["Free course material and problem sets", "University-issued certificate on completion"],
+        status="curated",
+    ),
+    dict(
+        title="CompTIA Security+",
+        org="CompTIA", org_url="https://www.comptia.org",
+        category="certifications", type="exam",
+        summary="A vendor-neutral baseline certification for cybersecurity roles.",
+        description=(
+            "CompTIA Security+ is a vendor-neutral certification covering threats and "
+            "vulnerabilities, security architecture, operations, and governance and compliance. "
+            "It is widely listed as a baseline requirement in security job postings. The exam is "
+            "paid and includes performance-based questions; CompTIA sells training bundles "
+            "separately and publishes an exam objectives document free of charge."
+        ),
+        eligibility="No formal prerequisites. CompTIA recommends Network+ and a couple of years of IT administration experience.",
+        who_can_apply=["Students", "IT support staff", "Career changers"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://www.comptia.org/certifications/security",
+        source_url="https://www.comptia.org/certifications/security",
+        skills=["Cybersecurity", "Network Security", "Risk Management"],
+        tags=["cybersecurity", "certification", "vendor-neutral"],
+        benefits=["Widely requested security baseline credential", "Free published exam objectives"],
+        status="curated",
+    ),
+    dict(
+        title="CompTIA A+",
+        org="CompTIA", org_url="https://www.comptia.org",
+        category="certifications", type="exam",
+        summary="An entry-level IT support certification covering hardware, operating systems and troubleshooting.",
+        description=(
+            "CompTIA A+ is an entry-level certification for IT support roles, covering hardware, "
+            "operating systems, software troubleshooting, networking basics, security and "
+            "operational procedures. It is earned by passing two separate paid exams. CompTIA "
+            "publishes the exam objectives free; training material is sold separately."
+        ),
+        eligibility="No formal prerequisites. Intended as a first IT certification.",
+        who_can_apply=["Students", "Beginners", "IT support applicants"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://www.comptia.org/certifications/a",
+        source_url="https://www.comptia.org/certifications/a",
+        skills=["IT Support", "Hardware", "Operating Systems", "Troubleshooting"],
+        tags=["it-support", "certification", "entry-level"],
+        benefits=["Recognised entry point into IT roles", "Free published exam objectives"],
+        status="curated",
+    ),
+    dict(
+        title="Cisco Certified Network Associate (CCNA)",
+        org="Cisco", org_url="https://www.cisco.com",
+        category="certifications", type="exam",
+        summary="Cisco's associate-level networking certification, earned through a single exam.",
+        description=(
+            "The CCNA covers network fundamentals, IP connectivity and services, security "
+            "fundamentals, and automation and programmability. It is earned by passing one paid "
+            "exam. Cisco's free Networking Academy courses on the Skills for All platform cover "
+            "much of the same ground and are commonly used to prepare."
+        ),
+        eligibility="No formal prerequisites. Cisco recommends around a year of networking experience.",
+        who_can_apply=["Students", "Network technicians", "IT staff"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://www.cisco.com/site/us/en/learn/training-certifications/certifications/enterprise/ccna/index.html",
+        source_url="https://www.cisco.com/site/us/en/learn/training-certifications/certifications/enterprise/ccna/index.html",
+        skills=["Networking", "Routing", "Switching", "Network Security"],
+        tags=["networking", "cisco", "certification", "associate"],
+        benefits=["Long-established networking credential", "Free preparation via Cisco Networking Academy"],
+        status="curated",
+    ),
+    dict(
+        title="Red Hat Certified System Administrator (RHCSA)",
+        org="Red Hat", org_url="https://www.redhat.com",
+        category="certifications", type="exam",
+        summary="A hands-on Linux administration certification assessed by performing real tasks.",
+        description=(
+            "The RHCSA is a performance-based certification: candidates complete real system "
+            "administration tasks on live Red Hat Enterprise Linux systems rather than answering "
+            "multiple-choice questions. It covers essential tools, file systems, users and "
+            "groups, storage, services, containers and security. The exam is paid; Red Hat sells "
+            "preparatory training separately and publishes the exam objectives free."
+        ),
+        eligibility="No formal prerequisites. Red Hat recommends its system administration training or equivalent experience.",
+        who_can_apply=["Students", "System administrators", "DevOps engineers"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://www.redhat.com/en/services/certification/rhcsa",
+        source_url="https://www.redhat.com/en/services/certification/rhcsa",
+        skills=["Linux", "System Administration", "Bash", "Containers"],
+        tags=["linux", "sysadmin", "certification", "hands-on"],
+        benefits=["Assessed on real systems, not multiple choice", "Published exam objectives"],
+        status="curated",
+    ),
+    dict(
+        title="Certified Kubernetes Administrator (CKA)",
+        org="The Linux Foundation", org_url="https://www.linuxfoundation.org",
+        category="certifications", type="exam",
+        summary="A hands-on, command-line Kubernetes administration certification.",
+        description=(
+            "The CKA is a performance-based exam run by the Linux Foundation and CNCF: candidates "
+            "solve Kubernetes administration tasks in a live command-line environment within a "
+            "fixed time. It covers cluster architecture, workloads and scheduling, services and "
+            "networking, storage, and troubleshooting. The exam is paid and includes a free "
+            "retake; the Linux Foundation runs discount periods, so check current pricing."
+        ),
+        eligibility="No formal prerequisites. Practical Kubernetes and Linux command-line experience is expected.",
+        who_can_apply=["DevOps engineers", "Platform engineers", "Students with Kubernetes experience"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/",
+        source_url="https://training.linuxfoundation.org/certification/certified-kubernetes-administrator-cka/",
+        skills=["Kubernetes", "Linux", "Containers", "Troubleshooting"],
+        tags=["kubernetes", "devops", "cloud-native", "hands-on"],
+        benefits=["Entirely hands-on assessment", "Includes one free retake"],
+        status="curated",
+    ),
+    dict(
+        title="Linux Foundation — Introduction to Linux (LFS101)",
+        org="The Linux Foundation", org_url="https://www.linuxfoundation.org",
+        category="certifications", type="course",
+        summary="A free, self-paced introduction to Linux from the Linux Foundation.",
+        description=(
+            "LFS101 is the Linux Foundation's free introductory course on Linux, covering the "
+            "graphical interface, command line, file systems, text editors, user management, "
+            "networking and basic administration across major distribution families. It is "
+            "self-paced and free to enrol, and is commonly used as preparation before the "
+            "Foundation's paid certification exams."
+        ),
+        eligibility="Open to anyone; free enrolment.",
+        who_can_apply=["Anyone", "Students", "Beginners"],
+        location="Global", remote=True, cost="free", rolling=True,
+        url="https://training.linuxfoundation.org/training/introduction-to-linux/",
+        source_url="https://training.linuxfoundation.org/training/introduction-to-linux/",
+        skills=["Linux", "Command Line", "System Administration"],
+        tags=["linux", "free", "self-paced", "foundational"],
+        benefits=["Free enrolment", "Preparation for Linux Foundation certifications"],
+        status="curated",
+    ),
+    dict(
+        title="HashiCorp Certified: Terraform Associate",
+        org="HashiCorp", org_url="https://www.hashicorp.com",
+        category="certifications", type="exam",
+        summary="An associate-level certification in infrastructure as code with Terraform.",
+        description=(
+            "The Terraform Associate certification covers infrastructure as code concepts, the "
+            "Terraform workflow, state management, modules, and Terraform Cloud. HashiCorp "
+            "publishes a free study guide, exam review and tutorials on its developer site; the "
+            "exam is paid and is taken online with a proctor."
+        ),
+        eligibility="No formal prerequisites. HashiCorp recommends basic cloud and Terraform experience.",
+        who_can_apply=["DevOps engineers", "Cloud engineers", "Students"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://developer.hashicorp.com/certifications/infrastructure-automation",
+        source_url="https://developer.hashicorp.com/certifications/infrastructure-automation",
+        skills=["Terraform", "Infrastructure as Code", "Cloud", "DevOps"],
+        tags=["devops", "terraform", "iac", "certification"],
+        benefits=["Free official study guide and tutorials", "Recognised IaC credential"],
+        status="curated",
+    ),
+    dict(
+        title="Salesforce Trailhead",
+        org="Salesforce", org_url="https://www.salesforce.com",
+        category="certifications", type="learning_platform",
+        summary="Salesforce's free learning platform, with hands-on orgs and earnable badges.",
+        description=(
+            "Trailhead is Salesforce's free online learning platform. Learners work through "
+            "modules and trails covering administration, development, data and AI on the "
+            "Salesforce platform, practising in a free hands-on developer org and earning badges "
+            "and superbadges. Trailhead itself is free; the Salesforce certification exams it "
+            "prepares for are paid."
+        ),
+        eligibility="Open to anyone with a free Trailhead account.",
+        who_can_apply=["Students", "Administrators", "Developers"],
+        location="Global", remote=True, cost="free", rolling=True,
+        url="https://trailhead.salesforce.com/",
+        source_url="https://trailhead.salesforce.com/",
+        skills=["Salesforce", "CRM", "Apex", "Administration"],
+        tags=["salesforce", "free", "badges", "hands-on"],
+        benefits=["Free hands-on developer org", "Badges and superbadges you can show"],
+        status="curated",
+    ),
+    dict(
+        title="Salesforce Certified Administrator",
+        org="Salesforce", org_url="https://www.salesforce.com",
+        category="certifications", type="exam",
+        summary="The entry certification for Salesforce administrators, prepared for free on Trailhead.",
+        description=(
+            "The Salesforce Certified Administrator credential covers configuration and setup, "
+            "object manager, sales and service applications, productivity and collaboration, data "
+            "and analytics management, and workflow automation. Salesforce publishes a free exam "
+            "guide and a full preparation trail on Trailhead; the exam is paid and maintaining "
+            "the credential requires periodic free maintenance modules."
+        ),
+        eligibility="No formal prerequisites. Salesforce recommends around six months of hands-on administration experience.",
+        who_can_apply=["Students", "Administrators", "Career changers"],
+        location="Global", remote=True, cost="paid", rolling=True,
+        url="https://trailhead.salesforce.com/credentials/administrator",
+        source_url="https://trailhead.salesforce.com/credentials/administrator",
+        skills=["Salesforce", "CRM", "Administration", "Automation"],
+        tags=["salesforce", "certification", "crm", "admin"],
+        benefits=["Free preparation trail on Trailhead", "Strong demand in the Salesforce ecosystem"],
+        status="curated",
+    ),
+    dict(
+        title="GitHub Foundations Certification",
+        org="GitHub", org_url="https://github.com",
+        category="certifications", type="exam",
+        summary="GitHub's entry-level certification covering Git, repositories and collaboration.",
+        description=(
+            "GitHub Foundations is the entry point of GitHub's certification programme, covering "
+            "Git basics, repositories, collaboration features, GitHub Projects, and privacy, "
+            "security and administration on GitHub. GitHub publishes a free study guide and "
+            "learning path on GitHub Skills and Microsoft Learn; the exam is paid and proctored "
+            "online."
+        ),
+        eligibility="No formal prerequisites. Basic familiarity with Git and GitHub is expected.",
+        who_can_apply=["Students", "Developers", "Beginners"],
+        location="Global", remote=True, cost="exam_fee", rolling=True,
+        url="https://resources.github.com/learn/certifications/",
+        source_url="https://resources.github.com/learn/certifications/",
+        skills=["Git", "GitHub", "Collaboration", "Version Control"],
+        tags=["git", "github", "certification", "entry-level"],
+        benefits=["Free official study guide", "Credential from the platform itself"],
+        status="curated",
+    ),
+    dict(
+        title="MongoDB Associate Developer Certification",
+        org="MongoDB", org_url="https://www.mongodb.com",
+        category="certifications", type="exam",
+        summary="MongoDB's associate developer credential, with free preparation on MongoDB University.",
+        description=(
+            "The MongoDB Associate Developer certification assesses building applications against "
+            "MongoDB: the document model, CRUD operations, aggregation, indexes, data modelling "
+            "and drivers. MongoDB University hosts the full learning path and practice questions "
+            "free of charge; the exam is paid and proctored. MongoDB has previously offered exam "
+            "vouchers to students through its Student Pack — check the current offer."
+        ),
+        eligibility="No formal prerequisites. Practical experience with MongoDB and one supported driver is expected.",
+        who_can_apply=["Students", "Backend developers", "Full-stack developers"],
+        location="Global", remote=True, cost="exam_fee", rolling=True,
+        url="https://learn.mongodb.com/pages/mongodb-associate-developer-exam",
+        source_url="https://learn.mongodb.com/pages/mongodb-associate-developer-exam",
+        skills=["MongoDB", "Databases", "Aggregation", "Data Modelling"],
+        tags=["databases", "mongodb", "certification", "backend"],
+        benefits=["Free learning path on MongoDB University", "Student vouchers have been offered previously"],
+        status="needs_review",
+    ),
+    dict(
+        title="Postman API Fundamentals Student Expert",
+        org="Postman", org_url="https://www.postman.com",
+        category="certifications", type="credential",
+        summary="A free Postman badge earned by completing hands-on API exercises.",
+        description=(
+            "The API Fundamentals Student Expert badge is earned by working through Postman's "
+            "free course on sending requests, working with variables and environments, writing "
+            "test scripts and chaining requests. The work is done in Postman itself, and the "
+            "badge is issued digitally on completion at no cost."
+        ),
+        eligibility="Open to anyone; free Postman account required.",
+        who_can_apply=["Students", "Beginners", "Developers"],
+        location="Global", remote=True, cost="free", rolling=True,
+        url="https://academy.postman.com/",
+        source_url="https://academy.postman.com/",
+        skills=["APIs", "REST", "Postman", "Testing"],
+        tags=["api", "free", "badge", "hands-on"],
+        benefits=["Free digital badge", "Entirely hands-on exercises"],
+        status="needs_review",
+    ),
+    dict(
+        title="Google Analytics Certification (Skillshop)",
+        org="Google", org_url="https://skillshop.withgoogle.com",
+        category="certifications", type="certification",
+        summary="Google's free certification in Google Analytics, taken through Skillshop.",
+        description=(
+            "Skillshop is Google's free training platform for its product certifications. The "
+            "Google Analytics certification covers setting up measurement, reporting, audiences "
+            "and conversions in Google Analytics, and is assessed by an online assessment taken "
+            "free of charge. Google states that its Skillshop certifications expire and must be "
+            "retaken periodically — check the current validity on the assessment page."
+        ),
+        eligibility="Open to anyone with a free Skillshop account.",
+        who_can_apply=["Students", "Marketers", "Analysts"],
+        location="Global", remote=True, cost="free", rolling=True,
+        url="https://skillshop.withgoogle.com/analytics",
+        source_url="https://skillshop.withgoogle.com/analytics",
+        skills=["Google Analytics", "Digital Marketing", "Measurement"],
+        tags=["analytics", "marketing", "free", "certification"],
+        benefits=["Free training and free assessment", "Recognised product certification"],
+        status="needs_review",
+    ),
+    dict(
+        title="NPTEL Online Certification",
+        org="NPTEL (IIT/IISc)", org_url="https://nptel.ac.in",
+        category="certifications", type="certification",
+        summary="Free courses taught by IIT and IISc faculty, with an optional paid proctored exam.",
+        description=(
+            "NPTEL, run by the IITs and IISc under India's Ministry of Education, offers free "
+            "online courses across engineering, science, management and humanities. Enrolment and "
+            "the course material are free; learners who want a certificate register for a paid "
+            "proctored exam held in person at designated centres. Courses run in fixed sessions "
+            "with published enrolment windows, so timing depends on the semester schedule."
+        ),
+        eligibility="Open to anyone; the certification exam is held at in-person centres, largely in India.",
+        who_can_apply=["Students", "Faculty", "Working professionals"],
+        location="India", remote=True, cost="exam_fee", rolling=False,
+        url="https://nptel.ac.in/",
+        source_url="https://nptel.ac.in/",
+        skills=["Engineering", "Computer Science", "Mathematics"],
+        tags=["india", "university", "free-courses", "iit"],
+        benefits=["Free course material from IIT and IISc faculty", "Certificate recognised by Indian institutions"],
+        status="curated",
+    ),
+    dict(
+        title="Fortinet Certified Fundamentals in Cybersecurity",
+        org="Fortinet", org_url="https://www.fortinet.com",
+        category="certifications", type="certification",
+        summary="Fortinet's free entry-level cybersecurity certification, training and exam included.",
+        description=(
+            "The Fortinet Certified Fundamentals in Cybersecurity credential covers threat "
+            "landscape basics, common attacks, and the principles of network and endpoint "
+            "security. Fortinet has made its training and the associated exam available free "
+            "through the Fortinet Training Institute as part of its free-training initiative. "
+            "Confirm the current cost and delivery on the official training page."
+        ),
+        eligibility="Open to anyone; free registration with the Fortinet Training Institute.",
+        who_can_apply=["Students", "Beginners", "Career changers"],
+        location="Global", remote=True, cost="free", rolling=True,
+        url="https://training.fortinet.com/",
+        source_url="https://training.fortinet.com/",
+        skills=["Cybersecurity", "Network Security", "Threat Analysis"],
+        tags=["cybersecurity", "free", "certification", "entry-level"],
+        benefits=["Free training and certification", "Vendor-recognised security fundamentals"],
+        status="needs_review",
+    ),
 ]
 # fmt: on
 

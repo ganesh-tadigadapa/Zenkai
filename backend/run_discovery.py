@@ -13,7 +13,9 @@ from sqlalchemy import select
 from app.core.database import SessionLocal
 from app.ingestion.pipeline import IngestionPipeline
 from app.ingestion.scheduler import is_due
+from app.models.enums import SourceType
 from app.models.source import Source
+from app.services.opportunity_service import expire_passed_deadlines
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logging.getLogger("httpx").setLevel(logging.WARNING)
@@ -24,7 +26,12 @@ def main(argv: list[str]) -> int:
     pipeline = IngestionPipeline()
 
     with SessionLocal() as db:
-        query = select(Source).where(Source.active.is_(True), Source.robots_allowed.is_(True))
+        # Manual sources are records a reviewer typed in; there is nothing to fetch.
+        query = select(Source).where(
+            Source.active.is_(True),
+            Source.robots_allowed.is_(True),
+            Source.source_type != SourceType.MANUAL.value,
+        )
         if wanted:
             query = query.where(Source.name == wanted)
         sources = list(db.scalars(query.order_by(Source.priority.desc())).all())
@@ -50,10 +57,17 @@ def main(argv: list[str]) -> int:
             print(f"    updated          : {report.updated}")
             print(f"    unchanged        : {report.unchanged}")
             print(f"    duplicates       : {report.duplicates}")
+            print(f"    no longer listed : {report.removed}")
             if report.blocked_reason:
                 print(f"    BLOCKED          : {report.blocked_reason}")
             for error in report.errors:
                 print(f"    error            : {error}")
+
+        # Close everything whose deadline has passed, whichever source it came
+        # from — curated records included.
+        closed = expire_passed_deadlines(db)
+        db.commit()
+        print(f"\nClosed {closed} opportunities whose deadline has passed.")
     return 0
 
 

@@ -22,6 +22,14 @@ class ApiAdapter(ABC):
     #: Matched against a source's URL to choose an adapter.
     url_marker: str = ""
     name: str = "adapter"
+    #: True when a response lists *everything* the provider currently offers,
+    #: so a record missing from it has been withdrawn. False for anything that
+    #: shows only a recent slice.
+    complete_listing: bool = False
+    #: Pages to follow per run; None means the connector's own cap.
+    max_pages: int | None = None
+    #: Response size limit; None means the fetcher's default.
+    max_bytes: int | None = None
 
     def handles(self, source: Source) -> bool:
         return bool(self.url_marker) and self.url_marker in source.url
@@ -30,3 +38,11 @@ class ApiAdapter(ABC):
     def to_documents(self, body: str, source: Source) -> list[RawDocument]:
         """Parse a response body. Raises on anything it cannot read."""
         raise NotImplementedError
+
+    def next_page_url(self, body: str, current_url: str) -> str | None:
+        """The next page of a paginated API, or None when this was the last.
+
+        Most catalogues answer in one response, so the default is None. The
+        connector caps how many pages it will follow, whatever this says.
+        """
+        return None

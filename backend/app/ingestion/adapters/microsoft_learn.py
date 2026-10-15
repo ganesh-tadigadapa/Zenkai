@@ -85,6 +85,7 @@ _EXAM_UID = re.compile(r"^exam\.(.+)$")
 class MicrosoftLearnAdapter(ApiAdapter):
     url_marker = "learn.microsoft.com/api/catalog"
     name = "microsoft-learn"
+    complete_listing = True
 
     def to_documents(self, body: str, source: Source) -> list[RawDocument]:
         payload = json.loads(body)

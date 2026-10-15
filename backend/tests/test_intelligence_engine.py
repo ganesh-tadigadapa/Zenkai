@@ -77,13 +77,33 @@ def test_unknown_proctoring_is_never_recorded_as_not_proctored():
 
 
 def test_only_genuine_certifications_are_typed_as_professional(db):
-    """A course completion certificate must not claim to be a certification."""
-    professional = [
-        title
+    """A course completion certificate must not claim to be a certification.
+
+    Asserted as an invariant rather than a fixed list, so the catalogue can grow
+    without the test having to be rewritten each time: anything claiming to be a
+    professional certification must be assessed by an actual exam, because that
+    is what an employer understands the words to mean.
+    """
+    from app.models.enums import AssessmentType
+
+    exam_assessments = {
+        AssessmentType.PROCTORED_EXAM,
+        AssessmentType.NON_PROCTORED_EXAM,
+        AssessmentType.PRACTICAL_EXAM,
+        AssessmentType.PERFORMANCE_BASED,
+    }
+    professional = {
+        title: facts
         for title, facts in CREDENTIAL_FACTS.items()
         if facts["credential_type"] is CredentialType.PROFESSIONAL_CERTIFICATION
-    ]
-    assert professional == ["AWS Certified Cloud Practitioner"]
+    }
+    assert professional, "expected the catalogue to hold professional certifications"
+    for title, facts in professional.items():
+        assert facts.get("assessment_type") in exam_assessments, title
+    # And the reverse: a course-completion credential never claims to be one.
+    for title, facts in CREDENTIAL_FACTS.items():
+        if facts.get("assessment_type") is AssessmentType.COURSE_COMPLETION:
+            assert facts["credential_type"] is not CredentialType.PROFESSIONAL_CERTIFICATION, title
 
 
 def test_free_learning_behind_a_paid_exam_is_not_recorded_as_free():

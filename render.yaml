@@ -29,18 +29,22 @@ services:
       # server-rendered.
     rootDir: backend
     buildCommand: pip install -r requirements.txt
+    # ENV=production skips create_all() at startup, so the schema and the
+    # catalogue are put in place here. The seeder is idempotent: it creates
+    # missing tables and skips records that already exist.
+    preDeployCommand: python -m app.seed.run
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
 
-      # SQLAlchemy needs an explicit driver in the scheme. Render's own
-      # connection string starts `postgres://`, which SQLAlchemy cannot
-      # resolve a driver from, so the value is entered by hand with the
-      # scheme rewritten to `postgresql+psycopg://`.
+      # Render's connection string starts `postgres://`; config.py rewrites
+      # it to `postgresql+psycopg://` so SQLAlchemy picks the psycopg driver.
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: zenkai-db
+          property: connectionString
 
       - key: ENV
         value: production # stops create_all() at startup AND demo fallback
@@ -72,24 +76,27 @@ services:
       # signed-out visitor act as the same demo student.
 
   # ---------------------------------------------------------------------
-  # Discovery. Ships suspended: it writes unreviewed records into the
-  # review queue, so the catalogue should be confirmed healthy first.
-  # Un-suspend from the dashboard when you want it running.
+  # Discovery: every 6 hours, reads each due, enabled source — Devpost, MLH,
+  # Unstop, SimplifyJobs, Microsoft Learn, the GitHub Student Pack, Outreachy
+  # and the scholarship feeds. Adds new listings, applies changes to ones it
+  # already holds, closes ones a source withdrew and ones whose deadline has
+  # passed. New records land as "Needs verification" until reviewed.
   # ---------------------------------------------------------------------
   - type: cron
     name: zenkai-discovery
     runtime: python
     plan: starter
     rootDir: backend
-    schedule: "0 */12 * * *" # matches DEFAULT_CHECK_FREQUENCY_MINUTES=720
+    schedule: "0 */6 * * *" # the fastest source cadence (check_frequency "high")
     buildCommand: pip install -r requirements.txt
     startCommand: python run_discovery.py
-    suspended: "yes"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: zenkai-db
+          property: connectionString
       - key: ENV
         value: production
       - key: DEBUG

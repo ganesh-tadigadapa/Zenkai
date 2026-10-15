@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -44,6 +45,16 @@ class Settings(BaseSettings):
     AI_PROVIDER: str = "stub"
     AI_API_KEY: str | None = None
     AI_MODEL: str = "claude-sonnet-5"
+
+    @field_validator("DATABASE_URL")
+    @classmethod
+    def _use_psycopg_driver(cls, value: str) -> str:
+        # Render/Heroku hand out `postgres://` URLs, which SQLAlchemy cannot
+        # resolve a driver from. Point them at psycopg 3, the installed driver.
+        for prefix in ("postgres://", "postgresql://"):
+            if value.startswith(prefix):
+                return "postgresql+psycopg://" + value[len(prefix):]
+        return value
 
     @property
     def cors_origin_list(self) -> list[str]:

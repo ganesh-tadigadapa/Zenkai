@@ -136,7 +136,7 @@ class PoliteFetcher:
 
     # --- Retrieval ---------------------------------------------------------
 
-    def get(self, url: str) -> FetchedDocument:
+    def get(self, url: str, max_bytes: int | None = None) -> FetchedDocument:
         allowed, reason = self.may_fetch(url)
         if not allowed:
             raise FetchRefused(f"{reason}: {url}")
@@ -164,8 +164,9 @@ class PoliteFetcher:
         if response.status_code >= 400:
             raise FetchFailed(f"HTTP {response.status_code} from {url}")
 
-        if len(response.content) > MAX_BYTES:
-            raise FetchFailed(f"response from {url} exceeds {MAX_BYTES} bytes")
+        limit = max_bytes or MAX_BYTES
+        if len(response.content) > limit:
+            raise FetchFailed(f"response from {url} exceeds {limit} bytes")
 
         return FetchedDocument(
             url=url,

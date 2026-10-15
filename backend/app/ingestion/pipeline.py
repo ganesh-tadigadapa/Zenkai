@@ -17,8 +17,9 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.ai.base import ExtractedOpportunity, RawDocument
+from app.ingestion.adapters import adapter_for
 from app.ingestion.connectors import connector_for
-from app.ingestion.deduplication import DeduplicationService
+from app.ingestion.deduplication import DeduplicationService, _canonical
 from app.ingestion.extraction import OpportunityExtractor
 from app.ingestion.monitoring import classify, is_result_plausible
 from app.ingestion.relevance import assess
@@ -70,6 +71,8 @@ class IngestionReport:
     errors: list[str] = field(default_factory=list)
     #: Set when the mass-deletion guard refused to trust the run's results.
     blocked_reason: str | None = None
+    #: Records this source published earlier and no longer lists.
+    removed: int = 0
 
 
 class IngestionPipeline:
@@ -123,6 +126,15 @@ class IngestionPipeline:
         result = self.process_documents(db, documents, source=source, check=check)
         result.source_id = source.id
         result.fetched = report.fetched
+
+        # A complete listing that no longer carries a record is the source
+        # saying it is gone: a retired certification, a cancelled event. Only
+        # complete listings count — a feed shows its latest N entries, so an
+        # entry scrolling off it says nothing about the opportunity.
+        adapter = adapter_for(source)
+        truncated = any((d.metadata or {}).get("listing_truncated") for d in documents)
+        if adapter is not None and adapter.complete_listing and not truncated:
+            result.removed = self._retire_missing(db, source, documents)
 
         source.last_success_at = datetime.now(timezone.utc)
         source.consecutive_failures = 0
@@ -268,8 +280,11 @@ class IngestionPipeline:
 
             # A second sighting is evidence, not noise. Record what this source
             # said and whether anything moved, rather than discarding it.
-            result = classify(existing, self._stated_fields(candidate))
+            stated = self._stated_fields(candidate)
+            result = classify(existing, stated)
             existing.last_checked_at = datetime.now(timezone.utc)
+            if self._owned_by(existing, source):
+                self._apply_changes(existing, result, stated)
             self._record_provenance(db, existing, source, raw, result)
             return result.kind
 
@@ -374,6 +389,65 @@ class IngestionPipeline:
         db.flush()
 
     @staticmethod
+    def _owned_by(existing: Opportunity, source: Source | None) -> bool:
+        """Whether this source is the record's own origin.
+
+        A source may keep the records it produced current. A curated record
+        is a person's work, so what another source says about it is kept as
+        provenance for a reviewer instead of being written over it.
+        """
+        return (
+            source is not None
+            and existing.source_id == source.id
+            and existing.data_origin == DataOrigin.INGESTED.value
+        )
+
+    @staticmethod
+    def _apply_changes(existing: Opportunity, result, stated: dict) -> None:
+        """Write what moved — an extended deadline, a new location — and
+        reopen a record the source is listing as open again."""
+        for name in result.as_dict:
+            setattr(existing, name, stated[name])
+
+        if existing.verification_status == VerificationStatus.EXPIRED.value:
+            deadline = existing.deadline
+            if deadline is not None and deadline.tzinfo is None:
+                deadline = deadline.replace(tzinfo=timezone.utc)
+            if deadline is None or deadline >= datetime.now(timezone.utc):
+                existing.verification_status = VerificationStatus.NEEDS_REVIEW.value
+
+    def _retire_missing(self, db: Session, source: Source, documents: list[RawDocument]) -> int:
+        """Close this source's records that its complete listing no longer has."""
+        listed = {_canonical(d.url) for d in documents}
+        rows = db.scalars(
+            select(Opportunity).where(
+                Opportunity.source_id == source.id,
+                Opportunity.data_origin == DataOrigin.INGESTED.value,
+                Opportunity.verification_status.not_in(
+                    [VerificationStatus.EXPIRED.value, VerificationStatus.REJECTED.value]
+                ),
+            )
+        ).all()
+        now = datetime.now(timezone.utc)
+        retired = 0
+        for row in rows:
+            if _canonical(row.application_url) in listed:
+                continue
+            row.verification_status = VerificationStatus.EXPIRED.value
+            row.last_checked_at = now
+            db.add(
+                OpportunityProvenance(
+                    opportunity_id=row.id,
+                    source_id=source.id,
+                    change_kind=ChangeKind.REMOVED.value,
+                    changed_fields={"listed": {"from": "true", "to": "false"}},
+                )
+            )
+            retired += 1
+        db.flush()
+        return retired
+
+    @staticmethod
     def _unpublished(candidate: ExtractedOpportunity) -> set[str]:
         """Fields the source is known not to publish.
 
@@ -394,6 +468,7 @@ class IngestionPipeline:
         An absent key means unmentioned. It must never overwrite a value we
         hold — a source going quiet about a price is not it becoming free.
         """
+        unpublished = IngestionPipeline._unpublished(candidate)
         stated = {
             "cost_type": candidate.cost_type,
             "deadline": candidate.deadline,
@@ -403,7 +478,15 @@ class IngestionPipeline:
             "summary": candidate.summary or None,
             "source_url": candidate.source_url,
         }
-        return {key: value for key, value in stated.items() if value is not None}
+        # A field the source does not publish was never stated, whatever the
+        # text heuristics read into the prose.
+        unpublished_columns = {"cost": "cost_type"}
+        dropped = {unpublished_columns.get(f, f) for f in unpublished}
+        return {
+            key: value
+            for key, value in stated.items()
+            if value is not None and key not in dropped
+        }
 
     @staticmethod
     def _record_provenance(

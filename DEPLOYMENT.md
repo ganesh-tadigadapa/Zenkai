@@ -73,11 +73,15 @@ Required environment:
 | `ENV` | `production` — this stops `create_all()` running at startup. |
 | `DEMO_USER_EMAIL` | Identity used when a request sends no `X-User-Id`. |
 
-Then seed the catalogue once:
+Then seed the catalogue:
 
 ```bash
 python -m app.seed.run
 ```
+
+On Render, `render.yaml` runs this as the `preDeployCommand` on every deploy,
+and wires `DATABASE_URL` straight from the `zenkai-db` database. A `postgres://`
+URL is rewritten to `postgresql+psycopg://` automatically.
 
 ### Before a real launch
 

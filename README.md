@@ -48,11 +48,11 @@ date it was last checked**, and the interface never hides that.
 | Raw source evidence and provenance trail | Complete |
 | Change detection and mass-deletion guard | Complete |
 | Live RSS/Atom discovery | Complete — real fetch, parse, relevance gate, provenance |
-| Live official-API discovery | Complete — Microsoft Learn catalogue adapter |
-| Web/sitemap connector | **Not implemented** — contract only |
+| Live official-API discovery | Complete — Microsoft Learn catalogue and Devpost hackathon adapters |
+| Web page connector | Complete — single permitted page per source; MLH calendar adapter |
 | Source registry and compliance gate | Complete |
 | Ingestion pipeline (extract → dedupe → verify) | Complete against the stub extractor |
-| Connector network fetching (RSS / API / web) | **Not implemented** — interfaces only |
+| Scheduled discovery in production | Complete — Render cron, every 12 hours |
 | LLM-backed extraction | **Not implemented** — stub provider only |
 | Notification delivery | **Not implemented** — model and service only |
 | Password reset by email | **Not implemented** — needs an email provider |

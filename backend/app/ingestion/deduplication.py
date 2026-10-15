@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from sqlalchemy import select
+from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from app.ai.base import ExtractedOpportunity
@@ -63,6 +63,28 @@ class DeduplicationService:
         ).first()
         if exact:
             return DuplicateVerdict(True, exact.id, "identical fingerprint", 1.0)
+
+        # The same official page is the same opportunity, however each source
+        # titles it: a programme homepage reads "Home | Google Summer of Code"
+        # where the curated record says "Google Summer of Code".
+        url = _canonical(candidate.application_url)
+        if url:
+            same_page = db.scalars(
+                select(Opportunity).where(
+                    or_(
+                        *(
+                            func.rtrim(func.lower(column), "/") == url
+                            for column in (
+                                Opportunity.application_url,
+                                Opportunity.direct_destination_url,
+                                Opportunity.source_url,
+                            )
+                        )
+                    )
+                )
+            ).first()
+            if same_page:
+                return DuplicateVerdict(True, same_page.id, "same official URL", 1.0)
 
         # Near-identical title from the same organisation suggests a re-post of
         # one opportunity across sources.

@@ -58,7 +58,7 @@ class FakeFetcher:
     def may_fetch(self, url: str) -> tuple[bool, str]:
         return True, "fixture"
 
-    def get(self, url: str):
+    def get(self, url: str, max_bytes: int | None = None):
         from datetime import datetime, timezone
 
         from app.ingestion.fetcher import FetchedDocument

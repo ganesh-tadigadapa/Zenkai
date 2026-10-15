@@ -19,6 +19,10 @@ from app.models.source import Source
 
 logger = logging.getLogger(__name__)
 
+#: Upper bound on pages followed in one run, however many the API reports.
+#: The fetcher already spaces requests to a host; this bounds the total.
+MAX_PAGES = 30
+
 
 class APIConnector(SourceConnector):
     source_type = SourceType.OFFICIAL_API.value
@@ -43,14 +47,27 @@ class APIConnector(SourceConnector):
             return self._read(fetcher, source, adapter)
 
     def _read(self, fetcher, source: Source, adapter) -> list[RawDocument]:
-        document = fetcher.get(source.url)
-        try:
-            documents = adapter.to_documents(document.body, source)
-        except (json.JSONDecodeError, ValueError, KeyError, TypeError) as exc:
-            raise FetchFailed(
-                f"{source.url} did not return a catalogue the {adapter.name} "
-                f"adapter can read: {exc}"
-            ) from exc
+        documents: list[RawDocument] = []
+        url: str | None = source.url
+        pages = 0
+        max_pages = adapter.max_pages or MAX_PAGES
+        while url and pages < max_pages:
+            document = fetcher.get(url, max_bytes=adapter.max_bytes)
+            pages += 1
+            try:
+                documents.extend(adapter.to_documents(document.body, source))
+                url = adapter.next_page_url(document.body, url)
+            except (json.JSONDecodeError, ValueError, KeyError, TypeError) as exc:
+                raise FetchFailed(
+                    f"{url} did not return a catalogue the {adapter.name} "
+                    f"adapter can read: {exc}"
+                ) from exc
+
+        if url:
+            # Stopped at the cap with pages left: this is a slice, so nothing
+            # may be retired for being absent from it.
+            for document in documents:
+                document.metadata["listing_truncated"] = "true"
 
         logger.info("%s: %d records via %s", source.name, len(documents), adapter.name)
         return documents

@@ -86,10 +86,25 @@ def seed_users(db) -> None:
         )
 
 
+#: Registry fields that describe *where and how* to read a source. The code's
+#: registry is their source of truth, so a re-seed carries an edited URL or a
+#: re-enabled feed into an existing database. Monitoring state (last checked,
+#: failures) is never touched.
+SYNCED_SOURCE_FIELDS = (
+    "url", "official_url", "organization", "source_type", "category", "authority",
+    "discovery_method", "trust_level", "robots_allowed", "access_notes", "priority",
+)
+
+
 def seed_sources(db) -> dict[str, Source]:
     by_name: dict[str, Source] = {}
     for spec in SOURCES:
         existing = db.scalars(select(Source).where(Source.name == spec["name"])).first()
+        if existing is not None:
+            for field in SYNCED_SOURCE_FIELDS:
+                if field in spec:
+                    setattr(existing, field, spec[field])
+            existing.active = spec.get("active", True)
         if existing is None:
             payload = dict(spec)
             # Derive the interval from the named cadence, so the two cannot
