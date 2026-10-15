@@ -52,7 +52,16 @@ class APIConnector(SourceConnector):
         pages = 0
         max_pages = adapter.max_pages or MAX_PAGES
         while url and pages < max_pages:
-            document = fetcher.get(url, max_bytes=adapter.max_bytes)
+            try:
+                document = fetcher.get(url, max_bytes=adapter.max_bytes)
+            except FetchFailed as exc:
+                if not pages:
+                    raise
+                # A later page failing (a timeout on page 9 of 10) keeps what
+                # was read. The listing is then partial, so it is marked as a
+                # slice below and nothing is retired for being absent from it.
+                logger.warning("%s: stopped paging at %s: %s", source.name, url, exc)
+                break
             pages += 1
             try:
                 documents.extend(adapter.to_documents(document.body, source))

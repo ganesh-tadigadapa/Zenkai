@@ -48,7 +48,8 @@ date it was last checked**, and the interface never hides that.
 | Raw source evidence and provenance trail | Complete |
 | Change detection and mass-deletion guard | Complete |
 | Live RSS/Atom discovery | Complete — real fetch, parse, relevance gate, provenance |
-| Live official-API discovery | Complete — Microsoft Learn catalogue and Devpost hackathon adapters |
+| Live official-API discovery | Complete — Microsoft Learn, Devpost, Unstop, SimplifyJobs; MLH and GitHub Student Pack pages |
+| Keeping records current | Complete — applies source changes, closes withdrawn listings and passed deadlines every run |
 | Web page connector | Complete — single permitted page per source; MLH calendar adapter |
 | Source registry and compliance gate | Complete |
 | Ingestion pipeline (extract → dedupe → verify) | Complete against the stub extractor |

@@ -330,7 +330,12 @@ SOURCES = [
         trust_level=3,
         check_frequency_minutes=720,
         robots_allowed=True,
-        access_notes="Aggregator RSS feed of scholarships and fellowships. Secondary source.",
+        access_notes=(
+            "DISABLED. Verified 2026-10-15: the feed answers HTTP 403 to "
+            "ZenkaiBot. That is the site declining automated reading, so it is "
+            "not fetched."
+        ),
+        active=False,
     ),
     dict(
         name="Manual editorial submissions",

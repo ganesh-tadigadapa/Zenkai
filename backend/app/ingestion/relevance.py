@@ -118,6 +118,13 @@ def _matches(patterns, text: str):
             yield pattern
 
 
+ROUNDUP_TITLE = re.compile(
+    r"^\s*(?:top\s+)?\d+\+?\s+(?:\w+\s+){0,4}"
+    r"(?:opportunities|scholarships|internships|fellowships|hackathons|programs|programmes)\b",
+    re.I,
+)
+
+
 def assess(
     title: str, summary: str = "", catalogue: str | None = None
 ) -> RelevanceVerdict:
@@ -146,6 +153,13 @@ def assess(
     text = f"{title} {summary}".strip()
     if not text:
         return RelevanceVerdict(False, 0, rejected_because="no text to assess")
+
+    # "18 Global Opportunities Currently Open" is a digest of other posts. Its
+    # items have their own entries; the digest is not something to apply to.
+    if ROUNDUP_TITLE.search(title or ""):
+        return RelevanceVerdict(
+            False, 0, rejected_because="the title reads as a roundup of other listings"
+        )
 
     score = 0
     reasons: list[str] = []

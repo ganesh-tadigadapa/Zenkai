@@ -123,7 +123,11 @@ class UnstopAdapter(ApiAdapter):
                         "cost_type": "paid" if record.get("isPaid") else "free",
                         "content_type": "application/json",
                         "deadline": deadline.isoformat() if deadline else "",
-                        "location": "Remote" if remote else (", ".join(cities[:3]) or "India"),
+                        "location": (
+                            ("Remote" if job else "Online")
+                            if remote
+                            else (", ".join(cities[:3]) or "India")
+                        ),
                         "is_remote": "true" if remote else "false",
                         "skills": ",".join(skills),
                         "tags": ",".join(["Unstop", *([stipend] if stipend else [])]),

@@ -35,6 +35,8 @@ REQUEST_TIMEOUT = 20.0
 MAX_REDIRECTS = 5
 #: Minimum gap between two requests to the same host, absent a Crawl-delay.
 DEFAULT_MIN_INTERVAL = 1.0
+#: Pause before the single retry of a timeout or dropped connection.
+TRANSIENT_RETRY_PAUSE = 3.0
 #: Refuse bodies beyond this. A feed is text; anything huge is a wrong turn.
 MAX_BYTES = 8 * 1024 * 1024
 
@@ -153,6 +155,15 @@ class PoliteFetcher:
 
         try:
             response = self._client.get(url)
+        except (httpx.TimeoutException, httpx.ConnectError, httpx.RemoteProtocolError) as exc:
+            # A network blip, not an answer from the provider: one more try
+            # after a pause. Refusals (401/403/429) never reach this branch.
+            logger.info("retrying %s after %s", url, type(exc).__name__)
+            time.sleep(TRANSIENT_RETRY_PAUSE)
+            try:
+                response = self._client.get(url)
+            except httpx.HTTPError as retry_exc:
+                raise FetchFailed(f"{type(retry_exc).__name__} fetching {url}") from retry_exc
         except httpx.HTTPError as exc:
             raise FetchFailed(f"{type(exc).__name__} fetching {url}") from exc
 
