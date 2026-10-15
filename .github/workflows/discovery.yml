@@ -5,7 +5,7 @@
 # passed. New records land as "Needs verification" until reviewed.
 #
 # Runs here rather than on Render because Render has no free cron. Needs one
-# repository secret: DATABASE_URL, the same Neon string the API uses.
+# repository secret: ZENK_AI_DB, the same Neon string the API uses.
 name: discovery
 
 on:
@@ -25,7 +25,7 @@ jobs:
       run:
         working-directory: backend
     env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL: ${{ secrets.ZENK_AI_DB }}
       ENV: production
       DEBUG: "false"
       AI_PROVIDER: stub
@@ -36,5 +36,7 @@ jobs:
           python-version: "3.11.9"
           cache: pip
           cache-dependency-path: backend/requirements.txt
+      - name: Check the database secret is set
+        run: test -n "$DATABASE_URL" || { echo "::error::Repository secret ZENK_AI_DB is not set"; exit 1; }
       - run: pip install -r requirements.txt
       - run: python run_discovery.py
