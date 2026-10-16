@@ -13,7 +13,10 @@ import {
   IconArrowRight,
   IconAward,
   IconBriefcase,
+  IconCheck,
+  IconClock,
   IconGraduationCap,
+  IconShield,
   IconSparkles,
   IconTrophy,
   IconUsers,
@@ -164,6 +167,110 @@ function Marquee({
   );
 }
 
+/* ----------------------------------------------------------- Feature cards */
+
+function SourcesVisual() {
+  return (
+    <div className="relative grid h-full place-items-center">
+      {[0, 1200, 2400].map((ms) => (
+        <span
+          key={ms}
+          className="hero-ring !w-[220px] !border-accent/40"
+          style={{ ...delay(ms), animationDuration: "3.6s" }}
+        />
+      ))}
+      <span className="relative grid size-14 place-items-center rounded-2xl border border-border-strong bg-surface text-[22px] text-accent shadow-[var(--shadow-md)]">
+        <IconShield />
+      </span>
+      <span
+        className="animate-float absolute left-[14%] top-[22%] rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] text-muted shadow-[var(--shadow-sm)]"
+        style={delay(0)}
+      >
+        devpost.com
+      </span>
+      <span
+        className="animate-float absolute bottom-[18%] right-[10%] inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] text-muted shadow-[var(--shadow-sm)]"
+        style={delay(1500)}
+      >
+        <IconCheck className="text-verified" />
+        Official page
+      </span>
+    </div>
+  );
+}
+
+function MatchVisual() {
+  const bars = [
+    { label: "Category", w: 1 },
+    { label: "Interests", w: 0.85 },
+    { label: "Skills", w: 0.65 },
+    { label: "Location", w: 0.9 },
+  ];
+  return (
+    <div className="flex h-full flex-col justify-center gap-3.5 px-2">
+      {bars.map((bar, index) => (
+        <div key={bar.label} className="grid grid-cols-[72px_1fr] items-center gap-3">
+          <span className="text-[11.5px] text-faint">{bar.label}</span>
+          <span className="h-2 overflow-hidden rounded-full bg-bg-subtle">
+            <span
+              className="bar-fill block h-full rounded-full bg-gradient-to-r from-accent/60 to-accent"
+              style={vars({ "--w": bar.w, "--d": `${index * 180}ms` })}
+            />
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function DeadlineVisual() {
+  return (
+    <div className="relative grid h-full place-items-center">
+      <svg viewBox="0 0 120 120" className="size-32 -rotate-90" aria-hidden>
+        <circle cx="60" cy="60" r="48" fill="none" stroke="var(--border)" strokeWidth="6" />
+        <circle
+          className="dial"
+          cx="60"
+          cy="60"
+          r="48"
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="6"
+          strokeLinecap="round"
+          strokeDasharray="90 211.6"
+        />
+      </svg>
+      <span className="absolute grid place-items-center text-[24px] text-text">
+        <IconClock />
+      </span>
+      <span
+        className="animate-float absolute right-[8%] top-[20%] rounded-full border border-critical/30 bg-critical-soft px-2.5 py-1 text-[11px] font-medium text-critical"
+        style={delay(800)}
+      >
+        Closes soon
+      </span>
+    </div>
+  );
+}
+
+const FEATURES = [
+  {
+    title: "Official sources only",
+    body: "Every listing links back to the page it came from.",
+    visual: SourcesVisual,
+  },
+  {
+    title: "Ranked for you",
+    body: "Tell it what you study and love. It sorts the rest, and shows why.",
+    visual: MatchVisual,
+  },
+  {
+    title: "Never miss a deadline",
+    body: "Save what matters and see what closes next.",
+    visual: DeadlineVisual,
+  },
+];
+
 export default function LandingPage() {
   return (
     <div className={`${serif.variable} min-h-dvh overflow-x-clip bg-bg`}>
@@ -274,6 +381,31 @@ export default function LandingPage() {
               </li>
             ))}
           </Marquee>
+        </section>
+
+        {/* ------------------------------------------------------------ Features */}
+        <section className="px-4 pb-28 pt-8 sm:px-6">
+          <div className="reveal-on-scroll mx-auto max-w-xl text-center">
+            <h2 className="text-balance text-[30px] font-semibold leading-[1.1] tracking-[-0.035em] text-text sm:text-[40px]">
+              Built to save you <span className="font-accent text-[1.12em]">time.</span>
+            </h2>
+          </div>
+
+          <ul className="mx-auto mt-14 grid max-w-5xl gap-4 md:grid-cols-3">
+            {FEATURES.map(({ title, body, visual: Visual }) => (
+              <li key={title} className="reveal-on-scroll">
+                <Spotlight className="h-full overflow-hidden rounded-3xl border border-border bg-surface shadow-[inset_0_1px_0_0_color-mix(in_srgb,var(--text)_7%,transparent)] transition-[border-color,transform] duration-300 hover:-translate-y-1 hover:border-border-strong">
+                  <div className="relative h-52 overflow-hidden border-b border-border bg-[radial-gradient(ellipse_at_50%_0%,color-mix(in_srgb,var(--accent)_7%,transparent),transparent_70%)]">
+                    <Visual />
+                  </div>
+                  <div className="relative p-6">
+                    <h3 className="text-[16px] font-medium text-text">{title}</h3>
+                    <p className="mt-1.5 text-[14px] leading-relaxed text-muted">{body}</p>
+                  </div>
+                </Spotlight>
+              </li>
+            ))}
+          </ul>
         </section>
 
         {/* ---------------------------------------------------------------- CTA */}
