@@ -4,12 +4,13 @@
 
 <br />
 
-**Internships, hackathons, certifications, scholarships, programs and free student tech  —    from across the internet, in one place, updated every 6 hours.**
+**Internships, hackathons, certifications, scholarships, programs and free student tech — gathered from official sources, in one place, updated every 6 hours.**
 
 <br />
 
 [![Live site](https://img.shields.io/badge/🌐_Live_site-zenkai--iota.vercel.app-4f9df7?style=for-the-badge)](https://zenkai-iota.vercel.app)
 [![Discovery](https://img.shields.io/github/actions/workflow/status/ganesh-tadigadapa/Zenkai/discovery.yml?style=for-the-badge&label=live%20fetch&logo=githubactions&logoColor=white)](https://github.com/ganesh-tadigadapa/Zenkai/actions/workflows/discovery.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/ganesh-tadigadapa/Zenkai/ci.yml?style=for-the-badge&label=tests&logo=githubactions&logoColor=white)](https://github.com/ganesh-tadigadapa/Zenkai/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-3fca8d?style=for-the-badge)](LICENSE)
 
 ![Next.js](https://img.shields.io/badge/Next.js_16-000000?style=flat-square&logo=nextdotjs&logoColor=white)
@@ -25,7 +26,8 @@
 [How it works](#%EF%B8%8F-how-it-works) ·
 [How to use it](#-how-to-use-it) ·
 [Tech stack](#%EF%B8%8F-tech-stack) ·
-[Run locally](#-run-it-on-your-computer)
+[Run locally](#-run-it-on-your-computer) ·
+[Docs](#-documentation)
 
 </div>
 
@@ -87,16 +89,24 @@ flowchart LR
   <img src="docs/screenshots/opportunities.png" alt="Browsing opportunities with filters" width="100%" />
 </p>
 
-| | Without an account | With a free account |
-|---|:---:|:---:|
-| 🔍 Search and filter every opportunity | ✅ | ✅ |
-| 🔗 Go straight to the official page to apply | ✅ | ✅ |
-| 🏠 **Overview:** personal home page with recommendations | | ✅ |
-| 🔖 **Save** opportunities you like | | ✅ |
-| ⏰ **Deadlines:** what's closing today, this week and later | | ✅ |
-| 🎯 **Profile:** add your degree, skills and interests for better matches | | ✅ |
+| | Signed out | Guest | Free account |
+|---|:---:|:---:|:---:|
+| 🔍 Search and filter every opportunity | ✅ | ✅ | ✅ |
+| 🔗 Go straight to the official page to apply | ✅ | ✅ | ✅ |
+| 🏠 **Overview:** personal home page with recommendations | | ✅ | ✅ |
+| 🔖 **Save** opportunities you like | | ✅ | ✅ |
+| ⏰ **Deadlines:** what's closing today, this week and later | | ✅ | ✅ |
+| 🎯 **Profile:** add your degree, skills and interests for better matches | | ✅ | ✅ |
+| 📱 Sign in from any device | | | ✅ |
 
-**Quick start:** open the [live site](https://zenkai-iota.vercel.app) → click **Explore opportunities** → search something like *"AI hackathon"* or *"remote internship"* → filter by category, cost, deadline or remote → open one and apply on the official page.
+**Quick start:** open the [live site](https://zenkai-iota.vercel.app) → click **Get started**. You land in the app straight away on a guest account, with no email and no password → search something like *"AI hackathon"* or *"remote internship"* → filter by category, cost, deadline or remote → open one and apply on the official page.
+
+**Keep your guest account:** on the **Profile** page, use **Save your account** to add your name, email and password. Everything you saved stays, and you can then sign in from any device.
+
+> [!WARNING]
+> A guest account exists only in the browser that started it. If you sign out before saving it with an email and password, it is gone.
+
+Just want to look around? **Browse opportunities** works without any account.
 
 > [!IMPORTANT]
 > Always check the details on the official website before applying. Listings found automatically show **"Needs verification"** until a person reviews them.
@@ -110,6 +120,16 @@ flowchart LR
 - 💸 **Free things are easy to find:** filter for "Free" or "Free for students".
 - 🔍 **Honest:** every listing shows where it came from. Deadlines and costs are shown only when the source states them, never guessed.
 - 🤝 **Respects websites:** Zenkai follows each site's robots.txt rules and never fetches from sites that don't allow it.
+- 🚪 **No sign-up wall:** one click and you're in. Add an email later only if you want to keep the account.
+
+---
+
+## 🔒 Security and privacy
+
+- **Passwords** are hashed with Argon2id. The real password is never stored.
+- **Sessions** are random tokens kept in an httpOnly cookie, so browser JavaScript can't read them. The database stores only a hash of each token, and signing out revokes it instantly.
+- **Changing your password** signs out every other device.
+- **Your preferences and saved list** are visible only to you, and are never shared with the organisations listed.
 
 ---
 
@@ -123,17 +143,19 @@ flowchart LR
   </tr>
   <tr valign="top">
     <td>
-      • Next.js 16 (App Router, Server Components)<br />
+      • Next.js 16 (App Router, Server Components, Server Actions)<br />
       • React 19<br />
       • TypeScript<br />
-      • Tailwind CSS v4
+      • Tailwind CSS v4<br />
+      • CSS-only animations, Instrument Serif accents
     </td>
     <td>
       • Python 3.11<br />
       • FastAPI (REST API, docs at <code>/docs</code>)<br />
       • SQLAlchemy 2.0 and Pydantic v2<br />
       • PostgreSQL (SQLite for local development)<br />
-      • Argon2 password hashing, secure sessions
+      • Argon2 password hashing, secure sessions<br />
+      • One-click guest accounts that can be upgraded later
     </td>
     <td>
       • httpx, with a polite fetcher: checks robots.txt, rate-limits each site, retries once on network errors<br />
@@ -152,7 +174,7 @@ flowchart LR
 | 🔄 Fetching every 6 hours | GitHub Actions |
 | 🔔 Keep-awake ping every 10 minutes | GitHub Actions |
 
-**🧪 Testing:** pytest, with 350+ backend tests.
+**🧪 Testing:** 365 backend tests with pytest, plus TypeScript and ESLint checks. All of them run on every push through GitHub Actions.
 
 ---
 
@@ -179,6 +201,9 @@ make discover
 
 Open **http://localhost:3000**. The API docs are at **http://localhost:8000/docs**.
 
+> [!NOTE]
+> `make backend` restarts the API by itself when you change backend code. If you start uvicorn some other way, add `--reload`. Without it, new API routes stay missing until you restart, and buttons that use them (such as **Get started**) fail with a 404.
+
 ```bash
 make test    # backend tests
 make lint    # frontend type check and lint
@@ -192,7 +217,11 @@ make lint    # frontend type check and lint
 
 ```
 ZENKAI/
-├── frontend/              # Next.js website
+├── frontend/
+│   └── src/
+│       ├── app/           # pages: landing, opportunities, dashboard, profile…
+│       ├── components/    # UI pieces: cards, filters, intro, layout
+│       └── lib/           # API client, server actions, session cookie
 ├── backend/
 │   ├── app/
 │   │   ├── api/           # API routes
@@ -202,13 +231,23 @@ ZENKAI/
 │   │   └── seed/          # starting data and the list of sources
 │   ├── tests/
 │   └── run_discovery.py   # runs one fetch cycle
-├── .github/workflows/     # 6-hour fetch and keep-awake jobs
+├── .github/workflows/     # tests, 6-hour fetch and keep-awake jobs
+├── docs/                  # banner and screenshots
 └── render.yaml            # Render deployment setup
 ```
 
-More detail: [ARCHITECTURE.md](ARCHITECTURE.md) · [DATABASE.md](DATABASE.md) · [DEVELOPMENT.md](DEVELOPMENT.md) · [DEPLOYMENT.md](DEPLOYMENT.md)
-
 </details>
+
+---
+
+## 📚 Documentation
+
+| Document | What's inside |
+|---|---|
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Design decisions and the discovery pipeline in depth |
+| [DATABASE.md](DATABASE.md) | Every table and column |
+| [DEVELOPMENT.md](DEVELOPMENT.md) | Working on the code day to day |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Putting it on Vercel, Render and Neon |
 
 ---
 
