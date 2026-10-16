@@ -53,8 +53,10 @@ class UnstopAdapter(ApiAdapter):
     url_marker = "unstop.com/api/public/opportunity/search-result"
     name = "unstop"
     complete_listing = True
-    #: 30 per page; ten pages is the 300 most recent open listings per type.
-    max_pages = 10
+    #: 30 per page; 25 pages is up to 750 open listings per type, which covers
+    #: everything currently open (661 internships, 733 competitions on
+    #: 2026-10-16) while still bounding a run.
+    max_pages = 25
 
     def to_documents(self, body: str, source: Source) -> list[RawDocument]:
         payload = (json.loads(body) or {}).get("data") or {}
