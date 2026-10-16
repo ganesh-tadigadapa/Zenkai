@@ -69,7 +69,7 @@ Required environment:
 | `DATABASE_URL` | `postgresql+psycopg://user:password@host:5432/dbname` |
 | `ADMIN_TOKEN` | **Change from the default.** A service-account path for scripts; people authorise through their own `is_admin` account. Must match the frontend's `ZENKAI_ADMIN_TOKEN`. |
 | `DEMO_USER_PASSWORD` / `DEMO_ADMIN_PASSWORD` | **Change both.** They seed the demo accounts and have known defaults. |
-| `CORS_ORIGINS` | Your Vercel domain, e.g. `https://zenkai.vercel.app`. Comma-separated for several. |
+| `CORS_ORIGINS` | Your Vercel domain, e.g. `https://getzenkai.vercel.app`. Comma-separated for several. |
 | `ENV` | `production` — this stops `create_all()` running at startup. |
 | `DEMO_USER_EMAIL` | Identity used when a request sends no `X-User-Id`. |
 
