@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
+import { GuestButton } from "@/components/auth/GuestButton";
 import { Button } from "@/components/ui/Button";
 import { IconAlert } from "@/components/ui/Icons";
 import { loginAction, signupAction, type ActionResult } from "@/lib/actions";
@@ -89,7 +90,22 @@ export function AuthForm({
         </p>
       ) : null}
 
-      <form action={formAction} className="mt-7 space-y-4">
+      <div className="mt-7">
+        <GuestButton next={next} className="w-full">
+          Continue as guest
+        </GuestButton>
+        <p className="mt-2 text-center text-[11.5px] text-faint">
+          No email needed. You can save the account later from your profile.
+        </p>
+      </div>
+
+      <div className="mt-6 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.07em] text-faint">
+        <span className="h-px flex-1 bg-border" />
+        or with email
+        <span className="h-px flex-1 bg-border" />
+      </div>
+
+      <form action={formAction} className="mt-6 space-y-4">
         {next ? <input type="hidden" name="next" value={next} /> : null}
 
         {isSignup ? (
@@ -123,7 +139,7 @@ export function AuthForm({
           </p>
         ) : null}
 
-        <Button type="submit" disabled={isPending} className="w-full" size="lg">
+        <Button type="submit" variant="secondary" disabled={isPending} className="w-full" size="lg">
           {isPending
             ? isSignup
               ? "Creating account…"
