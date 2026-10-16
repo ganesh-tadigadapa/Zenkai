@@ -32,6 +32,36 @@ function revalidateFeeds() {
 
 /* --- Authentication ------------------------------------------------------ */
 
+/** Only ever redirect within this app, so a crafted ?next= cannot send someone elsewhere. */
+function safeNext(value: FormDataEntryValue | null): string {
+  const next = String(value ?? "");
+  return next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
+}
+
+export async function guestAction(formData: FormData): Promise<void> {
+  const session = await api.auth.guest();
+  await setSessionCookie(session.token);
+  redirect(safeNext(formData.get("next")));
+}
+
+export async function claimAccountAction(formData: FormData): Promise<ActionResult> {
+  const email = String(formData.get("email") ?? "").trim();
+  const name = String(formData.get("name") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+
+  if (!email || !name || !password) {
+    return { ok: false, message: "Fill in every field." };
+  }
+
+  try {
+    await api.auth.claim({ email, name, password });
+    revalidatePath("/", "layout");
+    return { ok: true, message: "Account saved. You can now sign in from any device." };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
 export async function signupAction(formData: FormData): Promise<ActionResult> {
   const email = String(formData.get("email") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
@@ -55,8 +85,6 @@ export async function signupAction(formData: FormData): Promise<ActionResult> {
 export async function loginAction(formData: FormData): Promise<ActionResult> {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
-  const next = String(formData.get("next") ?? "/dashboard");
-
   if (!email || !password) {
     return { ok: false, message: "Enter your email and password." };
   }
@@ -67,9 +95,7 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
   } catch (error) {
     return fail(error);
   }
-  // Only ever redirect within this app, so a crafted ?next= cannot bounce
-  // someone to another origin straight after signing in.
-  redirect(next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard");
+  redirect(safeNext(formData.get("next")));
 }
 
 export async function logoutAction(): Promise<void> {
