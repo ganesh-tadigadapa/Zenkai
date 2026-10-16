@@ -128,7 +128,7 @@ export default async function DeadlinesPage({
           body={
             savedOnly
               ? "Save an opportunity that publishes a deadline and it will be tracked here."
-              : "Zenkai shows a date only where the official source publishes one, and never invents a cycle from a programme's history. Most of today's curated catalogue is either continuously open or announces dates each cycle, so there is nothing to count down yet. This fills in as source checking is rolled out."
+              : "Zenkai shows a date only where the official source publishes one, and never invents a cycle from a programme's history. Nothing in the catalogue has a published deadline in this window right now."
           }
           action={{ href: "/opportunities", label: "Browse opportunities" }}
         />
