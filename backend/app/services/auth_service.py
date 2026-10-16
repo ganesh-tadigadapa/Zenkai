@@ -1,6 +1,7 @@
 """Sign-up, sign-in and session lifecycle."""
 from __future__ import annotations
 
+import secrets
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import delete, select
@@ -52,6 +53,53 @@ def register(db: Session, email: str, name: str, password: str) -> User:
         auth_provider="password",
     )
     db.add(user)
+    db.flush()
+    return user
+
+
+# Guests get a placeholder address on a reserved domain so the unique email
+# column holds, and nobody can sign up with or sign in as one.
+GUEST_EMAIL_DOMAIN = "guest.zenkai.invalid"
+
+
+def create_guest(db: Session) -> User:
+    """An anonymous account, so people can use the app without signing up.
+
+    It has no password, so it is reachable only through its session. Claiming
+    it with ``claim_guest`` keeps everything saved under it.
+    """
+    user = User(
+        email=f"guest-{secrets.token_hex(8)}@{GUEST_EMAIL_DOMAIN}",
+        name="Guest",
+        auth_provider="guest",
+    )
+    db.add(user)
+    user.last_login_at = datetime.now(timezone.utc)
+    db.flush()
+    return user
+
+
+def claim_guest(db: Session, user: User, email: str, name: str, password: str) -> User:
+    """Give a guest account an email and password. Raises AuthError on a bad input."""
+    if not user.is_guest:
+        raise AuthError("This account already has a sign-in.")
+    email = normalize_email(email)
+    name = name.strip()
+
+    if not name:
+        raise AuthError("Enter your name.")
+    if email.endswith(f"@{GUEST_EMAIL_DOMAIN}"):
+        raise AuthError("Use your own email address.")
+    problems = password_problems(password)
+    if problems:
+        raise AuthError(" ".join(problems))
+    if find_by_email(db, email) is not None:
+        raise AuthError("An account with that email already exists.")
+
+    user.email = email
+    user.name = name
+    user.password_hash = hash_password(password)
+    user.auth_provider = "password"
     db.flush()
     return user
 
