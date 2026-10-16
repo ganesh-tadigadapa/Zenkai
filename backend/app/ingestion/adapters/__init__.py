@@ -1,5 +1,6 @@
 from app.ingestion.adapters.base import ApiAdapter
 from app.ingestion.adapters.devpost import DevpostAdapter
+from app.ingestion.adapters.free_certifications import FreeCertificationsListAdapter
 from app.ingestion.adapters.github_pack import GitHubPackOffersAdapter
 from app.ingestion.adapters.microsoft_learn import MicrosoftLearnAdapter
 from app.ingestion.adapters.mlh import MLHEventsAdapter
@@ -13,6 +14,7 @@ REGISTRY: list[ApiAdapter] = [
     UnstopAdapter(),
     SimplifyInternshipsAdapter(),
     GitHubPackOffersAdapter(),
+    FreeCertificationsListAdapter(),
 ]
 
 
@@ -26,6 +28,7 @@ def adapter_for(source) -> ApiAdapter | None:
 __all__ = [
     "ApiAdapter",
     "DevpostAdapter",
+    "FreeCertificationsListAdapter",
     "GitHubPackOffersAdapter",
     "MLHEventsAdapter",
     "MicrosoftLearnAdapter",

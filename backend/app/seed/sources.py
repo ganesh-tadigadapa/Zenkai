@@ -339,6 +339,27 @@ SOURCES = [
         ),
     ),
     dict(
+        # Verified 2026-10-16: 200, 126 rows, MIT licence. About 100 rows are
+        # still open-ended; the adapter drops rows whose offer has ended.
+        name="Free Certifications list",
+        organization="ArslanYM/Free-Certifications",
+        url="https://raw.githubusercontent.com/ArslanYM/Free-Certifications/main/README.md",
+        official_url="https://github.com/ArslanYM/Free-Certifications",
+        source_type="official_api",
+        category="certifications",
+        authority="other_reputable_source",
+        discovery_method="official_api",
+        check_frequency="low",
+        trust_level=3,
+        check_frequency_minutes=1440,
+        robots_allowed=True,
+        access_notes=(
+            "Community-maintained list in a public GitHub repository, read from "
+            "raw.githubusercontent.com. Useful for discovery only: records stay "
+            "'Needs verification' and link to each provider's own page."
+        ),
+    ),
+    dict(
         # Verified 2026-10-15: RSS, 200. Scholarships, fellowships and
         # competitions worldwide; the relevance gate filters the rest.
         name="Opportunity Desk",
