@@ -319,6 +319,26 @@ SOURCES = [
         ),
     ),
     dict(
+        # Verified 2026-10-16: 200, 733 open competitions. Same endpoint as the
+        # other Unstop sources; robots.txt allows /api/public/*.
+        name="Unstop competitions",
+        organization="Unstop",
+        url="https://unstop.com/api/public/opportunity/search-result?opportunity=competitions&oppstatus=open&per_page=30",
+        official_url="https://unstop.com/competitions",
+        source_type="official_api",
+        category="hackathons",
+        authority="established_platform",
+        discovery_method="official_api",
+        check_frequency="high",
+        trust_level=3,
+        check_frequency_minutes=360,
+        robots_allowed=True,
+        access_notes=(
+            "Same endpoint as Unstop internships, filtered to open competitions: "
+            "case studies, quizzes, coding and business contests."
+        ),
+    ),
+    dict(
         # Verified 2026-10-15: RSS, 200. Scholarships, fellowships and
         # competitions worldwide; the relevance gate filters the rest.
         name="Opportunity Desk",
