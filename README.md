@@ -4,7 +4,7 @@
 
 <br />
 
-**Internships, hackathons, certifications, scholarships, programs and free student tech — from across the internet, in one place, updated every 6 hours.**
+**Internships, hackathons, certifications, scholarships, programs and free student tech  — from across the internet, in one place, updated every 6 hours.**
 
 <br />
 
