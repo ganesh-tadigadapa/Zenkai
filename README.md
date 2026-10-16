@@ -64,7 +64,7 @@ Good opportunities for students are spread over many websites: Devpost for hacka
 
 ```mermaid
 flowchart LR
-    A["🌍 Sources<br/>Devpost · MLH · Unstop<br/>SimplifyJobs · Microsoft Learn<br/>GitHub Student Pack · feeds"] -->|every 6 hours| B["📥 Fetch<br/>follows robots.txt"]
+    A["🌍 Sources<br/>Devpost · MLH · Unstop<br/>SimplifyJobs · Microsoft Learn<br/>GitHub Student Pack · community lists · feeds"] -->|every 6 hours| B["📥 Fetch<br/>follows robots.txt"]
     B --> C["🧹 Clean up<br/>remove noise<br/>merge duplicates"]
     C --> D[("🗄️ Database")]
     D --> E["🔄 Keep fresh<br/>update changes<br/>close expired"]
@@ -73,7 +73,7 @@ flowchart LR
     F --> G["💻 Website"]
 ```
 
-1. **📥 It fetches.** Every 6 hours, Zenkai reads official sources: Devpost, MLH, Unstop, SimplifyJobs, Microsoft Learn, the GitHub Student Pack, Outreachy, Google Developers and Opportunity Desk.
+1. **📥 It fetches.** Every 6 hours, Zenkai reads official sources: Devpost, MLH, Unstop (internships, hackathons, competitions and scholarships), SimplifyJobs, Microsoft Learn (certifications and Applied Skills), the GitHub Student Pack, Outreachy, Google Developers and Opportunity Desk. It also reads two community-maintained GitHub lists, of free certifications and of student developer discounts. Records from those stay marked **"Needs verification"** and link to each provider's own page.
 2. **🧹 It cleans up.** If the same opportunity appears on two sites, it's kept only once. Posts that aren't real opportunities (news, product updates) are filtered out.
 3. **🔄 It keeps things fresh:**
    - New listings are added.
@@ -159,7 +159,7 @@ Just want to look around? **Browse opportunities** works without any account.
     </td>
     <td>
       • httpx, with a polite fetcher: checks robots.txt, rate-limits each site, retries once on network errors<br />
-      • Readers for APIs (Devpost, Unstop, Microsoft Learn, SimplifyJobs), web pages (MLH, GitHub Student Pack) and RSS/Atom feeds
+      • Readers for APIs (Devpost, Unstop, Microsoft Learn, SimplifyJobs), web pages (MLH, GitHub Student Pack), community Markdown lists and RSS/Atom feeds
     </td>
   </tr>
 </table>
