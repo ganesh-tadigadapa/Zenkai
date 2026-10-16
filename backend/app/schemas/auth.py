@@ -16,6 +16,10 @@ class LoginIn(BaseModel):
     password: str = Field(min_length=1, max_length=200)
 
 
+class ClaimIn(SignupIn):
+    """Turns a guest account into a password account, keeping its data."""
+
+
 class ChangePasswordIn(BaseModel):
     current_password: str = Field(min_length=1, max_length=200)
     new_password: str = Field(min_length=1, max_length=200)

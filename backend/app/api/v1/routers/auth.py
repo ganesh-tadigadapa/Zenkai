@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import bearer_token, db_session, get_current_user
 from app.auth.providers import AuthError
 from app.models.user import User
-from app.schemas.auth import ChangePasswordIn, LoginIn, SessionOut, SignupIn
+from app.schemas.auth import ChangePasswordIn, ClaimIn, LoginIn, SessionOut, SignupIn
 from app.schemas.common import Message
 from app.schemas.user import ProfileOut
 from app.services import auth_service
@@ -38,6 +38,32 @@ def signup(
     except AuthError as exc:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
     return _session_payload(db, user, request.headers.get("user-agent"))
+
+
+@router.post(
+    "/guest",
+    response_model=SessionOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Start a session on a new anonymous account",
+)
+def guest(request: Request, db: Session = Depends(db_session)):
+    user = auth_service.create_guest(db)
+    return _session_payload(db, user, request.headers.get("user-agent"))
+
+
+@router.post("/claim", response_model=ProfileOut, summary="Add an email and password to a guest account")
+def claim(
+    payload: ClaimIn,
+    db: Session = Depends(db_session),
+    user: User = Depends(get_current_user),
+):
+    try:
+        auth_service.claim_guest(db, user, str(payload.email), payload.name, payload.password)
+    except AuthError as exc:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+    db.commit()
+    db.refresh(user)
+    return user
 
 
 @router.post("/login", response_model=SessionOut, summary="Sign in")
