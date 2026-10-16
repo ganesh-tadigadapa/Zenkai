@@ -360,6 +360,26 @@ SOURCES = [
         ),
     ),
     dict(
+        # Verified 2026-10-16: 200, ~117 tagged offers, updated 2026-09.
+        name="Student developer discounts list",
+        organization="AchoArnold/discount-for-student-dev",
+        url="https://raw.githubusercontent.com/AchoArnold/discount-for-student-dev/master/README.md",
+        official_url="https://github.com/AchoArnold/discount-for-student-dev",
+        source_type="official_api",
+        category="tech_benefits",
+        authority="other_reputable_source",
+        discovery_method="official_api",
+        check_frequency="low",
+        trust_level=3,
+        check_frequency_minutes=1440,
+        robots_allowed=True,
+        access_notes=(
+            "Community-maintained list in a public GitHub repository, read from "
+            "raw.githubusercontent.com. Only entries tagged FREE, CREDIT or "
+            "DISCOUNT are read; links go to providers' own student pages."
+        ),
+    ),
+    dict(
         # Verified 2026-10-15: RSS, 200. Scholarships, fellowships and
         # competitions worldwide; the relevance gate filters the rest.
         name="Opportunity Desk",

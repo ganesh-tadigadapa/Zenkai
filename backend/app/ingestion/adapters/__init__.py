@@ -5,6 +5,7 @@ from app.ingestion.adapters.github_pack import GitHubPackOffersAdapter
 from app.ingestion.adapters.microsoft_learn import MicrosoftLearnAdapter
 from app.ingestion.adapters.mlh import MLHEventsAdapter
 from app.ingestion.adapters.simplify import SimplifyInternshipsAdapter
+from app.ingestion.adapters.student_discounts import StudentDiscountsListAdapter
 from app.ingestion.adapters.unstop import UnstopAdapter
 
 REGISTRY: list[ApiAdapter] = [
@@ -15,6 +16,7 @@ REGISTRY: list[ApiAdapter] = [
     SimplifyInternshipsAdapter(),
     GitHubPackOffersAdapter(),
     FreeCertificationsListAdapter(),
+    StudentDiscountsListAdapter(),
 ]
 
 
@@ -33,6 +35,7 @@ __all__ = [
     "MLHEventsAdapter",
     "MicrosoftLearnAdapter",
     "SimplifyInternshipsAdapter",
+    "StudentDiscountsListAdapter",
     "UnstopAdapter",
     "adapter_for",
 ]
