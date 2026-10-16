@@ -408,6 +408,54 @@ html[data-intro="pending"] .animate-blur-in {
   opacity: 0.7;
 }
 
+/* --- Marquee ------------------------------------------------------------- */
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee var(--speed, 40s) linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee var(--speed, 40s) linear infinite reverse;
+}
+
+/* --- Feature card loops -------------------------------------------------- */
+
+@keyframes bar-fill {
+  0%, 10%  { transform: scaleX(0.08); }
+  45%, 75% { transform: scaleX(var(--w, 1)); }
+  100%     { transform: scaleX(0.08); }
+}
+
+.bar-fill {
+  transform-origin: left;
+  animation: bar-fill 4.5s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  animation-delay: var(--d, 0ms);
+}
+
+@keyframes dial {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -301.6; }
+}
+
+.dial {
+  animation: dial 6s linear infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+  animation-delay: var(--d, 0ms);
+}
+
 /* Sections fade up as they scroll into view, where the browser supports it. */
 @supports (animation-timeline: view()) {
   .reveal-on-scroll {
@@ -423,6 +471,11 @@ html[data-intro="pending"] .animate-blur-in {
   .hero-ring,
   .hero-glow,
   .glow-border,
+  .animate-marquee,
+  .animate-marquee-reverse,
+  .bar-fill,
+  .dial,
+  .animate-float,
   .reveal-on-scroll {
     animation: none;
   }
