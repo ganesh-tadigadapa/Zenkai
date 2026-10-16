@@ -1,142 +1,114 @@
 import type { Metadata } from "next";
+import { Instrument_Serif } from "next/font/google";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 
+import { GuestButton } from "@/components/auth/GuestButton";
 import { IntroSequence } from "@/components/intro/IntroSequence";
 import { Logo } from "@/components/layout/Logo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
-import { PreviewCard } from "@/components/marketing/PreviewCard";
-import { Radar } from "@/components/marketing/Radar";
-import { Badge } from "@/components/ui/Badge";
+import { Spotlight } from "@/components/marketing/Spotlight";
 import { ButtonLink } from "@/components/ui/Button";
 import {
-  IconAward,
-  IconBriefcase,
-  IconCheck,
-  IconGraduationCap,
-  IconShield,
-  IconSparkles,
-  IconTrophy,
-  IconUsers,
+  IconArrowRight,
 } from "@/components/ui/Icons";
-import { api } from "@/lib/api";
-import { BRAND } from "@/lib/brand";
-import type { Category, CategoryInfo } from "@/lib/types";
+import { BRAND, STORAGE_KEYS } from "@/lib/brand";
+
+const serif = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: `${BRAND.wordmark} — ${BRAND.tagline}`,
   description: BRAND.description,
 };
-export const revalidate = 120;
 
-/**
- * The six categories are a fixed product commitment, so the landing page
- * describes them without needing the API. Live counts are layered on when the
- * catalogue responds, and simply omitted when it does not — which is what
- * happens during a build, before the backend is reachable.
- */
-const CATEGORIES: { slug: Category; name: string; description: string }[] = [
-  {
-    slug: "certifications",
-    name: "Certifications",
-    description: "Courses, exams and learning platforms that end in a credential.",
-  },
-  {
-    slug: "internships",
-    name: "Internships",
-    description: "Paid and unpaid roles built for students.",
-  },
-  {
-    slug: "hackathons",
-    name: "Hackathons & Competitions",
-    description: "Build, compete and win — usually in a weekend.",
-  },
-  {
-    slug: "programs",
-    name: "Programs & Fellowships",
-    description: "Structured cohorts, ambassadorships and fellowships.",
-  },
-  {
-    slug: "tech_benefits",
-    name: "Tech Benefits",
-    description: "Free and discounted software, cloud credits and AI tools.",
-  },
-  {
-    slug: "scholarships",
-    name: "Scholarships",
-    description: "Funding for tuition, travel and research.",
-  },
+/** Cycled in the headline: "Stop searching for …". */
+const ROTATING = [
+  "internships.",
+  "hackathons.",
+  "certifications.",
+  "scholarships.",
+  "fellowships.",
+  "student perks.",
 ];
 
-const CATEGORY_ICONS: Record<string, typeof IconAward> = {
-  certifications: IconAward,
-  internships: IconBriefcase,
-  hackathons: IconTrophy,
-  programs: IconUsers,
-  tech_benefits: IconSparkles,
-  scholarships: IconGraduationCap,
-};
+/** Entrance delay for an `.animate-blur-in` element, or any `--d` consumer. */
+const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
+const vars = (values: Record<string, string | number>) => values as CSSProperties;
 
-const PIPELINE = [
-  {
-    step: "Discover",
-    body: "Official pages, feeds and APIs are registered as sources, each with a trust level and a check cadence. Sources that disallow automated access are recorded and never fetched.",
-  },
-  {
-    step: "Extract",
-    body: "Each fetched document is turned into a structured candidate: what it is, who can apply, what it costs and when it closes.",
-  },
-  {
-    step: "Deduplicate",
-    body: "A content fingerprint plus title similarity collapses the same opportunity arriving from several places into one record.",
-  },
-  {
-    step: "Verify",
-    body: "Automated checks establish plausibility and produce a confidence score. Low confidence routes to a person — automation never self-approves.",
-  },
-  {
-    step: "Match",
-    body: "Your degree, skills, interests and location produce a score with a written reason for every point awarded.",
-  },
-];
+/*
+  Runs before the hero paints. If the intro is about to play, this holds the
+  page's entrance animation until the overlay leaves (IntroSequence clears the
+  flag), so the reveal is seen rather than spent behind the overlay. It mirrors
+  the intro's own check: first visit, motion allowed.
+*/
+const HOLD_FOR_INTRO = `
+(function () {
+  try {
+    if (localStorage.getItem('${STORAGE_KEYS.introSeen}') === '1') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.documentElement.dataset.intro = 'pending';
+  } catch (e) {}
+})();
+`;
 
 function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-bg/85 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+    <header className="fixed inset-x-0 top-3 z-40 px-3 sm:top-4">
+      <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-4 rounded-full border border-border/80 bg-surface/60 pl-4 pr-2 shadow-[var(--shadow-md)] backdrop-blur-xl sm:pl-5">
         <Logo />
-        <nav aria-label="Primary" className="flex items-center gap-1.5 sm:gap-3">
+        <nav aria-label="Primary" className="flex items-center gap-1 sm:gap-2">
           <Link
-            href="#how-it-works"
-            className="hidden rounded-lg px-3 py-2 text-[13px] font-medium text-muted transition-colors hover:text-text sm:block"
+            href="/opportunities"
+            className="hidden px-3 py-2 text-[13px] text-muted transition-colors hover:text-text sm:block"
           >
-            How it works
+            Browse
           </Link>
           <Link
             href="/login"
-            className="rounded-lg px-3 py-2 text-[13px] font-medium text-muted transition-colors hover:text-text"
+            className="px-3 py-2 text-[13px] text-muted transition-colors hover:text-text"
           >
             Sign in
           </Link>
           <ThemeToggle />
-          <ButtonLink href="/signup" size="sm">
-            Get started
-          </ButtonLink>
         </nav>
       </div>
     </header>
   );
 }
 
-export default async function LandingPage() {
-  // Real counts from the catalogue, never invented marketing numbers. If the
-  // API is unreachable — during a build, say — the page drops the numbers and
-  // keeps everything else.
-  const live: CategoryInfo[] = await api.categories().catch(() => []);
-  const counts = new Map(live.map((category) => [category.slug, category.count]));
-  const total = live.reduce((sum, category) => sum + category.count, 0);
-
+/** The one call to action, with a light travelling round its edge. */
+function PrimaryCta({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-dvh bg-bg">
+    <span className="glow-border isolate">
+      <GuestButton variant="ink" className="rounded-full px-8">
+        {children}
+      </GuestButton>
+    </span>
+  );
+}
+
+/** The closing call to action: same glow, but leads into the catalogue. */
+function BrowseCta() {
+  return (
+    <span className="glow-border isolate">
+      <ButtonLink href="/opportunities" variant="ink" size="lg" className="group rounded-full px-8">
+        Browse opportunities
+        <IconArrowRight className="transition-transform group-hover:translate-x-0.5" />
+      </ButtonLink>
+    </span>
+  );
+}
+
+export default function LandingPage() {
+  return (
+    <div className={`${serif.variable} min-h-dvh overflow-x-clip bg-bg`}>
+      <script dangerouslySetInnerHTML={{ __html: HOLD_FOR_INTRO }} />
       {/*
         Plays once per visitor, on the client only. Returning visitors and
         anyone with prefers-reduced-motion never see it, and it renders nothing
@@ -147,199 +119,100 @@ export default async function LandingPage() {
 
       <main id="main">
         {/* ---------------------------------------------------------------- Hero */}
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:py-24">
-            <div>
-              <Badge tone="accent" className="mb-5">
-                <IconShield />
-                Every record carries its official source
-              </Badge>
+        <Spotlight className="overflow-hidden" size={520} strength={10}>
+          <section className="relative flex min-h-dvh items-center justify-center px-4 sm:px-6">
+            <div aria-hidden className="animate-blur-in pointer-events-none absolute inset-0">
+              <div className="hero-glow" />
+              {[0, 3000, 6000].map((ms) => (
+                <span key={ms} className="hero-ring" style={delay(ms)} />
+              ))}
+            </div>
+            <div aria-hidden className="grain pointer-events-none absolute inset-0" />
+            {/* Fades the glow and rings out, so the hero has no hard bottom edge. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent to-bg"
+            />
 
-              <h1 className="text-balance text-[38px] font-semibold leading-[1.08] tracking-[-0.03em] text-text sm:text-[52px]">
-                Stop searching.
+            <div className="relative mx-auto max-w-4xl text-center">
+              <p
+                className="animate-blur-in inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3.5 py-1.5 text-[12.5px] text-muted backdrop-blur"
+                style={delay(0)}
+              >
+                <span className="relative flex size-1.5">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-70 motion-reduce:hidden" />
+                  <span className="relative inline-flex size-1.5 rounded-full bg-accent" />
+                </span>
+                {BRAND.tagline}
+              </p>
+
+              <h1 className="mt-7 text-[40px] font-semibold leading-[1.05] tracking-[-0.045em] text-text sm:text-[64px]">
+                <span className="animate-blur-in inline-block" style={delay(120)}>
+                  Stop searching for
+                </span>
                 <br />
-                Start discovering.
+                <span
+                  className="animate-blur-in font-accent inline-block text-[50px] leading-[1.05] sm:text-[80px]"
+                  style={delay(280)}
+                >
+                  <span className="word-cycle">
+                    {ROTATING.map((word, index) => (
+                      <span
+                        key={word}
+                        aria-hidden={index > 0}
+                        className="bg-gradient-to-r from-accent via-[color-mix(in_srgb,var(--accent)_70%,var(--text))] to-[color-mix(in_srgb,var(--accent)_35%,var(--text))] bg-clip-text px-2 pb-2 text-transparent"
+                        style={vars({ "--i": index })}
+                      >
+                        {word}
+                      </span>
+                    ))}
+                  </span>
+                </span>
               </h1>
 
-              <p className="mt-5 max-w-xl text-[16px] leading-relaxed text-muted">
-                {BRAND.description}
+              <p
+                className="animate-blur-in mx-auto mt-5 max-w-md text-pretty text-[16px] leading-relaxed text-muted sm:text-[17px]"
+                style={delay(420)}
+              >
+                Every opportunity worth your time, gathered from official sources and ranked for
+                you.
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3">
-                <ButtonLink href="/signup" size="lg">
-                  Get started
-                </ButtonLink>
-                <ButtonLink href="/opportunities" size="lg" variant="secondary">
-                  Explore opportunities
-                </ButtonLink>
+              <div className="animate-blur-in mt-10" style={delay(540)}>
+                <PrimaryCta>Get started — it&apos;s free</PrimaryCta>
               </div>
-
-              {total > 0 ? (
-                <p className="tnum mt-6 text-[13px] text-faint">
-                  <span className="font-semibold text-text">{total}</span> open opportunities
-                  across {live.filter((c) => c.count > 0).length} categories · browsing is free and
-                  needs no account
-                </p>
-              ) : null}
-            </div>
-
-            <div className="relative flex justify-center lg:justify-end lg:pr-6">
-              <Radar />
-
-              <PreviewCard
-                organization="Example Cloud Provider"
-                title="Free cloud certification"
-                category="Certification"
-                cost="Free"
-                deadline="12 days left"
-                isNew
-                className="absolute -top-2 left-0 hidden scale-[0.82] sm:block lg:-left-20 lg:top-4"
-              />
-              <PreviewCard
-                organization="Example Foundation"
-                title="Remote open-source fellowship"
-                category="Fellowship"
-                cost="Paid"
-                deadline="3 days left"
-                urgent
-                className="absolute -bottom-4 right-0 hidden scale-[0.82] sm:block lg:-right-12"
-              />
-            </div>
-          </div>
-
-          <p className="mx-auto max-w-6xl px-4 pb-6 text-[11.5px] text-faint sm:px-6">
-            The two floating cards above are illustrative examples, not live listings. Real records
-            are in{" "}
-            <Link href="/opportunities" className="text-accent hover:underline">
-              the catalogue
-            </Link>
-            , each labelled with its verification status and source.
-          </p>
-        </section>
-
-        {/* ---------------------------------------------------------- Categories */}
-        <section className="border-b border-border">
-            <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-              <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-text">
-                Six categories. Nothing else.
-              </h2>
-              <p className="mt-2 max-w-2xl text-[14.5px] leading-relaxed text-muted">
-                Zenkai deliberately does not aggregate general news, random events or generic
-                courses. A narrow catalogue is what makes it scannable.
+              <p className="animate-blur-in mt-4 text-[12.5px] text-faint" style={delay(620)}>
+                No sign-up needed
               </p>
-
-              <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                {CATEGORIES.map((category) => {
-                  const Glyph = CATEGORY_ICONS[category.slug] ?? IconSparkles;
-                  const count = counts.get(category.slug);
-                  return (
-                    <Link
-                      key={category.slug}
-                      href={`/opportunities?category=${category.slug}`}
-                      className="group rounded-panel border border-border bg-surface p-5 transition-[border-color,box-shadow,transform] hover:-translate-y-px hover:border-border-strong hover:shadow-float"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <span className="grid size-9 place-items-center rounded-[10px] bg-bg-subtle text-[17px] text-accent">
-                          <Glyph />
-                        </span>
-                        {count !== undefined ? (
-                          <span className="tnum text-[12.5px] font-medium text-faint">{count}</span>
-                        ) : null}
-                      </div>
-                      <h3 className="mt-3.5 text-[14.5px] font-semibold text-text group-hover:text-accent">
-                        {category.name}
-                      </h3>
-                      <p className="mt-1 text-[12.5px] leading-relaxed text-muted">
-                        {category.description}
-                      </p>
-                    </Link>
-                  );
-                })}
-              </div>
             </div>
           </section>
-
-        {/* -------------------------------------------------------- How it works */}
-        <section id="how-it-works" className="scroll-mt-20 border-b border-border">
-          <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-            <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-text">
-              How an opportunity reaches you
-            </h2>
-            <p className="mt-2 max-w-2xl text-[14.5px] leading-relaxed text-muted">
-              Five stages, each one auditable. Sources are read every six hours, and every record
-              is labelled with where it came from and whether a person has checked it.
-            </p>
-
-            <ol className="mt-8 grid gap-px overflow-hidden rounded-panel border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
-              {PIPELINE.map((stage, index) => (
-                <li key={stage.step} className="bg-surface p-5">
-                  <span className="tnum text-[11px] font-semibold text-faint">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-1.5 text-[14px] font-semibold text-text">{stage.step}</h3>
-                  <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted">{stage.body}</p>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        {/* ---------------------------------------------------------- Honest bit */}
-        <section className="border-b border-border">
-          <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2">
-            <div>
-              <h2 className="text-[24px] font-semibold tracking-[-0.02em] text-text">
-                What Zenkai does not claim
-              </h2>
-              <p className="mt-2 text-[14.5px] leading-relaxed text-muted">
-                Opportunity aggregators tend to overstate their coverage and their confidence. These
-                are the limits of this build, stated plainly.
-              </p>
-            </div>
-
-            <ul className="space-y-3.5">
-              {[
-                "It does not scan the whole internet — only the sources it lists, read every six hours.",
-                "Records found automatically say “Needs verification” until a person reviews them. “Curated” means a person wrote it from the official page.",
-                "Deadlines and costs appear only where the official source publishes them. Where it does not, Zenkai says “not listed” rather than guessing.",
-                "Match scores are fixed rules with visible reasons, not machine learning, and not a prediction of acceptance.",
-                "Sources that prohibit automated access are recorded and never fetched.",
-              ].map((line) => (
-                <li key={line} className="flex items-start gap-2.5">
-                  <IconCheck className="mt-[3px] text-[14px] text-verified" />
-                  <span className="text-[13.5px] leading-relaxed text-muted">{line}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+        </Spotlight>
 
         {/* ---------------------------------------------------------------- CTA */}
-        <section className="mx-auto max-w-6xl px-4 py-20 text-center sm:px-6">
-          <h2 className="text-balance text-[28px] font-semibold tracking-[-0.02em] text-text sm:text-[34px]">
-            Your opportunity radar.
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-muted">
-            Set your degree, skills and interests once. Zenkai ranks every opportunity against them
-            and shows you why each one surfaced.
-          </p>
-          <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <ButtonLink href="/signup" size="lg">
-              Create your account
-            </ButtonLink>
-            <ButtonLink href="/opportunities" size="lg" variant="secondary">
-              Browse without an account
-            </ButtonLink>
+        <section className="relative overflow-hidden border-t border-border px-4 py-28 text-center sm:px-6 sm:py-36">
+          <div aria-hidden className="pointer-events-none absolute inset-0">
+            <div className="hero-glow opacity-60" style={{ top: "100%" }} />
+          </div>
+          <div className="reveal-on-scroll relative">
+            <h2 className="text-balance text-[32px] font-semibold leading-[1.08] tracking-[-0.04em] text-text sm:text-[52px]">
+              Your next opportunity
+              <br />
+              <span className="font-accent text-[1.1em] text-faint">is already out there.</span>
+            </h2>
+            <div className="mt-10">
+              <BrowseCta />
+            </div>
+            <p className="mt-4 text-[12.5px] text-faint">No account needed to look around.</p>
           </div>
         </section>
       </main>
 
       <footer className="border-t border-border">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-8 sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <Logo />
-          <p className="max-w-md text-[12px] leading-relaxed text-faint">
-            {BRAND.tagline} An opportunity intelligence platform for students. Always confirm
-            details on the official source before applying.
+          <p className="text-[12px] text-faint">
+            © {new Date().getFullYear()} {BRAND.name} · Always confirm details on the official source
+            before applying.
           </p>
         </div>
       </footer>

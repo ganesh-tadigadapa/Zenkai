@@ -230,17 +230,6 @@ body {
   to   { opacity: 1; transform: none; }
 }
 
-@keyframes radar-sweep {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-@keyframes radar-ping {
-  0%   { opacity: 0; transform: scale(0.6); }
-  20%  { opacity: 1; }
-  100% { opacity: 0; transform: scale(1.9); }
-}
-
 @keyframes shimmer {
   from { background-position: -200% 0; }
   to   { background-position: 200% 0; }
