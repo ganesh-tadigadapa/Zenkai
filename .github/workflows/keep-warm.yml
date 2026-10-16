@@ -26,4 +26,4 @@ jobs:
         run: |
           curl --silent --show-error --fail-with-body --max-time 120 \
             --retry 2 --retry-delay 10 \
-            https://zenkai-iota.vercel.app/api/health
+            https://getzenkai.vercel.app/api/health
