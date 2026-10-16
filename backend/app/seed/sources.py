@@ -339,7 +339,7 @@ SOURCES = [
     ),
     dict(
         name="Manual editorial submissions",
-        url="https://zenkai.dev/internal/manual",
+        url="https://getzenkai.vercel.app/internal/manual",
         source_type="manual",
         category=None,
         authority="official_organization",
