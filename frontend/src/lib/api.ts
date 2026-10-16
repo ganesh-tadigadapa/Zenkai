@@ -130,6 +130,12 @@ export const api = {
         body: JSON.stringify(body),
       }),
 
+    guest: () =>
+      request<SessionResponse>("/api/v1/auth/guest", { method: "POST", anonymous: true }),
+
+    claim: (body: { email: string; name: string; password: string }) =>
+      request<Profile>("/api/v1/auth/claim", { method: "POST", body: JSON.stringify(body) }),
+
     logout: () => request<{ detail: string }>("/api/v1/auth/logout", { method: "POST" }),
 
     me: () => request<Profile>("/api/v1/auth/me"),

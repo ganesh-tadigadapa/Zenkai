@@ -270,6 +270,8 @@ export interface Profile {
   is_admin: boolean;
   /** True for the seeded demo account, so the UI can label it as such. */
   is_demo: boolean;
+  /** True for a one-click guest account that has no email or password yet. */
+  is_guest: boolean;
   preferences: Preferences | null;
 }
 
