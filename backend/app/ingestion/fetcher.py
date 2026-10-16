@@ -27,7 +27,7 @@ import httpx
 
 logger = logging.getLogger(__name__)
 
-USER_AGENT = "ZenkaiBot/0.1 (+https://zenkai.dev/bot; opportunity discovery)"
+USER_AGENT = "ZenkaiBot/0.1 (+https://getzenkai.vercel.app; opportunity discovery)"
 #: Identity robots.txt rules are evaluated against.
 ROBOTS_AGENT = "ZenkaiBot"
 
