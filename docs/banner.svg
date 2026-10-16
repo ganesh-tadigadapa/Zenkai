@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="240" viewBox="0 0 900 240" role="img" aria-label="Zenkai — Your opportunity radar">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="0%" r="75%">
+      <stop offset="0%" stop-color="#4f9df7" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0c0e12" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f9df7" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#4f9df7" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="240" rx="20" fill="#0c0e12"/>
+  <rect width="900" height="240" rx="20" fill="url(#glow)"/>
+  <g stroke="#252a31" stroke-width="1">
+    <path d="M0 60H900M0 120H900M0 180H900M150 0V240M300 0V240M450 0V240M600 0V240M750 0V240" opacity="0.6"/>
+  </g>
+  <!-- radar -->
+  <g transform="translate(160 120)">
+    <circle r="78" fill="none" stroke="#343a43"/>
+    <circle r="52" fill="none" stroke="#343a43"/>
+    <circle r="26" fill="none" stroke="#343a43"/>
+    <path d="M0 0 L0 -78 A78 78 0 0 1 55 -55 Z" fill="url(#sweep)"/>
+    <line x1="0" y1="0" x2="0" y2="-78" stroke="#4f9df7" stroke-width="2" stroke-linecap="round"/>
+    <circle r="4" fill="#eceef1"/>
+    <circle cx="36" cy="-48" r="5" fill="#4f9df7"/>
+    <circle cx="-44" cy="22" r="4" fill="#4f9df7" opacity="0.8"/>
+    <circle cx="50" cy="30" r="4" fill="#4f9df7" opacity="0.7"/>
+    <circle cx="-18" cy="-60" r="3" fill="#4f9df7" opacity="0.6"/>
+  </g>
+  <!-- wordmark -->
+  <text x="290" y="118" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="9" fill="#eceef1">ZEN<tspan fill="#4f9df7">KAI</tspan></text>
+  <text x="292" y="160" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" fill="#9aa1ab">Your opportunity radar — stop searching, start discovering.</text>
+</svg>
