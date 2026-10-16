@@ -293,6 +293,44 @@ html[data-intro="pending"] .animate-blur-in {
   animation-play-state: paused;
 }
 
+@keyframes ring-out {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+  15%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-46%, -54%) scale(1.08); }
+}
+
+/* Concentric rings pulsing out from behind the hero — the radar, without the chrome. */
+.hero-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  aspect-ratio: 1;
+  width: min(1100px, 160vw);
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  animation: ring-out 9s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+  animation-delay: var(--d, 0ms);
+  opacity: 0;
+}
+
+.hero-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  aspect-ratio: 1;
+  width: min(760px, 120vw);
+  border-radius: 9999px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent), transparent 65%);
+  filter: blur(40px);
+  animation: drift 14s ease-in-out infinite;
+  transform: translate(-50%, -50%);
+}
+
 /* Sections fade up as they scroll into view, where the browser supports it. */
 @supports (animation-timeline: view()) {
   .reveal-on-scroll {
@@ -305,6 +343,8 @@ html[data-intro="pending"] .animate-blur-in {
 @media (prefers-reduced-motion: reduce) {
   .animate-blur-in,
   .animate-letter-in,
+  .hero-ring,
+  .hero-glow,
   .reveal-on-scroll {
     animation: none;
   }
