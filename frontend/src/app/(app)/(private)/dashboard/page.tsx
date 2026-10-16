@@ -61,12 +61,12 @@ export default async function DashboardPage() {
       />
 
       {/*
-        A status line, not a claim of freshness. The catalogue is curated by
-        hand and nothing re-checks it, so the indicator says exactly that.
+        A status line, not a claim that every record was checked: sources are
+        read on a schedule, and each record carries its own status.
       */}
       <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[12px] text-muted">
         <span aria-hidden className="size-1.5 rounded-full bg-accent" />
-        Curated opportunity intelligence
+        Live opportunity feed · refreshed every six hours
         <span className="text-faint">· {stats.total} opportunities tracked</span>
       </p>
 
@@ -133,7 +133,7 @@ export default async function DashboardPage() {
         href="/opportunities?sort=newest"
         opportunities={payload.new_today}
         emptyTitle="Nothing added recently"
-        emptyBody="New records appear here as they are curated, and later as source checking brings them in automatically."
+        emptyBody="New records appear here as each six-hourly fetch brings them in."
       />
 
       <Shelf
@@ -143,7 +143,7 @@ export default async function DashboardPage() {
         href="/deadlines"
         opportunities={payload.closing_soon}
         emptyTitle="No deadlines published yet"
-        emptyBody="Zenkai only shows a date where the official source publishes one. These fill in as source checking is rolled out — it never guesses at a deadline."
+        emptyBody="Zenkai only shows a date where the official source publishes one — it never guesses at a deadline."
       />
 
       <Shelf
@@ -157,10 +157,10 @@ export default async function DashboardPage() {
       />
 
       <p className="mt-10 border-t border-border pt-5 text-[12px] leading-relaxed text-faint">
-        Today&apos;s catalogue is curated by hand from official pages, and every record carries its
-        status. <span className="font-medium text-muted">Curated</span> means a person wrote the
-        record from the official page — nothing re-checks it afterwards, so confirm details at the
-        source before applying. Deadlines and costs appear only where the source publishes them.{" "}
+        Most records are fetched from official sources every six hours and say{" "}
+        <span className="font-medium text-muted">Needs verification</span> until a person reviews
+        them; <span className="font-medium text-muted">Curated</span> means a person wrote the
+        record from the official page. Either way, confirm details at the source before applying. Deadlines and costs appear only where the source publishes them.{" "}
         <Link href="/admin" className="text-accent hover:underline">
           See the review queue
         </Link>
