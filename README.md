@@ -1,250 +1,173 @@
-# Zenkai
+# Zenkai — Your opportunity radar
 
-**Your opportunity radar.** — *Stop searching. Start discovering.*
+**Stop searching. Start discovering.**
 
-Zenkai discovers opportunities scattered across the web — from internships and
-hackathons to certifications, scholarships, programs, and student benefits — and
-brings the ones relevant to you into one place.
+Zenkai collects student opportunities from across the internet and shows them in one place: internships, hackathons, certifications, scholarships, programs and free student tech benefits.
 
-It records where every opportunity came from and how far it has been
-established, ranks everything against your profile with reasons you can read,
-and never claims more confidence than it has.
-
-<!-- Replace with a real screenshot before publishing. -->
+🌐 **Live site:** https://zenkai-iota.vercel.app
 
 ---
 
-## Why it exists
+## What is Zenkai?
 
-Opportunities that matter to students are scattered across company programme
-pages, certification platforms, university portals, developer programmes,
-newsletters and social posts. Nobody checks all of them, so students miss things
-that were free and open to them the whole time.
+Good opportunities for students are spread over many websites: Devpost for hackathons, Unstop for internships, Microsoft Learn for certifications, GitHub for student offers, and many more. Nobody has time to check all of them, so students miss things that were free and open to them.
 
-Aggregators exist, but they tend to have two problems: they are stale, and they
-do not tell you how confident they are. Zenkai is built around the opposite
-principle — **every record carries its source, its verification status and the
-date it was last checked**, and the interface never hides that.
+Zenkai checks these websites for you, **every 6 hours, automatically**, and puts everything in one simple feed.
 
----
+It covers six categories:
 
-## What is built
-
-| Area | State |
+| Category | What you'll find |
 |---|---|
-| Database schema, models, migrations path | Complete |
-| REST API (24 endpoints, OpenAPI docs) | Complete |
-| Rule-based recommendation scoring | Complete, with visible reasons |
-| Landing page, dashboard, feed, detail page | Complete |
-| Cinematic 0→100% entrance sequence | Complete — plays once, skippable, honours reduced motion |
-| Search, filtering, faceting, pagination | Complete |
-| Saved opportunities and deadline tracking | Complete |
-| Profile and preferences | Complete |
-| Admin review queue (approve / reject / edit) | Complete |
-| Accounts — sign-up, sign-in, sessions, password change | Complete |
-| Direct enrol/apply destinations with type-aware CTAs | Complete — 49 of 54 records |
-| Credential model — type, specialization, proctoring, assessment | Complete for the certifications vertical |
-| Source registry — authority, discovery method, cadence | Complete |
-| Raw source evidence and provenance trail | Complete |
-| Change detection and mass-deletion guard | Complete |
-| Live RSS/Atom discovery | Complete — real fetch, parse, relevance gate, provenance |
-| Live official-API discovery | Complete — Microsoft Learn, Devpost, Unstop, SimplifyJobs; MLH and GitHub Student Pack pages |
-| Keeping records current | Complete — applies source changes, closes withdrawn listings and passed deadlines every run |
-| Web page connector | Complete — single permitted page per source; MLH calendar adapter |
-| Source registry and compliance gate | Complete |
-| Ingestion pipeline (extract → dedupe → verify) | Complete against the stub extractor |
-| Scheduled discovery in production | Complete — Render cron, every 12 hours |
-| LLM-backed extraction | **Not implemented** — stub provider only |
-| Notification delivery | **Not implemented** — model and service only |
-| Password reset by email | **Not implemented** — needs an email provider |
-| OAuth (GitHub / Google) | **Not implemented** — provider seam in place |
+| 💼 **Internships** | Paid and unpaid internships, linked to the company's own application page |
+| 🏆 **Hackathons & Competitions** | Online and in-person events, with real registration deadlines |
+| 🎓 **Certifications** | Courses and exams that give you a certificate |
+| ✨ **Tech Benefits** | Free software, cloud credits and tools for students |
+| 👥 **Programs & Fellowships** | Cohorts, ambassador programs and fellowships |
+| 🎓 **Scholarships** | Money for studies, travel and research |
 
-The catalogue is **217 records**: 54 curated by hand and **163 discovered from
-live sources** — Microsoft's certification catalogue API and Outreachy's
-announcement feed. Everything discovered is `Needs verification` until a
-reviewer confirms it; discovery never certifies its own output. Each carries a status —
-`Curated` or `Needs verification` — and the product never presents them as
-continuously checked live data.
+---
 
-**On discovery:** the RSS/Atom connector fetches for real. It obeys robots.txt
-at request time, rate-limits per host, and never retries around a 401/403/429 —
-those are a provider saying no. A relevance gate sits between fetching and
-extraction because most of a real feed is not an opportunity: a vendor's
-release feed is a hundred product announcements, and without the gate those
-would become a hundred records no student can apply to.
+## How it works
 
-Run it with `make discover`. Certifications went from 10 to 153 this way.
+1. **It fetches.** Every 6 hours, Zenkai reads official sources: Devpost, MLH, Unstop, SimplifyJobs, Microsoft Learn, the GitHub Student Pack, Outreachy, Google Developers and Opportunity Desk.
+2. **It cleans up.** If the same opportunity appears on two sites, it's kept only once. Posts that aren't real opportunities (news, product updates) are filtered out.
+3. **It keeps things fresh:**
+   - New listings are added.
+   - If a deadline changes, the record is updated.
+   - When a deadline passes, or a listing is removed from its source, it disappears from Zenkai.
+4. **It ranks for you.** If you add your degree, skills and interests, every opportunity gets a match score, with a clear reason for every point.
 
-**On destinations:** every record carries the provider's authoritative page,
-and 49 of 54 also carry the exact page where a student can start, enrol,
-register or apply — so the button goes there rather than to a homepage. The
-other 5 fall back to the official source and say so. No URL was invented to
-close that gap.
+---
 
-**On deadlines:** Zenkai shows a date only where the official source publishes
-one. The catalogue's programmes are either continuously open or announce dates
-each cycle, so most records read "Deadline not listed" rather than carrying a
-guess. The deadline tracker is fully built and tested; it fills in when source
-checking supplies real dates.
+## How to use it
+
+**Without an account:**
+- Open the site and click **Explore opportunities**.
+- Search (for example "AI hackathon" or "remote internship").
+- Filter by category, cost, deadline, remote, and more.
+- Click any opportunity to see its details and go straight to the official page to apply.
+
+**With a free account:**
+- **Overview:** your personal home page, with recommendations, new listings and ones closing soon.
+- **Save:** bookmark opportunities you like.
+- **Deadlines:** see what's closing today, this week, and later.
+- **Profile:** add your degree, skills and interests to get better matches.
+
+> ⚠️ Always check the details on the official website before applying. Listings found automatically show **"Needs verification"** until a person reviews them.
+
+---
+
+## Why it's useful
+
+- **Saves time:** one site instead of ten.
+- **Never miss a deadline:** closing-soon listings are easy to see.
+- **Free things are easy to find:** filter for "Free" or "Free for students".
+- **Honest:** every listing shows where it came from. Deadlines and costs are shown only when the source states them, never guessed.
+- **Respects websites:** Zenkai follows each site's robots.txt rules and never fetches from sites that don't allow it.
 
 ---
 
 ## Tech stack
 
-**Backend** — Python 3.11, FastAPI, SQLAlchemy 2.0, Pydantic v2, PostgreSQL
-(SQLite-portable), pytest.
+**Frontend**
+- Next.js 16 (App Router, React Server Components)
+- React 19, TypeScript
+- Tailwind CSS v4
 
-**Frontend** — Next.js 16 (App Router, React Server Components), TypeScript,
-Tailwind CSS v4, server actions for all mutations.
+**Backend**
+- Python 3.11
+- FastAPI (REST API, with docs at `/docs`)
+- SQLAlchemy 2.0 and Pydantic v2
+- PostgreSQL (SQLite for local development)
+- Argon2 password hashing, with secure sessions
 
-No component library, no icon package, no state manager, no ORM beyond
-SQLAlchemy. The dependency list is deliberately short.
+**Data fetching (discovery)**
+- httpx, with a polite fetcher that checks robots.txt, rate-limits each site and retries once on network errors
+- Readers for each source: APIs (Devpost, Unstop, Microsoft Learn, SimplifyJobs), web pages (MLH, GitHub Student Pack) and RSS/Atom feeds
+
+**Hosting**
+
+| Part | Where it runs |
+|---|---|
+| Website | Vercel |
+| API | Render (free plan) |
+| Database | Neon PostgreSQL (free plan) |
+| Fetching every 6 hours | GitHub Actions |
+| Keep-awake ping every 10 minutes | GitHub Actions |
+
+**Testing:** pytest, with 350+ backend tests.
 
 ---
 
-## Run it locally
+## Run it on your computer
 
-Requires Python 3.11+ and Node 20+. PostgreSQL is optional.
+You need **Python 3.11+** and **Node 20+**.
 
 ```bash
-# 1. Install
+# 1. Install everything
 make install
 
-# 2. Create tables and load the seed catalogue
+# 2. Create the database and add starting data
 make seed
 
-# 3. Backend on :8000  (leave running)
+# 3. Start the backend (port 8000), and keep this running
 make backend
 
-# 4. Frontend on :3000 (in a second terminal)
+# 4. In a new terminal, start the website (port 3000)
 make frontend
+
+# 5. (Optional) Fetch live opportunities now
+make discover
 ```
 
-Open <http://localhost:3000>. API docs are at <http://localhost:8000/docs>.
+Open **http://localhost:3000**. The API docs are at **http://localhost:8000/docs**.
 
-Browsing needs no account. To see saved items, matching and the review queue,
-sign in with the seeded accounts — the sign-in page shows them in development:
-
-| Account | Email | Password |
-|---|---|---|
-| Student | `student@zenkai.dev` | `zenkai-demo-2026` |
-| Reviewer | `reviewer@zenkai.dev` | `zenkai-review-2026` |
-
-**Change both before any public deployment.**
-
-Without `make`, see [DEVELOPMENT.md](DEVELOPMENT.md) for the raw commands.
-
-### Using PostgreSQL
-
-SQLite is the default so the project runs with no database server. To use
-PostgreSQL instead:
+Run the tests:
 
 ```bash
-docker compose up -d
-export DATABASE_URL=postgresql+psycopg://studentos:studentos@localhost:5432/studentos
-cd backend && .venv/bin/python -m app.seed.run --reset
+make test    # backend tests
+make lint    # frontend type check and lint
 ```
 
-The schema is written for PostgreSQL and stays portable by using `JSON` rather
-than `JSONB` and string-backed enums rather than native enum types.
+Settings go in `backend/.env` and `frontend/.env.local`. Copy them from `.env.example`. Never upload real `.env` files.
 
 ---
 
-## Environment variables
+## Project structure
 
-Copy `.env.example` to `backend/.env` and `frontend/.env.local`. Never commit a
-filled-in `.env`.
-
-### Backend (`backend/.env`)
-
-| Variable | Default | Purpose |
-|---|---|---|
-| `DATABASE_URL` | `sqlite:///./studentos.db` | SQLAlchemy URL. Use `postgresql+psycopg://…` in production. |
-| `ENV` | `development` | `development` auto-creates tables at startup. |
-| `CORS_ORIGINS` | `http://localhost:3000,…` | Comma-separated allowed browser origins. |
-| `ADMIN_TOKEN` | `dev-admin-token` | **Change this.** Required by every `/api/v1/admin/*` route. |
-| `DEMO_USER_EMAIL` | `student@zenkai.dev` | The seeded demo student. |
-| `DEMO_USER_PASSWORD` | `zenkai-demo-2026` | **Change this.** Password for the seeded demo student. |
-| `DEMO_ADMIN_EMAIL` | `reviewer@zenkai.dev` | The seeded reviewer. |
-| `DEMO_ADMIN_PASSWORD` | `zenkai-review-2026` | **Change this.** Password for the seeded reviewer. |
-| `ALLOW_DEMO_FALLBACK` | unset | When true, a request with no session resolves to the demo student. Defaults to on in development, off elsewhere. Leave it off in production. |
-| `AI_PROVIDER` | `stub` | Extraction provider. `stub` is heuristic and needs no key. |
-| `AI_API_KEY` | — | Key for a real provider, once one is implemented. |
-| `AI_MODEL` | `claude-sonnet-5` | Model id passed to the provider. |
-
-### Frontend (`frontend/.env.local`)
-
-| Variable | Default | Purpose |
-|---|---|---|
-| `NEXT_PUBLIC_API_URL` | `http://localhost:8000` | Backend base URL. |
-| `ZENKAI_ADMIN_TOKEN` | `dev-admin-token` | Sent as `X-Admin-Token` from the server only. Must match the backend's `ADMIN_TOKEN`. Not `NEXT_PUBLIC_`, so it never enters the browser bundle. |
-
----
-
-## Testing
-
-```bash
-make test          # 295 backend tests
-make lint          # tsc --noEmit + eslint
-make build         # production build of the frontend
+```
+ZENKAI/
+├── frontend/              # Next.js website
+├── backend/
+│   ├── app/
+│   │   ├── api/           # API routes
+│   │   ├── ingestion/     # fetching, cleaning and updating opportunities
+│   │   ├── models/        # database tables
+│   │   ├── services/      # matching, deadlines, accounts
+│   │   └── seed/          # starting data and the list of sources
+│   ├── tests/
+│   └── run_discovery.py   # runs one fetch cycle
+├── .github/workflows/     # 6-hour fetch and keep-awake jobs
+└── render.yaml            # Render deployment setup
 ```
 
-Tests cover opportunity creation and retrieval, filtering, search across all
-indexed fields, deadline sorting and bucketing, verification status transitions,
-saving, recommendation scoring, admin approval and rejection, the ingestion
-pipeline's deduplication and compliance gates, the catalogue's editorial rules
-— including that no record invents a deadline or overstates its verification —
-and authentication: password hashing and salting, session expiry and
-revocation, and that one account's saved list and preferences are invisible to
-another. See [DEVELOPMENT.md](DEVELOPMENT.md).
+More detail: [ARCHITECTURE.md](ARCHITECTURE.md) · [DATABASE.md](DATABASE.md) · [DEVELOPMENT.md](DEVELOPMENT.md) · [DEPLOYMENT.md](DEPLOYMENT.md)
 
 ---
 
-## Deploying
+## What's next
 
-See [DEPLOYMENT.md](DEPLOYMENT.md). In short: the frontend deploys to Vercel
-with **Root Directory set to `frontend`**, and needs `NEXT_PUBLIC_API_URL`
-pointing at a hosted backend. The FastAPI service is a separate deployment —
-Vercel does not host it.
-
----
-
-## Documentation
-
-- [ARCHITECTURE.md](ARCHITECTURE.md) — how the system is put together and why
-- [DATABASE.md](DATABASE.md) — schema, indexes, and the reasoning behind it
-- [DEVELOPMENT.md](DEVELOPMENT.md) — running, testing, and adding to the project
+- Password reset by email
+- Sign in with Google or GitHub
+- Email alerts for new matches and deadlines
+- More scholarship sources
+- A Chrome extension
 
 ---
 
-## What Zenkai does not claim
+## License
 
-These limits are stated on the product itself, not just here.
+This project is licensed under the [MIT License](LICENSE).
 
-- **It does not scan the internet.** It checks sources that a human registered,
-  on a schedule. Coverage is exactly as wide as that list.
-- **"Verified" means a person checked the official source on the date shown.**
-  It is not a continuous live check, and programme terms change without notice.
-- **Match scores are fixed rules, not machine learning.** Every point awarded is
-  shown to the student as a written reason. A score does not predict acceptance.
-- **Deadlines marked `~` are estimates** derived from a programme's usual annual
-  cycle, not announced dates.
-- **Sources that prohibit automated access are never fetched.** They are
-  recorded in the sources table with `robots_allowed = false` specifically so
-  the system has an explicit record of what it must not touch.
-
----
-
-## Roadmap
-
-1. **Password reset by email.** Accounts exist, but a forgotten password is
-   currently unrecoverable. This needs an email provider and is the most
-   user-facing gap.
-2. **Implement one connector end to end** — RSS is the natural first choice,
-   since feeds are published for machine consumption.
-3. **Plug in a real extraction model** behind the existing `AIClient` interface
-   and compare its confidence against reviewer decisions.
-4. **Scheduler** to drive `due_sources()` on a cadence.
-5. **OAuth sign-in** (GitHub, Google) behind the existing provider seam.
-6. **Notification delivery** — the model and service seam already exist.
-7. **Chrome extension** consuming the same public API.
+Opportunity listings shown on the site belong to their original sources
+(Devpost, Unstop, MLH, Microsoft Learn and others) and are subject to their terms.
