@@ -4,14 +4,107 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { IconAlert, IconCheck } from "@/components/ui/Icons";
-import { changePasswordAction, type ActionResult } from "@/lib/actions";
+import { changePasswordAction, claimAccountAction, type ActionResult } from "@/lib/actions";
 import { cx } from "@/lib/format";
 import type { Profile } from "@/lib/types";
 
 const inputClass =
   "h-10 w-full rounded-lg border border-border bg-surface px-3 text-[13.5px] text-text placeholder:text-faint focus:border-accent focus:outline-none";
 
+function Status({ state }: { state: ActionResult | null }) {
+  if (!state) return null;
+  return (
+    <p
+      role="status"
+      className={cx(
+        "inline-flex items-center gap-1.5 text-[12.5px]",
+        state.ok ? "text-verified" : "text-expired",
+      )}
+    >
+      {state.ok ? <IconCheck /> : <IconAlert />}
+      {state.message}
+    </p>
+  );
+}
+
+/** A guest has no sign-in yet; this gives the account an email and password. */
+function ClaimPanel() {
+  const [state, formAction, isPending] = useActionState<ActionResult | null, FormData>(
+    async (_previous, formData) => claimAccountAction(formData),
+    null,
+  );
+
+  return (
+    <section className="rounded-panel border border-border bg-surface p-5 sm:p-6">
+      <h2 className="text-[13px] font-semibold text-text">Save your account</h2>
+      <p className="mb-4 text-[12.5px] leading-relaxed text-muted">
+        You are using a guest account. Add an email and password to keep your saved list and
+        preferences, and to sign in from other devices. Signing out of a guest account loses it.
+      </p>
+
+      <form action={formAction} className="space-y-4 border-t border-border pt-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="claim_name" className="mb-1.5 block text-[13px] font-medium text-text">
+              Name
+            </label>
+            <input
+              id="claim_name"
+              name="name"
+              required
+              autoComplete="name"
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label htmlFor="claim_email" className="mb-1.5 block text-[13px] font-medium text-text">
+              Email
+            </label>
+            <input
+              id="claim_email"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              className={inputClass}
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="claim_password"
+              className="mb-1.5 block text-[13px] font-medium text-text"
+            >
+              Password
+            </label>
+            <input
+              id="claim_password"
+              name="password"
+              type="password"
+              required
+              autoComplete="new-password"
+              placeholder="At least 10 characters"
+              className={inputClass}
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Button type="submit" size="sm" disabled={isPending}>
+            {isPending ? "Saving…" : "Save account"}
+          </Button>
+          <Status state={state} />
+        </div>
+      </form>
+    </section>
+  );
+}
+
 export function AccountPanel({ user }: { user: Profile }) {
+  if (user.is_guest) return <ClaimPanel />;
+  return <PasswordPanel user={user} />;
+}
+
+function PasswordPanel({ user }: { user: Profile }) {
   const [state, formAction, isPending] = useActionState<ActionResult | null, FormData>(
     async (_previous, formData) => changePasswordAction(formData),
     null,
@@ -85,18 +178,7 @@ export function AccountPanel({ user }: { user: Profile }) {
           <Button type="submit" variant="secondary" size="sm" disabled={isPending}>
             {isPending ? "Changing…" : "Change password"}
           </Button>
-          {state ? (
-            <p
-              role="status"
-              className={cx(
-                "inline-flex items-center gap-1.5 text-[12.5px]",
-                state.ok ? "text-verified" : "text-expired",
-              )}
-            >
-              {state.ok ? <IconCheck /> : <IconAlert />}
-              {state.message}
-            </p>
-          ) : null}
+          <Status state={state} />
         </div>
       </form>
     </section>
