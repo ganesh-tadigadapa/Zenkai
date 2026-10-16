@@ -349,6 +349,65 @@ html[data-intro="pending"] .animate-blur-in {
   mix-blend-mode: overlay;
 }
 
+/* --- Rotating headline word --------------------------------------------- */
+
+@keyframes word-cycle {
+  0%       { opacity: 0; filter: blur(10px); transform: translateY(0.35em); }
+  3%, 14%  { opacity: 1; filter: blur(0); transform: none; }
+  17%, 100% { opacity: 0; filter: blur(10px); transform: translateY(-0.35em); }
+}
+
+/* Every word sits in the same grid cell, so the line is as wide as the longest. */
+.word-cycle {
+  display: inline-grid;
+}
+
+.word-cycle > span {
+  grid-area: 1 / 1;
+  opacity: 0;
+  animation: word-cycle 15s infinite;
+  animation-delay: calc(var(--i) * 2.5s);
+}
+
+/* --- Glowing border ------------------------------------------------------ */
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spin-angle {
+  to { --angle: 360deg; }
+}
+
+/* A thin light that travels round the edge of whatever sits inside. */
+.glow-border {
+  position: relative;
+  display: inline-flex;
+  border-radius: 9999px;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    transparent 62%,
+    color-mix(in srgb, var(--accent) 90%, white) 82%,
+    transparent 100%
+  );
+  animation: spin-angle 3.5s linear infinite;
+}
+
+.glow-border::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  z-index: -1;
+  border-radius: inherit;
+  background: inherit;
+  filter: blur(14px);
+  opacity: 0.7;
+}
+
 /* Sections fade up as they scroll into view, where the browser supports it. */
 @supports (animation-timeline: view()) {
   .reveal-on-scroll {
@@ -363,8 +422,17 @@ html[data-intro="pending"] .animate-blur-in {
   .animate-letter-in,
   .hero-ring,
   .hero-glow,
+  .glow-border,
   .reveal-on-scroll {
     animation: none;
+  }
+
+  .word-cycle > span {
+    animation: none;
+  }
+
+  .word-cycle > span:first-child {
+    opacity: 1;
   }
 }
 
