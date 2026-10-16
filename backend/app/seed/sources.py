@@ -273,7 +273,7 @@ SOURCES = [
         access_notes=(
             "Data file of a public GitHub repository, served from "
             "raw.githubusercontent.com for exactly this kind of reading. The "
-            "300 newest active postings are taken; links go to employers' own "
+            "1,000 newest active postings are taken; links go to employers' own "
             "application pages."
         ),
     ),
