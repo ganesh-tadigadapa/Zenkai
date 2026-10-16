@@ -169,36 +169,6 @@ export function IntroSequence() {
         </div>
       </div>
 
-      {/* Counter and progress rail */}
-      <footer className="relative z-10 px-5 pb-7 sm:px-8 sm:pb-9">
-        <div className="mx-auto flex max-w-2xl items-end justify-between gap-6">
-          <span
-            className="tnum text-[40px] font-semibold leading-none tracking-[-0.04em] text-text sm:text-[56px]"
-            aria-hidden
-          >
-            {rounded}
-            <span className="ml-0.5 text-[18px] text-faint sm:text-[22px]">%</span>
-          </span>
-          <span className="pb-1 text-right text-[11px] uppercase tracking-[0.16em] text-faint">
-            {rounded < 100 ? "Calibrating radar" : "Ready"}
-          </span>
-        </div>
-
-        <div
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={rounded}
-          aria-label="Introduction progress"
-          className="mx-auto mt-4 h-px w-full max-w-2xl bg-border"
-        >
-          <div
-            className="h-px bg-accent transition-[width] duration-100 ease-linear"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </footer>
-
       <span aria-live="polite" className="sr-only">
         {rounded === 100 ? `${BRAND.name}. ${BRAND.tagline}` : null}
       </span>
