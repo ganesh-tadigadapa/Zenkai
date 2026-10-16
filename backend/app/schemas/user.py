@@ -29,6 +29,7 @@ class ProfileOut(BaseModel):
     name: str
     is_admin: bool
     is_demo: bool = False
+    is_guest: bool = False
     preferences: PreferencesOut | None = None
 
 

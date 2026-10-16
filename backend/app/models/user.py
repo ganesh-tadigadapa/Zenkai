@@ -25,8 +25,8 @@ class User(UUIDPrimaryKey, Timestamps, Base):
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
 
     password_hash: Mapped[str | None] = mapped_column(String(255))
-    # Which provider owns this identity. "password" today; "github"/"google"
-    # once the provider seam is implemented.
+    # Which provider owns this identity: "password", or "guest" for an
+    # anonymous account started with one click and claimable later.
     auth_provider: Mapped[str] = mapped_column(String(32), default="password")
     last_login_at: Mapped[datetime | None] = mapped_column(UTCDateTime)
     # Marks the seeded demo account so the UI can label it honestly.
@@ -42,6 +42,10 @@ class User(UUIDPrimaryKey, Timestamps, Base):
     @property
     def can_use_password(self) -> bool:
         return self.password_hash is not None
+
+    @property
+    def is_guest(self) -> bool:
+        return self.auth_provider == "guest"
 
 
 class UserSession(UUIDPrimaryKey, Timestamps, Base):
