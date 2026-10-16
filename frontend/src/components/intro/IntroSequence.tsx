@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  type CSSProperties,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 import { LogoMark } from "@/components/layout/Logo";
 import { BRAND, STORAGE_KEYS } from "@/lib/brand";
@@ -62,7 +69,17 @@ export function IntroSequence() {
       /* private browsing — it will simply play again next time */
     }
     document.documentElement.style.removeProperty("overflow");
+    // Release the landing page's held entrance so it plays as the overlay fades.
+    delete document.documentElement.dataset.intro;
     setState(immediate ? "done" : "leaving");
+  }, []);
+
+  // The landing page holds its entrance when it expects the intro. If the
+  // intro then does not play, release it straight away. Checks the client
+  // snapshot directly: during hydration `shouldPlay` briefly reports the
+  // server value, false, even when the intro is about to play.
+  useEffect(() => {
+    if (!clientSnapshot()) delete document.documentElement.dataset.intro;
   }, []);
 
   // Lock scroll only while the overlay actually owns the viewport, and move
@@ -176,32 +193,115 @@ export function IntroSequence() {
   );
 }
 
-/** Concentric rings that tighten as the sequence advances. */
+/** Where blips light up on the radar, and the progress at which each appears. */
+const BLIPS = [
+  { x: 262, y: 128, at: 12 },
+  { x: 118, y: 160, at: 28 },
+  { x: 300, y: 250, at: 42 },
+  { x: 150, y: 292, at: 58 },
+  { x: 232, y: 330, at: 74 },
+  { x: 92, y: 226, at: 88 },
+];
+
+/** Concentric rings that tighten as the sequence advances, with a sweep picking up blips. */
 function IntroRings({ progress }: { progress: number }) {
   return (
-    <svg
-      viewBox="0 0 400 400"
-      className="absolute left-1/2 top-1/2 size-[min(110vw,720px)] -translate-x-1/2 -translate-y-1/2"
-      aria-hidden
-    >
-      {[70, 118, 166].map((radius, index) => (
-        <circle
-          key={radius}
-          cx="200"
-          cy="200"
-          r={radius}
-          fill="none"
-          stroke="var(--border-strong)"
-          strokeWidth="1"
-          strokeOpacity={0.22 + (progress / 100) * 0.38}
-          strokeDasharray={index === 1 ? "2 7" : undefined}
+    <>
+      <div
+        className="absolute left-1/2 top-1/2 size-[min(110vw,720px)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full"
+        style={{ maskImage: "radial-gradient(circle, black 0%, black 46%, transparent 47%)" }}
+      >
+        <div
+          className="size-full"
           style={{
-            transformOrigin: "200px 200px",
-            transform: `rotate(${progress * (index % 2 === 0 ? 0.9 : -0.6)}deg)`,
+            background:
+              "conic-gradient(from 0deg, transparent 0deg, transparent 300deg, color-mix(in srgb, var(--accent) 22%, transparent) 360deg)",
+            animation: "intro-sweep 3.2s linear infinite",
           }}
         />
+      </div>
+      <svg
+        viewBox="0 0 400 400"
+        className="absolute left-1/2 top-1/2 size-[min(110vw,720px)] -translate-x-1/2 -translate-y-1/2"
+        aria-hidden
+      >
+        {[70, 118, 166].map((radius, index) => (
+          <circle
+            key={radius}
+            cx="200"
+            cy="200"
+            r={radius}
+            fill="none"
+            stroke="var(--border-strong)"
+            strokeWidth="1"
+            strokeOpacity={0.22 + (progress / 100) * 0.38}
+            strokeDasharray={index === 1 ? "2 7" : undefined}
+            style={{
+              transformOrigin: "200px 200px",
+              transform: `rotate(${progress * (index % 2 === 0 ? 0.9 : -0.6)}deg)`,
+            }}
+          />
+        ))}
+        {BLIPS.filter((blip) => progress >= blip.at).map((blip) => (
+          <g key={`${blip.x}-${blip.y}`}>
+            <circle
+              cx={blip.x}
+              cy={blip.y}
+              r="9"
+              fill="none"
+              stroke="var(--accent)"
+              strokeWidth="1"
+              style={{
+                transformOrigin: `${blip.x}px ${blip.y}px`,
+                animation: "intro-ping 1.6s ease-out infinite",
+              }}
+            />
+            <circle
+              cx={blip.x}
+              cy={blip.y}
+              r="3"
+              fill="var(--accent)"
+              className="animate-fade-up"
+              style={{ transformOrigin: `${blip.x}px ${blip.y}px` }}
+            />
+          </g>
+        ))}
+      </svg>
+    </>
+  );
+}
+
+/** Per-letter / per-word entrance delay. */
+const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
+
+/** The wordmark, assembling one letter at a time. */
+function Wordmark() {
+  return (
+    <h1 className="text-[clamp(2.5rem,12vw,5.5rem)] font-semibold leading-none tracking-[0.16em] text-text">
+      {"ZENKAI".split("").map((letter, index) => (
+        <span
+          key={index}
+          className={cx("animate-letter-in", index >= 3 && "text-accent")}
+          style={delay(index * 70)}
+        >
+          {letter}
+        </span>
       ))}
-    </svg>
+    </h1>
+  );
+}
+
+/** A sentence that arrives word by word. */
+function Words({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(" ").map((word, index) => (
+        <span key={index} className="animate-letter-in" style={delay(index * 65)}>
+          {word}
+          {"\u00a0"}
+        </span>
+      ))}
+    </>
   );
 }
 
@@ -219,10 +319,8 @@ function Stage({
 
   if (beat.kind === "wordmark") {
     return (
-      <div key={key} className="animate-fade-up">
-        <h1 className="text-[clamp(2.5rem,12vw,5.5rem)] font-semibold leading-none tracking-[0.16em] text-text">
-          ZEN<span className="text-accent">KAI</span>
-        </h1>
+      <div key={key}>
+        <Wordmark />
       </div>
     );
   }
@@ -231,9 +329,9 @@ function Stage({
     return (
       <p
         key={key}
-        className="animate-fade-up text-balance text-[clamp(1.35rem,4.5vw,2.25rem)] font-medium leading-snug tracking-[-0.02em] text-text"
+        className="text-balance text-[clamp(1.35rem,4.5vw,2.25rem)] font-medium leading-snug tracking-[-0.02em] text-text"
       >
-        {beat.text}
+        <Words text={beat.text} />
       </p>
     );
   }
@@ -303,17 +401,19 @@ function Stage({
 
   // Finale
   return (
-    <div key={key} className="animate-fade-up">
-      <h1 className="text-[clamp(2.5rem,12vw,5.5rem)] font-semibold leading-none tracking-[0.16em] text-text">
-        ZEN<span className="text-accent">KAI</span>
-      </h1>
-      <p className="mt-5 text-[clamp(1rem,3vw,1.4rem)] font-medium text-muted">{BRAND.tagline}</p>
+    <div key={key}>
+      <Wordmark />
+      <p
+        className="animate-blur-in mt-5 text-[clamp(1rem,3vw,1.4rem)] font-medium text-muted"
+        style={delay(450)}
+      >{BRAND.tagline}</p>
       {/* Dismisses the overlay and navigates client-side, so the site fades in
           rather than the browser reloading into it. */}
       <Link
         href="/opportunities"
         onClick={onEnter}
-        className="mt-9 inline-flex h-12 items-center gap-2 rounded-[12px] bg-accent px-7 text-[15px] font-medium text-white transition-colors hover:bg-accent-hover"
+        className="animate-blur-in mt-9 inline-flex h-12 items-center gap-2 rounded-full bg-text px-7 text-[15px] font-medium text-bg transition-opacity hover:opacity-85"
+        style={delay(650)}
       >
         Enter Zenkai
         <span aria-hidden>→</span>
