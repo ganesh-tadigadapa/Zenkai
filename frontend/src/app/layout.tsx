@@ -18,6 +18,7 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(BRAND.url),
   title: {
     default: `${BRAND.wordmark} — ${BRAND.tagline}`,
     template: `%s · ${BRAND.name}`,
@@ -38,6 +39,7 @@ export const metadata: Metadata = {
     title: `${BRAND.name} — ${BRAND.tagline}`,
     description: BRAND.hero,
     siteName: BRAND.name,
+    url: BRAND.url,
     type: "website",
   },
   twitter: {

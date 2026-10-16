@@ -7,6 +7,8 @@
 export const BRAND = {
   name: "Zenkai",
   wordmark: "ZENKAI",
+  /** The public address. Link previews and canonical URLs are built from it. */
+  url: "https://getzenkai.vercel.app",
   tagline: "Your opportunity radar.",
   hero: "Stop searching. Start discovering.",
   description:
