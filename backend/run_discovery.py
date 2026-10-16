@@ -15,6 +15,7 @@ from app.ingestion.pipeline import IngestionPipeline
 from app.ingestion.scheduler import is_due
 from app.models.enums import SourceType
 from app.models.source import Source
+from app.seed.run import seed_sources
 from app.services.opportunity_service import expire_passed_deadlines
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -26,6 +27,13 @@ def main(argv: list[str]) -> int:
     pipeline = IngestionPipeline()
 
     with SessionLocal() as db:
+        # Bring the source registry in line with app/seed/sources.py first, so
+        # a source added in code is read on the next scheduled run rather than
+        # waiting for the API's next deploy to seed it. Idempotent: existing
+        # sources are updated in place, and nothing else is seeded.
+        seed_sources(db)
+        db.commit()
+
         # Manual sources are records a reviewer typed in; there is nothing to fetch.
         query = select(Source).where(
             Source.active.is_(True),
