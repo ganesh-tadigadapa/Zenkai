@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 
 import { cx } from "@/lib/format";
 
-type Variant = "primary" | "secondary" | "ghost" | "danger";
+type Variant = "primary" | "secondary" | "ghost" | "danger" | "ink";
 type Size = "sm" | "md" | "lg";
 
 const VARIANTS: Record<Variant, string> = {
@@ -12,6 +12,7 @@ const VARIANTS: Record<Variant, string> = {
   secondary:
     "bg-surface text-text border-border-strong hover:bg-bg-subtle hover:border-faint",
   ghost: "bg-transparent text-muted border-transparent hover:bg-bg-subtle hover:text-text",
+  ink: "bg-text text-bg border-transparent hover:opacity-85",
   danger: "bg-transparent text-expired border-border hover:bg-expired-soft hover:border-expired",
 };
 
