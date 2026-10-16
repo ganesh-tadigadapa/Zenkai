@@ -57,7 +57,9 @@ export function UserMenu({ user }: { user: Profile }) {
         >
           <div className="border-b border-border px-3.5 py-3">
             <p className="truncate text-[13px] font-semibold text-text">{user.name}</p>
-            <p className="truncate text-[12px] text-muted">{user.email}</p>
+            <p className="truncate text-[12px] text-muted">
+              {user.is_guest ? "Guest account" : user.email}
+            </p>
             <div className="mt-1.5 flex flex-wrap gap-1.5">
               {user.is_admin ? (
                 <span className="inline-flex items-center gap-1 rounded-md bg-accent-soft px-1.5 py-0.5 text-[10.5px] font-medium text-accent">
@@ -80,7 +82,7 @@ export function UserMenu({ user }: { user: Profile }) {
               onClick={() => setOpen(false)}
               className="block rounded-lg px-2.5 py-2 text-[13px] text-muted transition-colors hover:bg-bg-subtle hover:text-text"
             >
-              Profile and preferences
+              {user.is_guest ? "Save your account" : "Profile and preferences"}
             </Link>
             <Link
               href="/saved"
@@ -102,6 +104,11 @@ export function UserMenu({ user }: { user: Profile }) {
               )}
             >
               Sign out
+              {user.is_guest ? (
+                <span className="block text-[11px] font-normal text-faint">
+                  Guest data is lost unless you save the account first
+                </span>
+              ) : null}
             </button>
           </form>
         </div>
