@@ -11,6 +11,12 @@ import { Spotlight } from "@/components/marketing/Spotlight";
 import { ButtonLink } from "@/components/ui/Button";
 import {
   IconArrowRight,
+  IconAward,
+  IconBriefcase,
+  IconGraduationCap,
+  IconSparkles,
+  IconTrophy,
+  IconUsers,
 } from "@/components/ui/Icons";
 import { BRAND, STORAGE_KEYS } from "@/lib/brand";
 
@@ -35,6 +41,29 @@ const ROTATING = [
   "scholarships.",
   "fellowships.",
   "student perks.",
+];
+
+/** Where records come from, as named in the source registry. */
+const SOURCES = [
+  "Devpost",
+  "Major League Hacking",
+  "Unstop",
+  "GitHub Education",
+  "Microsoft Learn",
+  "Google Summer of Code",
+  "Outreachy",
+  "SimplifyJobs",
+  "AWS",
+  "Microsoft Azure",
+];
+
+const CATEGORIES = [
+  { name: "Internships", icon: IconBriefcase },
+  { name: "Hackathons", icon: IconTrophy },
+  { name: "Certifications", icon: IconAward },
+  { name: "Scholarships", icon: IconGraduationCap },
+  { name: "Fellowships", icon: IconUsers },
+  { name: "Tech benefits", icon: IconSparkles },
 ];
 
 /** Entrance delay for an `.animate-blur-in` element, or any `--d` consumer. */
@@ -102,6 +131,36 @@ function BrowseCta() {
         <IconArrowRight className="transition-transform group-hover:translate-x-0.5" />
       </ButtonLink>
     </span>
+  );
+}
+
+function Marquee({
+  children,
+  reverse = false,
+  speed = "40s",
+}: {
+  children: React.ReactNode[];
+  reverse?: boolean;
+  speed?: string;
+}) {
+  return (
+    <div
+      className="overflow-hidden"
+      style={{
+        maskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+      }}
+    >
+      {/* Two copies, so the loop is seamless at -50%. The second is hidden from screen readers. */}
+      <div
+        className={`${reverse ? "animate-marquee-reverse" : "animate-marquee"} flex w-max hover:[animation-play-state:paused]`}
+        style={vars({ "--speed": speed })}
+      >
+        <ul className="flex shrink-0 items-center gap-4 pr-4">{children}</ul>
+        <ul aria-hidden className="flex shrink-0 items-center gap-4 pr-4">
+          {children}
+        </ul>
+      </div>
+    </div>
   );
 }
 
@@ -187,6 +246,35 @@ export default function LandingPage() {
             </div>
           </section>
         </Spotlight>
+
+        {/* ------------------------------------------------------------ Marquees */}
+        <section aria-label="Sources and categories" className="space-y-5 pb-24">
+          <p className="reveal-on-scroll pb-3 text-center text-[12.5px] text-faint">
+            Gathered from official sources
+          </p>
+          <Marquee speed="45s">
+            {SOURCES.map((name) => (
+              <li
+                key={name}
+                className="flex items-center gap-8 whitespace-nowrap pl-4 text-[17px] font-semibold tracking-[-0.01em] text-faint"
+              >
+                {name}
+                <span aria-hidden className="size-1 rounded-full bg-border-strong" />
+              </li>
+            ))}
+          </Marquee>
+          <Marquee reverse speed="38s">
+            {CATEGORIES.map(({ name, icon: Glyph }) => (
+              <li
+                key={name}
+                className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-border bg-surface px-4 py-2 text-[13.5px] text-muted"
+              >
+                <Glyph className="text-accent" />
+                {name}
+              </li>
+            ))}
+          </Marquee>
+        </section>
 
         {/* ---------------------------------------------------------------- CTA */}
         <section className="relative overflow-hidden border-t border-border px-4 py-28 text-center sm:px-6 sm:py-36">
