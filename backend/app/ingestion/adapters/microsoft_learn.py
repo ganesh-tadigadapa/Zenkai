@@ -3,7 +3,9 @@
 `learn.microsoft.com/api/catalog/` is the public JSON catalogue behind
 Microsoft's own certification pages. robots.txt permits it, and it carries the
 certifications, their level, the roles they target, and the exam codes that sit
-behind them.
+behind them. The same catalogue also publishes Applied Skills: scenario-based
+credentials earned by passing a lab assessment rather than an exam, read here
+from a source scoped to that collection.
 
 Deliberately *not* inferred, because the API does not state it:
 
@@ -39,6 +41,9 @@ CREDENTIAL_TYPE_BY_KIND: dict[str, CredentialType] = {
     "mcsd": CredentialType.PROFESSIONAL_CERTIFICATION,
     "mcse": CredentialType.PROFESSIONAL_CERTIFICATION,
     "mta": CredentialType.PROFESSIONAL_CERTIFICATION,
+    # Applied Skills verify one scenario through a lab assessment: narrower
+    # than a certification, and awarded without an exam.
+    "applied-skill": CredentialType.MICRO_CREDENTIAL,
 }
 
 LEVEL_BY_NAME: dict[str, ExperienceLevel] = {
@@ -90,8 +95,9 @@ class MicrosoftLearnAdapter(ApiAdapter):
     def to_documents(self, body: str, source: Source) -> list[RawDocument]:
         payload = json.loads(body)
         certifications = payload.get("certifications") or []
-        if not certifications:
-            raise ValueError("catalogue response contained no certifications")
+        applied_skills = payload.get("appliedSkills") or []
+        if not certifications and not applied_skills:
+            raise ValueError("catalogue response contained no certifications or applied skills")
 
         # Exam codes live in a separate array, keyed by uid.
         exam_codes: dict[str, str] = {}
@@ -104,13 +110,17 @@ class MicrosoftLearnAdapter(ApiAdapter):
         retrieved_at = datetime.now(timezone.utc)
         documents: list[RawDocument] = []
 
-        for record in certifications:
+        records = [(record, record.get("certification_type") or "") for record in certifications]
+        records += [(record, "applied-skill") for record in applied_skills]
+
+        for record, kind in records:
             title = (record.get("title") or "").strip()
             url = (record.get("url") or "").strip()
             if not title or not url:
                 continue  # nothing to show, or nowhere to send anyone
 
-            description = strip_markup(record.get("subtitle") or "")
+            # Certifications carry a one-line subtitle; Applied Skills a summary.
+            description = strip_markup(record.get("subtitle") or record.get("summary") or "")
             codes = [
                 exam_codes[uid]
                 for uid in (record.get("exams") or [])
@@ -139,7 +149,7 @@ class MicrosoftLearnAdapter(ApiAdapter):
                         "unpublished_fields": "cost,deadline,proctoring,assessment",
                         "content_type": "application/json",
                         # Structured facts, passed through for normalisation.
-                        "credential_kind": record.get("certification_type") or "",
+                        "credential_kind": kind,
                         "levels": ",".join(record.get("levels") or []),
                         "roles": ",".join(record.get("roles") or []),
                         "exam_codes": ",".join(codes),

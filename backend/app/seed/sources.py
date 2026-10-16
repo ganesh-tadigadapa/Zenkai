@@ -297,6 +297,28 @@ SOURCES = [
         ),
     ),
     dict(
+        # Verified 2026-10-16: 200, 37 Applied Skills credentials. Same public
+        # catalogue API as the certifications source, scoped to one collection.
+        name="Microsoft Learn Applied Skills",
+        organization="Microsoft",
+        url="https://learn.microsoft.com/api/catalog/?locale=en-us&type=appliedSkills",
+        official_url="https://learn.microsoft.com/credentials/applied-skills/",
+        source_type="official_api",
+        category="certifications",
+        authority="official_issuer",
+        discovery_method="official_api",
+        check_frequency="normal",
+        trust_level=5,
+        check_frequency_minutes=1440,
+        priority=85,
+        robots_allowed=True,
+        access_notes=(
+            "Public catalogue API, permitted by robots.txt. Applied Skills are "
+            "scenario-based credentials earned through a lab assessment. Cost "
+            "is not published by the API, so it stays UNKNOWN."
+        ),
+    ),
+    dict(
         # Verified 2026-10-15: RSS, 200. Scholarships, fellowships and
         # competitions worldwide; the relevance gate filters the rest.
         name="Opportunity Desk",
