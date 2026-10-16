@@ -176,7 +176,7 @@ export default async function LandingPage() {
 
               {total > 0 ? (
                 <p className="tnum mt-6 text-[13px] text-faint">
-                  <span className="font-semibold text-text">{total}</span> curated opportunities
+                  <span className="font-semibold text-text">{total}</span> open opportunities
                   across {live.filter((c) => c.count > 0).length} categories · browsing is free and
                   needs no account
                 </p>
@@ -266,9 +266,8 @@ export default async function LandingPage() {
               How an opportunity reaches you
             </h2>
             <p className="mt-2 max-w-2xl text-[14.5px] leading-relaxed text-muted">
-              Five stages, each one auditable. The pipeline is built; automated fetching is the
-              piece still to come, which is why today&apos;s catalogue is curated by hand and
-              labelled as such on every record.
+              Five stages, each one auditable. Sources are read every six hours, and every record
+              is labelled with where it came from and whether a person has checked it.
             </p>
 
             <ol className="mt-8 grid gap-px overflow-hidden rounded-panel border border-border bg-border sm:grid-cols-2 lg:grid-cols-5">
@@ -300,8 +299,8 @@ export default async function LandingPage() {
 
             <ul className="space-y-3.5">
               {[
-                "It does not scan the whole internet. Today's catalogue is curated by hand from official pages, and every record says so.",
-                "“Curated” means a person wrote the record from the official page. Nothing re-checks it afterwards, so details can have moved on.",
+                "It does not scan the whole internet — only the sources it lists, read every six hours.",
+                "Records found automatically say “Needs verification” until a person reviews them. “Curated” means a person wrote it from the official page.",
                 "Deadlines and costs appear only where the official source publishes them. Where it does not, Zenkai says “not listed” rather than guessing.",
                 "Match scores are fixed rules with visible reasons, not machine learning, and not a prediction of acceptance.",
                 "Sources that prohibit automated access are recorded and never fetched.",
