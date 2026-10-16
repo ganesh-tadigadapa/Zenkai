@@ -355,3 +355,78 @@ def test_resolving_a_stale_token_is_idempotent(db, student):
 
     assert auth_service.resolve_session(db, token) is None
     assert auth_service.resolve_session(db, token) is None
+
+
+# --- Guest accounts ---------------------------------------------------------
+
+def _start_guest(client) -> str:
+    r = client.post("/api/v1/auth/guest")
+    assert r.status_code == 201
+    token = r.json()["token"]
+    client.headers["Authorization"] = f"Bearer {token}"
+    return token
+
+
+def test_guest_gets_a_working_session_without_any_details(client):
+    r = client.post("/api/v1/auth/guest")
+    assert r.status_code == 201
+    body = r.json()
+    assert body["user"]["is_guest"] is True
+    me = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {body['token']}"})
+    assert me.status_code == 200
+    assert me.json()["id"] == body["user"]["id"]
+
+
+def test_each_guest_is_a_separate_account(client):
+    first = client.post("/api/v1/auth/guest").json()["user"]["id"]
+    second = client.post("/api/v1/auth/guest").json()["user"]["id"]
+    assert first != second
+
+
+def test_a_guest_cannot_be_signed_into_with_a_password(client):
+    email = client.post("/api/v1/auth/guest").json()["user"]["email"]
+    r = client.post("/api/v1/auth/login", json={"email": email, "password": "a-good-password"})
+    assert r.status_code in (401, 422)
+
+
+def test_claiming_a_guest_keeps_its_data_and_enables_password_sign_in(client, db):
+    _start_guest(client)
+    opp = make_opportunity(db)
+    db.commit()
+    assert client.post("/api/v1/saved", json={"opportunity_id": opp.id}).status_code == 201
+
+    r = client.post("/api/v1/auth/claim", json=SIGNUP)
+    assert r.status_code == 200, r.text
+    assert r.json()["is_guest"] is False
+    assert r.json()["email"] == "new.student@example.com"
+
+    # Same session still works, and the saved item came along.
+    assert client.get("/api/v1/saved").json()["total"] == 1
+
+    client.headers.pop("Authorization")
+    login = client.post(
+        "/api/v1/auth/login", json={"email": SIGNUP["email"], "password": SIGNUP["password"]}
+    )
+    assert login.status_code == 200
+
+
+def test_claim_rejects_a_taken_email(client):
+    client.post("/api/v1/auth/signup", json=SIGNUP)
+    _start_guest(client)
+    r = client.post("/api/v1/auth/claim", json=SIGNUP)
+    assert r.status_code == 400
+
+
+def test_claim_rejects_a_weak_password(client):
+    _start_guest(client)
+    r = client.post("/api/v1/auth/claim", json={**SIGNUP, "password": "short"})
+    assert r.status_code == 400
+
+
+def test_a_password_account_cannot_be_claimed(client, student):
+    r = client.post("/api/v1/auth/claim", json=SIGNUP)
+    assert r.status_code == 400
+
+
+def test_claim_requires_a_session(client):
+    assert client.post("/api/v1/auth/claim", json=SIGNUP).status_code == 401
