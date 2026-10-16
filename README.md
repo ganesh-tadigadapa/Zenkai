@@ -8,7 +8,7 @@
 
 <br />
 
-[![Live site](https://img.shields.io/badge/🌐_Live_site-zenkai--iota.vercel.app-4f9df7?style=for-the-badge)](https://zenkai-iota.vercel.app)
+[![Live site](https://img.shields.io/badge/🌐_Live_site-getzenkai.vercel.app-4f9df7?style=for-the-badge)](https://getzenkai.vercel.app)
 [![Discovery](https://img.shields.io/github/actions/workflow/status/ganesh-tadigadapa/Zenkai/discovery.yml?style=for-the-badge&label=live%20fetch&logo=githubactions&logoColor=white)](https://github.com/ganesh-tadigadapa/Zenkai/actions/workflows/discovery.yml)
 [![CI](https://img.shields.io/github/actions/workflow/status/ganesh-tadigadapa/Zenkai/ci.yml?style=for-the-badge&label=tests&logo=githubactions&logoColor=white)](https://github.com/ganesh-tadigadapa/Zenkai/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-3fca8d?style=for-the-badge)](LICENSE)
@@ -21,7 +21,7 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169e1?style=flat-square&logo=postgresql&logoColor=white)
 
-[**Live site**](https://zenkai-iota.vercel.app) ·
+[**Live site**](https://getzenkai.vercel.app) ·
 [What it is](#-what-is-zenkai) ·
 [How it works](#%EF%B8%8F-how-it-works) ·
 [How to use it](#-how-to-use-it) ·
@@ -99,7 +99,7 @@ flowchart LR
 | 🎯 **Profile:** add your degree, skills and interests for better matches | | ✅ | ✅ |
 | 📱 Sign in from any device | | | ✅ |
 
-**Quick start:** open the [live site](https://zenkai-iota.vercel.app) → click **Get started**. You land in the app straight away on a guest account, with no email and no password → search something like *"AI hackathon"* or *"remote internship"* → filter by category, cost, deadline or remote → open one and apply on the official page.
+**Quick start:** open the [live site](https://getzenkai.vercel.app) → click **Get started**. You land in the app straight away on a guest account, with no email and no password → search something like *"AI hackathon"* or *"remote internship"* → filter by category, cost, deadline or remote → open one and apply on the official page.
 
 **Keep your guest account:** on the **Profile** page, use **Save your account** to add your name, email and password. Everything you saved stays, and you can then sign in from any device.
 
