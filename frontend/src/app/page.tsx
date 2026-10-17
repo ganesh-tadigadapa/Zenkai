@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import { Instrument_Serif } from "next/font/google";
 
-import { GuestButton } from "@/components/auth/GuestButton";
 import { Logo } from "@/components/layout/Logo";
+import { PrimaryCta, BrowseCta } from "@/components/marketing/CallsToAction";
 import { DeadlineVisual } from "@/components/marketing/DeadlineVisual";
 import { LandingHeader } from "@/components/marketing/LandingHeader";
 import { Marquee } from "@/components/marketing/Marquee";
 import { MatchVisual } from "@/components/marketing/MatchVisual";
 import { SourcesVisual } from "@/components/marketing/SourcesVisual";
 import { Spotlight } from "@/components/marketing/Spotlight";
-import { ButtonLink } from "@/components/ui/Button";
 import {
-  IconArrowRight,
   IconAward,
   IconBriefcase,
   IconGraduationCap,
@@ -67,29 +65,6 @@ const CATEGORIES = [
   { name: "Fellowships", icon: IconUsers },
   { name: "Tech benefits", icon: IconSparkles },
 ];
-
-/** The one call to action, with a light travelling round its edge. */
-function PrimaryCta({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="glow-border isolate">
-      <GuestButton variant="ink" className="rounded-full px-8">
-        {children}
-      </GuestButton>
-    </span>
-  );
-}
-
-/** The closing call to action: same glow, but leads into the catalogue. */
-function BrowseCta() {
-  return (
-    <span className="glow-border isolate">
-      <ButtonLink href="/opportunities" variant="ink" size="lg" className="group rounded-full px-8">
-        Browse opportunities
-        <IconArrowRight className="transition-transform group-hover:translate-x-0.5" />
-      </ButtonLink>
-    </span>
-  );
-}
 
 /* ----------------------------------------------------------- Feature cards */
 
