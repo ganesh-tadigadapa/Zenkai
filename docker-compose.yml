@@ -4,7 +4,7 @@
 #   export DATABASE_URL=postgresql+psycopg://studentos:studentos@localhost:5432/studentos
 #   cd backend && .venv/bin/python -m app.seed.run --reset
 #
-# The application also runs on SQLite with no container at all — see DEVELOPMENT.md.
+# The application also runs on SQLite with no container at all — see docs/DEVELOPMENT.md.
 services:
   db:
     image: postgres:16-alpine
