@@ -230,7 +230,7 @@ ZENKAI/
 │   │   ├── services/      # matching, deadlines, accounts
 │   │   └── seed/          # starting data and the list of sources
 │   ├── tests/
-│   └── run_discovery.py   # runs one fetch cycle
+│   └── scripts/           # run_discovery: one fetch cycle
 ├── .github/workflows/     # tests, 6-hour fetch and keep-awake jobs
 ├── docs/                  # guides, banner and screenshots
 └── render.yaml            # Render deployment setup

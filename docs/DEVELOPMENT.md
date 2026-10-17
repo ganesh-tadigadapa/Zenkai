@@ -130,7 +130,7 @@ them fails the suite rather than reaching students.
 
 ```bash
 make discover                                   # every due, enabled source
-cd backend && .venv/bin/python run_discovery.py "Outreachy announcements"
+cd backend && .venv/bin/python -m scripts.run_discovery "Outreachy announcements"
 ```
 
 Sources that are disabled or disallow automated access are skipped. Every

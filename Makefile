@@ -24,7 +24,7 @@ reset:
 	cd backend && .venv/bin/python -m app.seed.run --reset
 
 discover:
-	cd backend && .venv/bin/python run_discovery.py
+	cd backend && .venv/bin/python -m scripts.run_discovery
 
 backend:
 	cd backend && .venv/bin/uvicorn app.main:app --reload --port 8000

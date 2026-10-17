@@ -68,4 +68,4 @@ jobs:
               sys.exit(f"::error::host does not resolve: {exc}{hint}")
           print("host resolves")
       - run: pip install -r requirements.txt
-      - run: python run_discovery.py
+      - run: python -m scripts.run_discovery

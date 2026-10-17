@@ -1,7 +1,7 @@
 """Run discovery against registered sources. A real fetch, not a simulation.
 
-    python run_discovery.py                      # every due, enabled source
-    python run_discovery.py "Outreachy announcements"   # one named source
+    python -m scripts.run_discovery              # every due, enabled source
+    python -m scripts.run_discovery "Outreachy announcements"   # one named source
 """
 from __future__ import annotations
 
