@@ -1,0 +1,9 @@
+# Normalise line endings in the repository.
+* text=auto eol=lf
+
+# Binary assets
+*.png binary
+*.ico binary
+
+# Generated; keep it out of diffs and language stats
+frontend/package-lock.json -diff linguist-generated
