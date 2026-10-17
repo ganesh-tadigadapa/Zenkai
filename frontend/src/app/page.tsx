@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Instrument_Serif } from "next/font/google";
-import Link from "next/link";
 
 import { GuestButton } from "@/components/auth/GuestButton";
 import { Logo } from "@/components/layout/Logo";
-import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { DeadlineVisual } from "@/components/marketing/DeadlineVisual";
+import { LandingHeader } from "@/components/marketing/LandingHeader";
 import { Marquee } from "@/components/marketing/Marquee";
 import { MatchVisual } from "@/components/marketing/MatchVisual";
 import { SourcesVisual } from "@/components/marketing/SourcesVisual";
@@ -69,31 +68,6 @@ const CATEGORIES = [
   { name: "Tech benefits", icon: IconSparkles },
 ];
 
-function Header() {
-  return (
-    <header className="fixed inset-x-0 top-3 z-40 px-3 sm:top-4">
-      <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-4 rounded-full border border-border/80 bg-surface/60 pl-4 pr-2 shadow-[var(--shadow-md)] backdrop-blur-xl sm:pl-5">
-        <Logo />
-        <nav aria-label="Primary" className="flex items-center gap-1 sm:gap-2">
-          <Link
-            href="/opportunities"
-            className="hidden px-3 py-2 text-[13px] text-muted transition-colors hover:text-text sm:block"
-          >
-            Browse
-          </Link>
-          <Link
-            href="/login"
-            className="px-3 py-2 text-[13px] text-muted transition-colors hover:text-text"
-          >
-            Sign in
-          </Link>
-          <ThemeToggle />
-        </nav>
-      </div>
-    </header>
-  );
-}
-
 /** The one call to action, with a light travelling round its edge. */
 function PrimaryCta({ children }: { children: React.ReactNode }) {
   return (
@@ -140,7 +114,7 @@ const FEATURES = [
 export default function LandingPage() {
   return (
     <div className={`${serif.variable} min-h-dvh overflow-x-clip bg-bg`}>
-      <Header />
+      <LandingHeader />
 
       <main id="main">
         {/* ---------------------------------------------------------------- Hero */}
