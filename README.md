@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/banner.svg" alt="Zenkai — Your opportunity radar" width="100%" />
+<img src="docs/assets/banner.svg" alt="Zenkai — Your opportunity radar" width="100%" />
 
 <br />
 
