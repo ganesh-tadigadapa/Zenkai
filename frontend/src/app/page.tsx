@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Serif } from "next/font/google";
 import Link from "next/link";
-import type { CSSProperties } from "react";
 
 import { GuestButton } from "@/components/auth/GuestButton";
 import { Logo } from "@/components/layout/Logo";
@@ -21,6 +20,7 @@ import {
   IconUsers,
 } from "@/components/ui/Icons";
 import { BRAND } from "@/lib/brand";
+import { delay, vars } from "@/lib/style";
 
 const serif = Instrument_Serif({
   weight: "400",
@@ -67,10 +67,6 @@ const CATEGORIES = [
   { name: "Fellowships", icon: IconUsers },
   { name: "Tech benefits", icon: IconSparkles },
 ];
-
-/** Entrance delay for an `.animate-blur-in` element, or any `--d` consumer. */
-const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
-const vars = (values: Record<string, string | number>) => values as CSSProperties;
 
 function Header() {
   return (
