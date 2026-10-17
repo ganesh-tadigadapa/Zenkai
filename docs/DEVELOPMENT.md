@@ -52,7 +52,7 @@ Set the same `DATABASE_URL` in `backend/.env` to make it permanent.
 
 ```bash
 cd backend && .venv/bin/python -m pytest -q        # all 295
-.venv/bin/python -m pytest tests/test_matching.py -v
+.venv/bin/python -m pytest tests/services/test_matching.py -v
 .venv/bin/python -m pytest -k "deadline"
 ```
 
