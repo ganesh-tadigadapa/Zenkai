@@ -247,7 +247,7 @@ ZENKAI/
 | [ARCHITECTURE.md](docs/ARCHITECTURE.md) | Design decisions and the discovery pipeline in depth |
 | [DATABASE.md](docs/DATABASE.md) | Every table and column |
 | [DEVELOPMENT.md](docs/DEVELOPMENT.md) | Working on the code day to day |
-| [DEPLOYMENT.md](DEPLOYMENT.md) | Putting it on Vercel, Render and Neon |
+| [DEPLOYMENT.md](docs/DEPLOYMENT.md) | Putting it on Vercel, Render and Neon |
 
 ---
 
