@@ -15,12 +15,10 @@ from app.ingestion.adapters.devpost import submission_deadline
 from app.ingestion.connectors.api_connector import APIConnector
 from app.ingestion.connectors.web_connector import WebConnector
 from app.ingestion.fetcher import FetchFailed
-from app.ingestion.pipeline import IngestionPipeline
 from app.models.enums import SourceType
 from app.models.opportunity import Opportunity
-from app.models.provenance import SourceCheck
 from app.models.source import Source
-from tests.conftest import FakeFetcher, make_opportunity
+from tests.conftest import FakeFetcher, make_opportunity, make_source, process
 
 DEVPOST_URL = "https://devpost.com/api/hackathons?status[]=upcoming&status[]=open"
 
@@ -63,25 +61,6 @@ PROGRAMME_PAGE = """<html><head><title>Home | Example Fellowship</title>
 <p>Applications are open to students worldwide.</p><footer>Copyright</footer></body></html>"""
 
 
-def make_source(db, **kwargs) -> Source:
-    defaults = dict(
-        name="Test source",
-        organization="Example",
-        url="https://example.org/",
-        source_type=SourceType.WEB.value,
-        discovery_method="public_webpage",
-        authority="official_organization",
-        active=True,
-        robots_allowed=True,
-        trust_level=4,
-    )
-    defaults.update(kwargs)
-    source = Source(**defaults)
-    db.add(source)
-    db.flush()
-    return source
-
-
 def devpost_source(db) -> Source:
     return make_source(
         db,
@@ -102,13 +81,6 @@ def mlh_source(db) -> Source:
         url="https://www.mlh.com/seasons/2027/events",
         category="hackathons",
     )
-
-
-def process(db, source, documents):
-    check = SourceCheck(source_id=source.id)
-    db.add(check)
-    db.flush()
-    return IngestionPipeline().process_documents(db, documents, source=source, check=check)
 
 
 # --- Devpost -----------------------------------------------------------------

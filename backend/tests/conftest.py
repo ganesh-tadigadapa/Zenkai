@@ -26,6 +26,7 @@ os.environ["DEMO_USER_EMAIL"] = "student@zenkai.dev"
 from app.api.deps import db_session  # noqa: E402
 from app.core.database import Base  # noqa: E402
 from app.core.security import hash_password  # noqa: E402
+from app.ingestion.pipeline import IngestionPipeline  # noqa: E402
 from app.main import app  # noqa: E402
 from app.models.enums import (  # noqa: E402
     Category,
@@ -33,10 +34,13 @@ from app.models.enums import (  # noqa: E402
     DataOrigin,
     OpportunityType,
     RemotePreference,
+    SourceType,
     VerificationStatus,
 )
 from app.models.opportunity import Opportunity, content_fingerprint  # noqa: E402
 from app.models.organization import Organization  # noqa: E402
+from app.models.provenance import SourceCheck  # noqa: E402
+from app.models.source import Source  # noqa: E402
 from app.models.user import User, UserPreferences  # noqa: E402
 from app.services import auth_service  # noqa: E402
 
@@ -207,6 +211,32 @@ def make_opportunity(
     db.add(row)
     db.flush()
     return row
+
+
+def make_source(db, **kwargs) -> Source:
+    defaults = dict(
+        name="Test source",
+        organization="Example",
+        url="https://example.org/",
+        source_type=SourceType.WEB.value,
+        discovery_method="public_webpage",
+        authority="official_organization",
+        active=True,
+        robots_allowed=True,
+        trust_level=4,
+    )
+    defaults.update(kwargs)
+    source = Source(**defaults)
+    db.add(source)
+    db.flush()
+    return source
+
+
+def process(db, source, documents):
+    check = SourceCheck(source_id=source.id)
+    db.add(check)
+    db.flush()
+    return IngestionPipeline().process_documents(db, documents, source=source, check=check)
 
 
 @pytest.fixture()

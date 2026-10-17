@@ -12,8 +12,7 @@ from app.ingestion.connectors.api_connector import APIConnector
 from app.models.credential import CredentialDetail
 from app.models.enums import SourceType
 from app.models.opportunity import Opportunity
-from tests.conftest import FakeFetcher
-from tests.test_live_sources import make_source, process
+from tests.conftest import FakeFetcher, make_source, process
 
 NOW = datetime(2026, 10, 16, tzinfo=timezone.utc)
 
