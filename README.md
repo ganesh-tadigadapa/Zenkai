@@ -34,7 +34,7 @@
 <br />
 
 <p align="center">
-  <img src="docs/screenshots/landing.png" alt="Zenkai landing page" width="100%" />
+  <img src="docs/assets/screenshots/landing.png" alt="Zenkai landing page" width="100%" />
 </p>
 
 ---
@@ -86,7 +86,7 @@ flowchart LR
 ## 🧭 How to use it
 
 <p align="center">
-  <img src="docs/screenshots/opportunities.png" alt="Browsing opportunities with filters" width="100%" />
+  <img src="docs/assets/screenshots/opportunities.png" alt="Browsing opportunities with filters" width="100%" />
 </p>
 
 | | Signed out | Guest | Free account |
