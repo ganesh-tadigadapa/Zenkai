@@ -10,7 +10,7 @@ import {
   CostBadge,
   DeadlineBadge,
   SourceStatusBadge,
-} from "@/components/opportunity/badges";
+} from "@/components/opportunity/OpportunityBadges";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
 import { ExternalLink, hostOf } from "@/components/ui/ExternalLink";

@@ -7,7 +7,7 @@ import {
   DeadlineBadge,
   MatchBadge,
   SourceStatusBadge,
-} from "@/components/opportunity/badges";
+} from "@/components/opportunity/OpportunityBadges";
 import { CredentialBadge } from "@/components/opportunity/CredentialPanel";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import { IconGlobe, IconPin } from "@/components/ui/Icons";

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { ReviewActions } from "@/components/admin/ReviewActions";
-import { CategoryBadge, CostBadge, DeadlineBadge } from "@/components/opportunity/badges";
+import { CategoryBadge, CostBadge, DeadlineBadge } from "@/components/opportunity/OpportunityBadges";
 import { Badge } from "@/components/ui/Badge";
 import { IconExternal } from "@/components/ui/Icons";
 import { CATEGORY_SHORT, cx, formatDate, relativeTime, titleCase } from "@/lib/format";
