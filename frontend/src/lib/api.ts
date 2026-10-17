@@ -4,7 +4,7 @@
  * Everything here runs on the Next.js server: the admin token is read from a
  * non-public environment variable and never reaches the browser bundle.
  */
-import { getSessionToken } from "./session";
+import { getSessionToken } from "./auth/session";
 import type {
   AdminOpportunity,
   AdminStats,

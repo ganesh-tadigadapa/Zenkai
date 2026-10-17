@@ -10,7 +10,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { api, ApiError } from "./api";
-import { clearSessionCookie, setSessionCookie } from "./session";
+import { clearSessionCookie, setSessionCookie } from "./auth/session";
 
 export interface ActionResult {
   ok: boolean;

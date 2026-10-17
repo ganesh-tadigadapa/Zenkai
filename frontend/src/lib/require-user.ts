@@ -3,7 +3,7 @@ import "server-only";
 import { redirect } from "next/navigation";
 
 import { api, ApiError } from "./api";
-import { getSessionToken } from "./session";
+import { getSessionToken } from "./auth/session";
 import type { Profile } from "./types";
 
 /**
