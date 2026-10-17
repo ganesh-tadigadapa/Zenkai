@@ -99,7 +99,7 @@ freshness the system has not earned.
 | `expired` | Closed, or the deadline has passed |
 | `rejected` | A reviewer rejected it. **Never shown to students** |
 
-No seed record carries `source_checked`, and `tests/test_seed_integrity.py`
+No seed record carries `source_checked`, and `tests/seed/test_seed_integrity.py`
 asserts it: nothing fetches anything yet, so nothing may claim it did.
 
 `verification_status`, `verification_method` and `data_origin` are three

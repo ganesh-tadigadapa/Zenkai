@@ -121,7 +121,7 @@ To add it to the seed catalogue instead, append a dict to the relevant list in
 `backend/app/seed/data.py` and re-run the seeder. Read the editorial rules at
 the top of that file first — descriptions must state only what the official page
 states, and deadlines and costs appear only where the source publishes them.
-`tests/test_seed_integrity.py` enforces those rules, so a record that breaks
+`tests/seed/test_seed_integrity.py` enforces those rules, so a record that breaks
 them fails the suite rather than reaching students.
 
 ---
