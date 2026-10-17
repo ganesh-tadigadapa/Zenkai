@@ -5,7 +5,7 @@ from enum import Enum
 
 
 class Category(str, Enum):
-    """The six product categories. Deliberately closed — see ARCHITECTURE.md."""
+    """The six product categories. Deliberately closed — see docs/ARCHITECTURE.md."""
 
     CERTIFICATIONS = "certifications"
     INTERNSHIPS = "internships"
