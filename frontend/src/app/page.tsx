@@ -4,7 +4,6 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 
 import { GuestButton } from "@/components/auth/GuestButton";
-import { IntroSequence } from "@/components/intro/IntroSequence";
 import { Logo } from "@/components/layout/Logo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
 import { Spotlight } from "@/components/marketing/Spotlight";
@@ -21,7 +20,7 @@ import {
   IconTrophy,
   IconUsers,
 } from "@/components/ui/Icons";
-import { BRAND, STORAGE_KEYS } from "@/lib/brand";
+import { BRAND } from "@/lib/brand";
 
 const serif = Instrument_Serif({
   weight: "400",
@@ -72,22 +71,6 @@ const CATEGORIES = [
 /** Entrance delay for an `.animate-blur-in` element, or any `--d` consumer. */
 const delay = (ms: number) => ({ "--d": `${ms}ms` }) as CSSProperties;
 const vars = (values: Record<string, string | number>) => values as CSSProperties;
-
-/*
-  Runs before the hero paints. If the intro is about to play, this holds the
-  page's entrance animation until the overlay leaves (IntroSequence clears the
-  flag), so the reveal is seen rather than spent behind the overlay. It mirrors
-  the intro's own check: first visit, motion allowed.
-*/
-const HOLD_FOR_INTRO = `
-(function () {
-  try {
-    if (localStorage.getItem('${STORAGE_KEYS.introSeen}') === '1') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    document.documentElement.dataset.intro = 'pending';
-  } catch (e) {}
-})();
-`;
 
 function Header() {
   return (
@@ -274,13 +257,6 @@ const FEATURES = [
 export default function LandingPage() {
   return (
     <div className={`${serif.variable} min-h-dvh overflow-x-clip bg-bg`}>
-      <script dangerouslySetInnerHTML={{ __html: HOLD_FOR_INTRO }} />
-      {/*
-        Plays once per visitor, on the client only. Returning visitors and
-        anyone with prefers-reduced-motion never see it, and it renders nothing
-        server-side so the landing page is complete without it.
-      */}
-      <IntroSequence />
       <Header />
 
       <main id="main">

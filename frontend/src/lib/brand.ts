@@ -21,5 +21,4 @@ export const BRAND = {
 /** Storage keys, namespaced so they cannot collide with anything else. */
 export const STORAGE_KEYS = {
   theme: "zenkai-theme",
-  introSeen: "zenkai-intro-seen",
 } as const;
