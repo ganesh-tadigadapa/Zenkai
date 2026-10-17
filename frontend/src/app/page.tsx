@@ -9,14 +9,7 @@ import { Marquee } from "@/components/marketing/Marquee";
 import { MatchVisual } from "@/components/marketing/MatchVisual";
 import { SourcesVisual } from "@/components/marketing/SourcesVisual";
 import { Spotlight } from "@/components/marketing/Spotlight";
-import {
-  IconAward,
-  IconBriefcase,
-  IconGraduationCap,
-  IconSparkles,
-  IconTrophy,
-  IconUsers,
-} from "@/components/ui/Icons";
+import { ROTATING, SOURCES, CATEGORIES } from "@/components/marketing/content";
 import { BRAND } from "@/lib/brand";
 import { delay, vars } from "@/lib/style";
 
@@ -32,39 +25,6 @@ export const metadata: Metadata = {
   title: `${BRAND.wordmark} — ${BRAND.tagline}`,
   description: BRAND.description,
 };
-
-/** Cycled in the headline: "Stop searching for …". */
-const ROTATING = [
-  "internships.",
-  "hackathons.",
-  "certifications.",
-  "scholarships.",
-  "fellowships.",
-  "student perks.",
-];
-
-/** Where records come from, as named in the source registry. */
-const SOURCES = [
-  "Devpost",
-  "Major League Hacking",
-  "Unstop",
-  "GitHub Education",
-  "Microsoft Learn",
-  "Google Summer of Code",
-  "Outreachy",
-  "SimplifyJobs",
-  "AWS",
-  "Microsoft Azure",
-];
-
-const CATEGORIES = [
-  { name: "Internships", icon: IconBriefcase },
-  { name: "Hackathons", icon: IconTrophy },
-  { name: "Certifications", icon: IconAward },
-  { name: "Scholarships", icon: IconGraduationCap },
-  { name: "Fellowships", icon: IconUsers },
-  { name: "Tech benefits", icon: IconSparkles },
-];
 
 /* ----------------------------------------------------------- Feature cards */
 
