@@ -17,8 +17,9 @@ Set `NEXT_PUBLIC_API_URL` if the backend is not on `http://localhost:8000`.
 ```
 src/
 ├── app/          # routes: landing, (auth), (app) and the health check
-├── components/   # UI grouped by feature: opportunity, filters, layout, ui…
-├── lib/          # API client, server actions, session and formatting
+├── components/   # UI grouped by feature: opportunity, filters, marketing, ui…
+├── lib/          # API client, server actions, formatting and style helpers
+│   └── auth/     # session cookie and signed-in user guards
 └── proxy.ts      # redirects signed-out visitors away from private pages
 ```
 
