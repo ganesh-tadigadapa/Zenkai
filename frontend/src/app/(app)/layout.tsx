@@ -1,6 +1,6 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Topbar } from "@/components/layout/Topbar";
-import { getCurrentUser } from "@/lib/require-user";
+import { getCurrentUser } from "@/lib/auth/require-user";
 
 /**
  * Shell for the catalogue and every signed-in surface.

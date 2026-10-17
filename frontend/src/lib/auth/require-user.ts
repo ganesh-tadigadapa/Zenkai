@@ -2,9 +2,9 @@ import "server-only";
 
 import { redirect } from "next/navigation";
 
-import { api, ApiError } from "./api";
-import { getSessionToken } from "./auth/session";
-import type { Profile } from "./types";
+import { api, ApiError } from "../api";
+import { getSessionToken } from "./session";
+import type { Profile } from "../types";
 
 /**
  * The signed-in user, or null.

@@ -1,4 +1,4 @@
-import { requireUser } from "@/lib/require-user";
+import { requireUser } from "@/lib/auth/require-user";
 
 /**
  * Guards every personal surface: dashboard, saved, deadlines, profile, admin.

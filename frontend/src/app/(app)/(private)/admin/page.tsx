@@ -8,7 +8,7 @@ import { IconDatabase, IconShield } from "@/components/ui/Icons";
 import { StatsCard } from "@/components/ui/StatsCard";
 import { EmptyState, ErrorState } from "@/components/ui/States";
 import { api, ApiError } from "@/lib/api";
-import { requireUser } from "@/lib/require-user";
+import { requireUser } from "@/lib/auth/require-user";
 import { AUTHORITY_LABELS, cx, DISCOVERY_LABELS, relativeTime } from "@/lib/format";
 import type { VerificationStatus } from "@/lib/types";
 

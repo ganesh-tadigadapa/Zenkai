@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { AuthForm } from "@/components/auth/AuthForm";
-import { getCurrentUser } from "@/lib/require-user";
+import { getCurrentUser } from "@/lib/auth/require-user";
 
 export const metadata: Metadata = { title: "Sign in" };
 export const dynamic = "force-dynamic";
