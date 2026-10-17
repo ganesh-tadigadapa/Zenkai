@@ -38,7 +38,8 @@ backend/
     ai/             provider-agnostic AI contracts + heuristic stub
     notifications/  notification model and channel interface
     seed/           curated catalogue and the seeder
-  tests/            86 tests
+  scripts/          command-line entry points (run_discovery)
+  tests/            api, ingestion, sources, services, core, seed
 
 frontend/
   src/
