@@ -232,7 +232,7 @@ ZENKAI/
 │   ├── tests/
 │   └── run_discovery.py   # runs one fetch cycle
 ├── .github/workflows/     # tests, 6-hour fetch and keep-awake jobs
-├── docs/                  # banner and screenshots
+├── docs/                  # guides, banner and screenshots
 └── render.yaml            # Render deployment setup
 ```
 
