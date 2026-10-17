@@ -35,7 +35,7 @@ app.include_router(api_router)
 
 @app.on_event("startup")
 def on_startup() -> None:
-    # Dev convenience. Production uses a migration tool (see DATABASE.md).
+    # Dev convenience. Production uses a migration tool (see docs/DATABASE.md).
     if settings.ENV == "development":
         create_all()
 
