@@ -46,8 +46,9 @@ frontend/
     app/
       (app)/        signed-in shell: dashboard, feed, detail, saved, …
       page.tsx      landing page
-    components/     ui primitives, opportunity, filters, admin, layout
+    components/     ui primitives, opportunity, filters, admin, layout, marketing
     lib/            typed API client, server actions, formatting
+      auth/         session cookie and signed-in user guards
 ```
 
 ---
