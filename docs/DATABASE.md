@@ -234,7 +234,7 @@ so the six categories can share one pipeline while differing in schema.
 | `available_countries` | Empty means unstated, which is not the same as worldwide |
 
 **Every field defaults to UNKNOWN.** A source that does not mention proctoring
-has not said there is none. `tests/test_intelligence_engine.py` asserts that
+has not said there is none. `tests/ingestion/test_intelligence_engine.py` asserts that
 UNKNOWN is never written as NO.
 
 ### `source_checks`
