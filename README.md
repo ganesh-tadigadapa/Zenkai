@@ -220,8 +220,8 @@ ZENKAI/
 ├── frontend/
 │   └── src/
 │       ├── app/           # pages: landing, opportunities, dashboard, profile…
-│       ├── components/    # UI pieces: cards, filters, intro, layout
-│       └── lib/           # API client, server actions, session cookie
+│       ├── components/    # UI pieces: cards, filters, landing, layout
+│       └── lib/           # API client, server actions, auth helpers
 ├── backend/
 │   ├── app/
 │   │   ├── api/           # API routes
@@ -229,7 +229,7 @@ ZENKAI/
 │   │   ├── models/        # database tables
 │   │   ├── services/      # matching, deadlines, accounts
 │   │   └── seed/          # starting data and the list of sources
-│   ├── tests/
+│   ├── tests/             # grouped: api, ingestion, sources, services…
 │   └── scripts/           # run_discovery: one fetch cycle
 ├── .github/workflows/     # tests, 6-hour fetch and keep-awake jobs
 ├── docs/                  # guides, banner and screenshots
