@@ -144,14 +144,17 @@ def test_devpost_pages_are_followed_until_the_total_is_reached(db):
 
 def test_a_devpost_hackathon_becomes_a_hackathon_with_its_real_deadline(db):
     source = devpost_source(db)
-    connector = APIConnector(fetcher=FakeFetcher({DEVPOST_URL: devpost_page([HACKATHON], total=1)}))
+    # The captured hackathon closed on 2026-10-23; shift it far ahead so the
+    # record is still open whenever the suite runs, instead of being expired.
+    open_hackathon = dict(HACKATHON, submission_period_dates="Aug 31 - Oct 23, 2099")
+    connector = APIConnector(fetcher=FakeFetcher({DEVPOST_URL: devpost_page([open_hackathon], total=1)}))
     report = process(db, source, list(connector.fetch(source)))
     assert report.created == 1
 
     row = db.scalars(select(Opportunity).where(Opportunity.source_id == source.id)).one()
     assert row.category == "hackathons"
     assert row.opportunity_type == "hackathon"
-    assert row.deadline.replace(tzinfo=timezone.utc).date() == datetime(2026, 10, 23).date()
+    assert row.deadline.replace(tzinfo=timezone.utc).date() == datetime(2099, 10, 23).date()
     assert row.location == "Online" and row.is_remote is True
     assert row.cost_type == "unknown"  # not stated by the API, so not assumed free
     assert row.tags == ["Machine Learning/AI", "Productivity"]
