@@ -1,7 +1,7 @@
 """Keeping discovered records current: changes, withdrawals and deadlines.
 
 Plus the Unstop, SimplifyJobs and GitHub Student Pack adapters. Fixture bodies
-only — trimmed copies of what each provider served on 2026-10-15.
+only - trimmed copies of what each provider served on 2026-10-15.
 """
 from __future__ import annotations
 

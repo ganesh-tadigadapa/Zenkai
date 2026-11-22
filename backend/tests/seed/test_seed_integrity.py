@@ -61,7 +61,7 @@ def test_seed_categories_and_types_are_valid_enum_members():
 
 
 def test_learning_platforms_are_not_labelled_certifications():
-    """A catalogue of courses is not a credential — see the editorial rules."""
+    """A catalogue of courses is not a credential - see the editorial rules."""
     platforms = {
         "Google Cloud Skills Boost",
         "Microsoft Learn Training and Certifications",

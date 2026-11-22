@@ -3,7 +3,7 @@
  *
  * Hand-rolled rather than pulled from an icon package: the set is small, and
  * inlining keeps the client bundle free of a dependency for ~20 glyphs.
- * All icons inherit `currentColor` and are hidden from assistive technology —
+ * All icons inherit `currentColor` and are hidden from assistive technology - 
  * the surrounding element always carries the label.
  */
 import type { SVGProps } from "react";

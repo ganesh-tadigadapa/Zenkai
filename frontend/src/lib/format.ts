@@ -31,13 +31,13 @@ export const COST_LABELS: Record<CostType, string> = {
   paid: "Paid",
   freemium: "Free tier, paid upgrade",
   subscription: "Subscription",
-  // Free to learn, paid to sit — the distinction students most need.
+  // Free to learn, paid to sit - the distinction students most need.
   exam_fee: "Free to learn, paid exam",
   unknown: "Cost not confirmed",
 };
 
 /**
- * Deliberately modest wording. Nothing here implies a live or recent check —
+ * Deliberately modest wording. Nothing here implies a live or recent check - 
  * the product only claims what it actually did.
  */
 export const STATUS_LABELS: Record<VerificationStatus, string> = {
@@ -101,7 +101,7 @@ export function titleCase(value: string): string {
     .join(" ");
 }
 
-/** "2 hours ago", "3 days ago" — used for freshness indicators. */
+/** "2 hours ago", "3 days ago" - used for freshness indicators. */
 export function relativeTime(iso: string | null): string {
   if (!iso) return "never";
   const then = new Date(iso).getTime();
@@ -176,7 +176,7 @@ export function costLabel(opportunity: Pick<Opportunity, "cost_type" | "cost_amo
 /**
  * Whether a cost badge tells the student anything.
  *
- * "Free" on a scholarship or an internship is noise — nobody expects to pay to
+ * "Free" on a scholarship or an internship is noise - nobody expects to pay to
  * apply. Cost only carries information where the student might actually be
  * charged, so the badge is suppressed elsewhere unless there is a real price.
  */
@@ -211,7 +211,7 @@ export function isFree(cost: CostType): boolean {
   return cost === "free" || cost === "free_for_students";
 }
 
-/** Tailwind class merge helper — keeps conditional class lists readable. */
+/** Tailwind class merge helper - keeps conditional class lists readable. */
 export function cx(...values: Array<string | false | null | undefined>): string {
   return values.filter(Boolean).join(" ");
 }

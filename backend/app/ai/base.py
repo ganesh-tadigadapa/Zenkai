@@ -48,7 +48,7 @@ class ExtractedOpportunity:
     confidence: float = 0.0
     notes: list[str] = field(default_factory=list)
     #: Structured facts the source carried, passed through untouched for
-    #: normalisation. Never invented — only what an adapter actually read.
+    #: normalisation. Never invented - only what an adapter actually read.
     provider_metadata: dict = field(default_factory=dict)
 
 

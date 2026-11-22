@@ -38,7 +38,7 @@ class SourceOut(SourceCreate):
     consecutive_failures: int = 0
     #: Whether this source can support a SOURCE_CHECKED record.
     is_authoritative: bool = False
-    #: One honest line about monitoring state — "Not monitored yet." when
+    #: One honest line about monitoring state - "Not monitored yet." when
     #: nothing has ever read it, rather than an invented timestamp.
     monitoring_summary: str = "Not monitored yet."
 

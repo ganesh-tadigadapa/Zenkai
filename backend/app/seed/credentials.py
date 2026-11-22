@@ -2,7 +2,7 @@
 
 EDITORIAL RULE, same as the rest of the catalogue: only what the official page
 states. Every field left out of a record below stays UNKNOWN, and UNKNOWN is a
-real answer — it means nobody checked, not that the answer is "no".
+real answer - it means nobody checked, not that the answer is "no".
 
 In particular:
   * ``proctored`` is omitted wherever the provider does not say. It is never
@@ -138,7 +138,7 @@ CREDENTIAL_FACTS: dict[str, dict] = {
         ],
         issuer="NVIDIA",
         delivery_mode=DeliveryMode.ONLINE,
-        # Some courses are free, workshops are paid — a mixed catalogue.
+        # Some courses are free, workshops are paid - a mixed catalogue.
         cost=CostType.FREEMIUM,
     ),
     "Google Digital Garage — Fundamentals of Digital Marketing": dict(

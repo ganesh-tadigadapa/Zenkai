@@ -274,7 +274,7 @@ body {
   50%      { transform: translate(-46%, -54%) scale(1.08); }
 }
 
-/* Concentric rings pulsing out from behind the hero — the radar, without the chrome. */
+/* Concentric rings pulsing out from behind the hero - the radar, without the chrome. */
 .hero-ring {
   position: absolute;
   left: 50%;

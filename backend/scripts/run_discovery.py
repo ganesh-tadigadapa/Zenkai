@@ -72,7 +72,7 @@ def main(argv: list[str]) -> int:
                 print(f"    error            : {error}")
 
         # Close everything whose deadline has passed, whichever source it came
-        # from — curated records included.
+        # from - curated records included.
         closed = expire_passed_deadlines(db)
         db.commit()
         print(f"\nClosed {closed} opportunities whose deadline has passed.")

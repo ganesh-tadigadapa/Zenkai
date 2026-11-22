@@ -11,7 +11,7 @@ ones are read, newest first, up to :data:`MAX_LISTINGS`. The listing is
 treated as complete for that window: a role whose flag is cleared, or that
 ages out of the window, is retired on the next run.
 
-Postings carry no deadline — internships close when they fill — so none is
+Postings carry no deadline - internships close when they fill - so none is
 set, and cost and eligibility are not stated.
 """
 from __future__ import annotations

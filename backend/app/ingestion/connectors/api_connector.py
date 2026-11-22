@@ -1,4 +1,4 @@
-"""Official-API connector — the highest-trust discovery path.
+"""Official-API connector - the highest-trust discovery path.
 
 The connector does the fetching; a per-provider adapter does the mapping,
 because every catalogue API has its own shape. A source whose URL matches no

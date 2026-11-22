@@ -4,7 +4,7 @@
 Unstop's own listing pages, and Unstop's robots.txt explicitly allows
 `/api/public/*`. Filtered with `oppstatus=open`, it returns only listings whose
 registration is open, each with its registration deadline, organiser,
-locations, skills and — for internships — the stipend.
+locations, skills and - for internships - the stipend.
 
 Unstop is a marketplace: organisers post their own listings, so the trust
 level on the source is lower than an official issuer's, and every record lands

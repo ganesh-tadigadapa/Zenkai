@@ -45,7 +45,7 @@ export function ExternalLink({
   );
 }
 
-/** Only http(s) is followed — never javascript:, data: or a relative path. */
+/** Only http(s) is followed - never javascript:, data: or a relative path. */
 export function isSafeExternalUrl(href: string | null | undefined): boolean {
   if (!href) return false;
   try {
@@ -56,7 +56,7 @@ export function isSafeExternalUrl(href: string | null | undefined): boolean {
   }
 }
 
-/** "education.github.com" — the recognisable part of a URL, for display. */
+/** "education.github.com" - the recognisable part of a URL, for display. */
 export function hostOf(href: string | null | undefined): string {
   if (!href) return "";
   try {

@@ -47,8 +47,8 @@ class SourceOut(BaseModel):
 class CredentialOut(BaseModel):
     """Certification-specific facts.
 
-    Every field can be UNKNOWN, and UNKNOWN means the official page did not say
-    — never that the answer is "no". The UI renders those as "Not stated"
+    Every field can be UNKNOWN, and UNKNOWN means the official page did not say,
+    never that the answer is "no". The UI renders those as "Not stated"
     rather than hiding them, so a student can see what has and has not been
     established.
     """
@@ -117,7 +117,7 @@ class OpportunityBase(BaseModel):
     tags: list[str] = []
     benefits: list[str] = []
     secondary_categories: list[Category] = []
-    #: Exact page where the student can act. Leave unset when it is not known —
+    #: Exact page where the student can act. Leave unset when it is not known - 
     #: the interface falls back to the source rather than guessing.
     direct_destination_url: HttpUrl | None = None
     destination_action: DestinationAction | None = None
@@ -151,7 +151,7 @@ class OpportunityUpdate(BaseModel):
 
 
 class OpportunityOut(BaseModel):
-    """Card-level payload — everything the feed renders, nothing more."""
+    """Card-level payload - everything the feed renders, nothing more."""
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -24,8 +24,8 @@ class Source(UUIDPrimaryKey, Timestamps, Base):
     and *how much its word is worth*. Two separate questions:
 
     * ``robots_allowed`` and ``enabled`` gate access. A source that disallows
-      automated access is still registered — with the prohibition recorded as a
-      fact — so the system holds an explicit note of what it must not touch.
+      automated access is still registered - with the prohibition recorded as a
+      fact - so the system holds an explicit note of what it must not touch.
     * ``authority`` gates belief. Only an authoritative source can support a
       record being published as SOURCE_CHECKED. A third-party listing is useful
       for discovering that something exists; it is not evidence of what it costs

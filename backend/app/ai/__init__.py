@@ -12,7 +12,7 @@ def get_ai_client() -> AIClient:
     """Resolve the configured provider.
 
     Only the stub ships today. Adding a provider means implementing ``AIClient``
-    and registering it here — no pipeline changes.
+    and registering it here - no pipeline changes.
     """
     provider = (settings.AI_PROVIDER or "stub").lower()
     if provider == "stub":

@@ -54,7 +54,7 @@ def get_optional_user(
         user = auth_service.resolve_session(db, token)
         if user is not None:
             return user
-        # A token that no longer resolves is simply not signed in — the caller
+        # A token that no longer resolves is simply not signed in - the caller
         # decides whether that is an error.
         return None
     return _demo_user(db)

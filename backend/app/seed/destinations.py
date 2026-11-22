@@ -1,7 +1,7 @@
 """Destination overrides, from the link audit of 2026-09-20.
 
 Every URL here was fetched before being adopted. Where a host returns 200 for
-any path — several are single-page apps that do — a 200 proves nothing, so
+any path - several are single-page apps that do - a 200 proves nothing, so
 those candidates were rejected rather than trusted.
 
 Records absent from both tables keep their catalogue URL as the direct
@@ -55,7 +55,7 @@ URL_FIXES: dict[str, dict[str, str]] = {
     },
     "Adobe Research Women-in-Technology Scholarship": {
         # The scholarship page is gone; anchor on the research site root, which
-        # resolves. No direct destination — see NO_DIRECT_DESTINATION above.
+        # resolves. No direct destination - see NO_DIRECT_DESTINATION above.
         "url": "https://research.adobe.com/",
         "source_url": "https://research.adobe.com/",
         "note": "scholarship path 404s; anchored on the Adobe Research root",
@@ -66,7 +66,7 @@ URL_FIXES: dict[str, dict[str, str]] = {
         "note": "attend/scholarships/ redirects in a loop; conference root resolves",
     },
     "Google STEP Internship": {
-        # The old apply URL was a careers *search results* page — exactly the
+        # The old apply URL was a careers *search results* page - exactly the
         # experience this work exists to remove. The programme page is the
         # right destination and resolves.
         "url": "https://buildyourfuture.withgoogle.com/programs/step",

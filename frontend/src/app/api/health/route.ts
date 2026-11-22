@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
  * Reports whether the API is up, and wakes it if it is asleep.
  *
  * A free Render instance sleeps after 15 idle minutes, and waking it takes
- * 30-60s — which would otherwise be the next visitor's page load. The
+ * 30-60s - which would otherwise be the next visitor's page load. The
  * keep-warm workflow (.github/workflows/keep-warm.yml) calls this route, so
  * it does not need to know the API's own URL.
  */

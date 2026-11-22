@@ -25,7 +25,7 @@ function Submit({
 }
 
 /**
- * One click into the app on a fresh guest account — no email, no password.
+ * One click into the app on a fresh guest account - no email, no password.
  *
  * A form rather than a link, so creating the account is a POST and cannot be
  * triggered by a prefetch or a crawler following links.

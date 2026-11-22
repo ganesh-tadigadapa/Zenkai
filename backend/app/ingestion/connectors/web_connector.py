@@ -1,6 +1,6 @@
 """Polite single-page fetcher.
 
-Scope is intentionally narrow: fetch one known, permitted URL — the program page
+Scope is intentionally narrow: fetch one known, permitted URL - the program page
 a human already registered as a source. It is not a crawler and does not follow
 links, enumerate paths, or bypass any access control. Robots.txt, Crawl-delay
 and refusals are all handled by :class:`PoliteFetcher`.

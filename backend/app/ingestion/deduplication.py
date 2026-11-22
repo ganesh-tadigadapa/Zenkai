@@ -18,8 +18,8 @@ def _tokens(value: str) -> set[str]:
     """Words that carry meaning, including short distinguishing ones.
 
     A length filter here caused real false merges: "Azure Fundamentals" and
-    "Azure AI Fundamentals" scored a perfect 1.0 because "AI" — the only word
-    telling them apart — was thrown away. Only single characters and a handful
+    "Azure AI Fundamentals" scored a perfect 1.0 because "AI" - the only word
+    telling them apart - was thrown away. Only single characters and a handful
     of stop words are dropped now.
     """
     stop = {"the", "a", "an", "of", "for", "and", "in", "on", "to", "with"}
@@ -35,7 +35,7 @@ def _canonical(url: str | None) -> str:
 
 
 def title_similarity(a: str, b: str) -> float:
-    """Jaccard overlap on word tokens — no dependencies, good enough as a pre-filter."""
+    """Jaccard overlap on word tokens - no dependencies, good enough as a pre-filter."""
     ta, tb = _tokens(a), _tokens(b)
     if not ta or not tb:
         return 0.0
@@ -103,7 +103,7 @@ class DeduplicationService:
         if best and best_score >= TITLE_SIMILARITY_THRESHOLD:
             # Distinct official URLs mean distinct opportunities, whatever the
             # titles look like. A provider's catalogue is full of entries that
-            # differ by a word — each with its own page — and merging those
+            # differ by a word - each with its own page - and merging those
             # silently loses records a student could have taken up.
             candidate_url = _canonical(candidate.application_url)
             existing_url = _canonical(best.application_url)

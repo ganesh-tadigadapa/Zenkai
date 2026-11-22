@@ -139,7 +139,7 @@ def start_session(
 ) -> tuple[str, UserSession]:
     """Create a session, returning the plaintext token and the stored row.
 
-    The token is returned once and never persisted — only its digest is.
+    The token is returned once and never persisted - only its digest is.
     """
     token = generate_session_token()
     session = UserSession(
@@ -190,7 +190,7 @@ def end_session(db: Session, token: str) -> bool:
 
 
 def end_all_sessions(db: Session, user: User) -> int:
-    """Sign out everywhere — used after a password change."""
+    """Sign out everywhere - used after a password change."""
     result = db.execute(delete(UserSession).where(UserSession.user_id == user.id))
     db.flush()
     return int(result.rowcount or 0)

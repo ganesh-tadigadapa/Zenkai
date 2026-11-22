@@ -319,7 +319,7 @@ def test_registration_rejects_a_blank_name(db):
 # elsewhere or changing a password, and vanishes when the database is reseeded.
 # The frontend once treated "a cookie exists" as "signed in", which bounced
 # /login and the private routes off each other forever. These assert the API
-# behaviour that fix depends on — an invalid token must be *distinguishable*
+# behaviour that fix depends on - an invalid token must be *distinguishable*
 # from a valid one, not merely absent.
 
 def test_a_token_that_no_longer_exists_is_rejected_not_ignored(client, student):

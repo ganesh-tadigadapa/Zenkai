@@ -122,7 +122,7 @@ export async function changePasswordAction(formData: FormData): Promise<ActionRe
   try {
     const session = await api.auth.changePassword({ current_password, new_password });
     // The server revoked every session, including this one, and issued a fresh
-    // token — store it or the user is signed out of the device they just used.
+    // token - store it or the user is signed out of the device they just used.
     await setSessionCookie(session.token);
     revalidatePath("/profile");
     return { ok: true, message: "Password changed. Other devices were signed out." };

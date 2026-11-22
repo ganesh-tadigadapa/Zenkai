@@ -27,7 +27,7 @@ const GROUPS: { param: string; label: string; facet: string }[] = [
 
 /*
   Each hint says what the filter *excludes*, not just what it includes. Most of
-  the catalogue has an unconfirmed cost, so "Free only" hides the majority —
+  the catalogue has an unconfirmed cost, so "Free only" hides the majority - 
   correct, because an unstated price is not a free one, but useless to a
   student unless the control admits it.
 */

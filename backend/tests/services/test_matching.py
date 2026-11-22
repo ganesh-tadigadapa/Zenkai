@@ -1,4 +1,4 @@
-"""Recommendation scoring — the rules that drive 'Recommended for you'."""
+"""Recommendation scoring - the rules that drive 'Recommended for you'."""
 from __future__ import annotations
 
 from app.models.enums import Category, CostType, RemotePreference

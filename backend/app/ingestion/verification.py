@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 from app.ai.base import ExtractedOpportunity
 from app.models.enums import VerificationStatus
 
-# Nothing in this build can reach it — it exists for a future connector whose
+# Nothing in this build can reach it - it exists for a future connector whose
 # source is an official API with a trust_level of 5. Even then the best an
 # automated check can assert is SOURCE_CHECKED, never a human sign-off.
 AUTO_APPROVE_CONFIDENCE = 0.95

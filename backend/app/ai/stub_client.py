@@ -1,6 +1,6 @@
 """Deterministic, dependency-free implementation of :class:`AIClient`.
 
-It uses keyword heuristics and regular expressions — useful for tests and local
+It uses keyword heuristics and regular expressions - useful for tests and local
 development, and honest about being no substitute for a real model. Confidence
 scores it returns are capped below the auto-approve threshold on purpose, so
 stub-extracted records always land in the human review queue.

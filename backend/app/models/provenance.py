@@ -55,7 +55,7 @@ class RawSourceDocument(UUIDPrimaryKey, Timestamps, Base):
 
     Extraction and normalisation will improve. Keeping the raw evidence means
     those improvements can be re-run over what we already have instead of
-    re-fetching every source — which is both slower and ruder to the providers.
+    re-fetching every source - which is both slower and ruder to the providers.
 
     It is also the audit trail: every published record can be traced back
     through source -> check -> this document -> extraction.
@@ -79,7 +79,7 @@ class RawSourceDocument(UUIDPrimaryKey, Timestamps, Base):
     final_url: Mapped[str | None] = mapped_column(String(600))
     title: Mapped[str | None] = mapped_column(String(300))
 
-    #: The retrieved body. Text only — no binaries, no credentials.
+    #: The retrieved body. Text only - no binaries, no credentials.
     content: Mapped[str] = mapped_column(Text, default="")
     content_type: Mapped[str | None] = mapped_column(String(80))
     #: Digest of `content`. Equal digests across checks mean nothing changed,

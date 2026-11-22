@@ -20,7 +20,7 @@ def test_profile_refuses_an_anonymous_caller(client):
 
 
 def test_a_session_resolves_only_its_own_user(db, client, student):
-    """Two accounts, two sessions — each token must resolve to its own user."""
+    """Two accounts, two sessions - each token must resolve to its own user."""
     from app.core.security import hash_password
     from app.services import auth_service
 

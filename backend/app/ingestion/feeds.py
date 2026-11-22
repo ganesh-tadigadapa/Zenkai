@@ -44,7 +44,7 @@ class FeedEntry:
 class ParsedFeed:
     title: str | None
     entries: list[FeedEntry]
-    #: "rss" or "atom" — recorded so a source's declared method can be checked
+    #: "rss" or "atom" - recorded so a source's declared method can be checked
     #: against what it actually serves.
     format: str
 
@@ -169,7 +169,7 @@ def parse_feed(body: str) -> ParsedFeed:
     """Parse an RSS 2.0 or Atom document.
 
     Raises FeedParseError for anything else, so a source quietly serving an
-    error page is recorded as a failure rather than as an empty feed — which
+    error page is recorded as a failure rather than as an empty feed - which
     the mass-deletion guard would otherwise have to catch later.
     """
     if not body or not body.strip():

@@ -82,7 +82,7 @@ export type AssessmentType =
   | "none"
   | "unknown";
 
-/** `unknown` means the source did not say — never that the answer is "no". */
+/** `unknown` means the source did not say - never that the answer is "no". */
 export type ProctoredStatus = "yes" | "no" | "optional" | "unknown";
 
 export type DeliveryMode =
@@ -336,7 +336,7 @@ export interface SourceRecord {
   official_url: string | null;
   source_type: string;
   category: string | null;
-  /** How much the source's word is worth — separate from whether it may be read. */
+  /** How much the source's word is worth - separate from whether it may be read. */
   authority: SourceAuthority;
   discovery_method: DiscoveryMethod;
   trust_level: number;

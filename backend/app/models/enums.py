@@ -5,7 +5,7 @@ from enum import Enum
 
 
 class Category(str, Enum):
-    """The six product categories. Deliberately closed — see docs/ARCHITECTURE.md."""
+    """The six product categories. Deliberately closed - see docs/ARCHITECTURE.md."""
 
     CERTIFICATIONS = "certifications"
     INTERNSHIPS = "internships"
@@ -151,7 +151,7 @@ class DestinationType(str, Enum):
 class DestinationAction(str, Enum):
     """What the student is about to do, which sets the button's wording.
 
-    Derived from ``opportunity_type`` so the two can never disagree — a record
+    Derived from ``opportunity_type`` so the two can never disagree - a record
     typed as an exam cannot end up saying "Start course". ``VISIT_SOURCE`` is
     the honest fallback when no direct destination could be established.
     """
@@ -214,7 +214,7 @@ DESTINATION_ACTION_BY_TYPE: dict[str, DestinationAction] = {
 # categories can add their own without widening the shared row.
 #
 # Every one of these defaults to UNKNOWN. An absent value from a source means
-# "the source did not say", never "no" — inferring otherwise is how a catalogue
+# "the source did not say", never "no" - inferring otherwise is how a catalogue
 # starts telling students things that are not true.
 # ---------------------------------------------------------------------------
 
@@ -286,7 +286,7 @@ class ExperienceLevel(str, Enum):
 
 
 class Specialization(str, Enum):
-    """Subject areas, kept extensible — add members as the catalogue grows."""
+    """Subject areas, kept extensible - add members as the catalogue grows."""
 
     CLOUD = "cloud"
     AWS = "aws"
@@ -364,7 +364,7 @@ class DiscoveryMethod(str, Enum):
     """How a source is read, in order of preference.
 
     Earlier members are cheaper, more reliable and more clearly permitted than
-    later ones. ``UNKNOWN`` means we have not established what a source offers —
+    later ones. ``UNKNOWN`` means we have not established what a source offers - 
     it is never assumed to have an API.
     """
 

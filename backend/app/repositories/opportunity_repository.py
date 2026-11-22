@@ -79,7 +79,7 @@ def apply_filters(stmt: Select, q: OpportunityQuery, now: datetime | None = None
 
     # Applied independently of `statuses`: callers pass the set of statuses the
     # surface may show, and this narrows that further on request. "Checked"
-    # covers both curated-by-hand and source-checked records — the two states in
+    # covers both curated-by-hand and source-checked records - the two states in
     # which a human has looked at the official page.
     if q.verified_only:
         stmt = stmt.where(

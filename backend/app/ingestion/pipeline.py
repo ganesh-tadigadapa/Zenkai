@@ -32,17 +32,6 @@ from app.models.enums import (
     OpportunityType,
     VerificationStatus,
 )
-
-#: When an extractor does not state a type, fall back to the one implied by the
-#: category rather than labelling everything a programme.
-DEFAULT_TYPE_BY_CATEGORY: dict[str, str] = {
-    Category.INTERNSHIPS.value: OpportunityType.INTERNSHIP.value,
-    Category.HACKATHONS.value: OpportunityType.HACKATHON.value,
-    Category.SCHOLARSHIPS.value: OpportunityType.SCHOLARSHIP.value,
-    Category.CERTIFICATIONS.value: OpportunityType.CERTIFICATION.value,
-    Category.TECH_BENEFITS.value: OpportunityType.STUDENT_BENEFIT.value,
-    Category.PROGRAMS.value: OpportunityType.PROGRAM.value,
-}
 from app.models.opportunity import Opportunity, content_fingerprint
 from app.models.provenance import (
     OpportunityProvenance,
@@ -54,6 +43,17 @@ from app.models.source import Source
 from app.services.opportunity_service import get_or_create_organization, unique_slug
 
 logger = logging.getLogger(__name__)
+
+#: When an extractor does not state a type, fall back to the one implied by the
+#: category rather than labelling everything a programme.
+DEFAULT_TYPE_BY_CATEGORY: dict[str, str] = {
+    Category.INTERNSHIPS.value: OpportunityType.INTERNSHIP.value,
+    Category.HACKATHONS.value: OpportunityType.HACKATHON.value,
+    Category.SCHOLARSHIPS.value: OpportunityType.SCHOLARSHIP.value,
+    Category.CERTIFICATIONS.value: OpportunityType.CERTIFICATION.value,
+    Category.TECH_BENEFITS.value: OpportunityType.STUDENT_BENEFIT.value,
+    Category.PROGRAMS.value: OpportunityType.PROGRAM.value,
+}
 
 
 @dataclass
@@ -129,7 +129,7 @@ class IngestionPipeline:
 
         # A complete listing that no longer carries a record is the source
         # saying it is gone: a retired certification, a cancelled event. Only
-        # complete listings count — a feed shows its latest N entries, so an
+        # complete listings count - a feed shows its latest N entries, so an
         # entry scrolling off it says nothing about the opportunity.
         adapter = adapter_for(source)
         truncated = any((d.metadata or {}).get("listing_truncated") for d in documents)
@@ -188,7 +188,7 @@ class IngestionPipeline:
         # Relevance first, before anything is stored or extracted. A vendor's
         # release feed is a hundred product announcements; persisting and
         # extracting all of them would fill the catalogue with things no
-        # student can apply to. Rejected entries are counted, not kept — their
+        # student can apply to. Rejected entries are counted, not kept - their
         # number is recorded on the check so the ratio stays visible.
         relevant: list[RawDocument] = []
         for document in documents:
@@ -294,7 +294,7 @@ class IngestionPipeline:
         # confident the plausibility checks are. Those checks establish that a
         # record is well formed, not that anyone confirmed it against the
         # provider. SOURCE_CHECKED is reserved for a reviewer in the queue or a
-        # dedicated re-check against the official page — neither of which is
+        # dedicated re-check against the official page - neither of which is
         # what just happened here.
         unpublished = self._unpublished(candidate)
 
@@ -304,7 +304,7 @@ class IngestionPipeline:
 
         # A verdict may not outlive the evidence behind it. EXPIRED is reached
         # by comparing a deadline against today, so if that deadline came from
-        # a field the source does not publish — and was therefore discarded —
+        # a field the source does not publish - and was therefore discarded - 
         # the verdict goes with it. Otherwise a year mentioned in prose
         # ("Office 2016") marks a currently-available certification as closed
         # and hides it from students.
@@ -404,7 +404,7 @@ class IngestionPipeline:
 
     @staticmethod
     def _apply_changes(existing: Opportunity, result, stated: dict) -> None:
-        """Write what moved — an extended deadline, a new location — and
+        """Write what moved - an extended deadline, a new location - and
         reopen a record the source is listing as open again."""
         for name in result.as_dict:
             setattr(existing, name, stated[name])
@@ -456,7 +456,7 @@ class IngestionPipeline:
         mentioning "Office 2019" is not a deadline, and one mentioning a
         "discounted voucher" is not the exam price. Where a source does not
         publish a field, the extractor's guess is discarded and the value stays
-        UNKNOWN — which is the honest answer.
+        UNKNOWN - which is the honest answer.
         """
         raw = (candidate.provider_metadata or {}).get("unpublished_fields", "")
         return {f.strip() for f in raw.split(",") if f.strip()}
@@ -466,7 +466,7 @@ class IngestionPipeline:
         """Only what the source actually said.
 
         An absent key means unmentioned. It must never overwrite a value we
-        hold — a source going quiet about a price is not it becoming free.
+        hold - a source going quiet about a price is not it becoming free.
         """
         unpublished = IngestionPipeline._unpublished(candidate)
         stated = {

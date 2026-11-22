@@ -43,7 +43,7 @@ export const dynamic = "force-dynamic";
  *
  * Throwing the 404 from metadata aborts the segment tree, so Next replies with
  * a bare 404 and no UI. The page component below owns that decision, which
- * renders `not-found.tsx` *and* sets the status — but only because this segment
+ * renders `not-found.tsx` *and* sets the status - but only because this segment
  * has no `loading.tsx`; see ../README.md.
  */
 export async function generateMetadata({
@@ -77,7 +77,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
  *
  * The single most important block on the page. It states plainly where the
  * record came from, how far it has been established, and that the student must
- * confirm the details themselves — rather than letting a coloured badge imply
+ * confirm the details themselves - rather than letting a coloured badge imply
  * more confidence than the system has.
  */
 function InformationStatus({ opportunity }: { opportunity: OpportunityDetail }) {

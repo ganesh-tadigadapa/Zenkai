@@ -12,7 +12,7 @@ forget a piece of it:
 
 It does not attempt authentication, does not send cookies, and does not retry
 around a 401, 403 or 429. Those are a provider saying no, and the answer is to
-stop, record it, and let a human look — not to try a different way in.
+stop, record it, and let a human look - not to try a different way in.
 """
 from __future__ import annotations
 

@@ -73,7 +73,7 @@ class Opportunity(UUIDPrimaryKey, Timestamps, Base):
     # Where a student is sent. `source_url` is the authoritative provider page;
     # `direct_destination_url` is the exact page where they can actually start,
     # enrol, register or apply. It is NULL whenever that page could not be
-    # established from an official source — the interface then falls back to the
+    # established from an official source - the interface then falls back to the
     # provider page and says so, rather than guessing at a deep link.
     application_url: Mapped[str] = mapped_column(String(600), nullable=False)
     source_url: Mapped[str] = mapped_column(String(600), nullable=False)

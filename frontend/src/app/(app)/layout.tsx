@@ -5,7 +5,7 @@ import { getCurrentUser } from "@/lib/auth/require-user";
 /**
  * Shell for the catalogue and every signed-in surface.
  *
- * It does not force a sign-in. Browsing is deliberately open — a visitor can
+ * It does not force a sign-in. Browsing is deliberately open - a visitor can
  * read the catalogue and follow an enrolment link without an account, which is
  * the whole point of the landing page. Pages that genuinely need a user
  * (dashboard, saved, deadlines, profile, admin) guard themselves through

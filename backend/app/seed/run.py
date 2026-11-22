@@ -60,7 +60,7 @@ def seed_users(db) -> None:
     Both get a real password so the login flow can actually be exercised, and
     both are flagged ``is_demo`` so the interface can label them honestly rather
     than passing them off as ordinary accounts. The passwords come from
-    settings, so a deployment can override them — and should.
+    settings, so a deployment can override them - and should.
     """
     student = db.scalars(select(User).where(User.email == DEMO_STUDENT["email"])).first()
     if student is None:
@@ -190,7 +190,7 @@ def seed_opportunities(db, sources: dict[str, Source]) -> tuple[int, int]:
 
         # Apply the link audit's findings. A record's catalogue URL is its
         # direct destination unless the audit found it to be a hub, a listing
-        # or a search page — those fall back to the official source instead.
+        # or a search page - those fall back to the official source instead.
         title = spec["title"]
         fix = URL_FIXES.get(title, {})
         apply_url = fix.get("url", spec["url"])

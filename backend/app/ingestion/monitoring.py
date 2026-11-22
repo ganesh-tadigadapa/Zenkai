@@ -3,7 +3,7 @@
 Two jobs:
 
 1. Classify each sighting as NEW / UPDATED / UNCHANGED, and report which fields
-   moved — a cost or a deadline changing is the kind of thing a reviewer must
+   moved - a cost or a deadline changing is the kind of thing a reviewer must
    see, not something to overwrite silently.
 2. Refuse to act on a result that looks like a broken connector rather than a
    genuinely emptied source. An outage returning zero items must not be allowed
@@ -71,7 +71,7 @@ def classify(existing: Opportunity | None, incoming: dict) -> ChangeResult:
     """Decide what a sighting means for a record we may already hold.
 
     ``incoming`` carries only the fields the source actually stated. A key that
-    is absent was not mentioned, and absence never overwrites a value we have —
+    is absent was not mentioned, and absence never overwrites a value we have - 
     a source going quiet about a price is not the same as it becoming free.
     """
     if existing is None:

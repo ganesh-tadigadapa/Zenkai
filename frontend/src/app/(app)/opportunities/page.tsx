@@ -28,7 +28,7 @@ function asArray(value: string | string[] | undefined): string[] {
 /*
   Every narrowing param the filter rail can set must be forwarded here. A param
   present in the URL and rendered as a chip but missing from this object is a
-  control that silently does nothing — which is worse than no control at all,
+  control that silently does nothing - which is worse than no control at all,
   because the chip says it is working.
 
   NARROWING_PARAMS below is the shared list; keep the two in step.

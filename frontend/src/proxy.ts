@@ -8,7 +8,7 @@ import { SESSION_COOKIE } from "@/lib/auth/session";
  * This only checks that a session cookie exists. Validating it belongs in the
  * private layout, which can call the API; middleware runs on every matched
  * request and should not add a network round trip to each one. The layout is
- * the real gate — this exists so the `next` parameter names the route the
+ * the real gate - this exists so the `next` parameter names the route the
  * person actually asked for, which a layout cannot know.
  */
 const PRIVATE_PREFIXES = ["/dashboard", "/saved", "/deadlines", "/profile", "/admin"];

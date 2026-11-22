@@ -20,7 +20,7 @@ export function UserMenu({ user }: { user: Profile }) {
     .join("")
     .toUpperCase();
 
-  // Close on outside click and on Escape — both expected of a menu.
+  // Close on outside click and on Escape - both expected of a menu.
   useEffect(() => {
     if (!open) return;
     function onPointerDown(event: MouseEvent) {

@@ -1,7 +1,7 @@
 """Connector contract.
 
 A connector's only job is to turn a :class:`Source` into ``RawDocument`` objects.
-It must not interpret content — extraction is a separate, testable stage.
+It must not interpret content - extraction is a separate, testable stage.
 
 Compliance rules every connector inherits:
   * A source with ``robots_allowed=False`` is never fetched.

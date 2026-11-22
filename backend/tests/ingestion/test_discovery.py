@@ -453,7 +453,7 @@ def test_two_certifications_differing_by_one_word_are_not_merged(db):
     """"Azure Fundamentals" and "Azure AI Fundamentals" are different exams.
 
     They once scored 1.0 similarity because the tokeniser dropped words shorter
-    than three characters — discarding the only word telling them apart.
+    than three characters - discarding the only word telling them apart.
     """
     from app.ingestion.connectors.api_connector import APIConnector
 
@@ -523,7 +523,7 @@ def test_a_closed_verdict_cannot_outlive_the_date_behind_it(db):
     """A year in prose must not mark an available certification as closed.
 
     EXPIRED is decided by comparing a deadline against today. Where that
-    deadline came from a field the source does not publish, it is discarded —
+    deadline came from a field the source does not publish, it is discarded - 
     and the verdict has to go with it, or a description mentioning "Office
     2016" hides a live certification from every student.
     """

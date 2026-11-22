@@ -45,7 +45,7 @@ class CredentialDetail(Timestamps, Base):
     #: matching, so it is a list rather than a single value.
     specializations: Mapped[list] = mapped_column(JSON, default=list)
 
-    #: The issuing body, where it differs from the listing organisation — an
+    #: The issuing body, where it differs from the listing organisation - an
     #: exam sold through a training partner is still issued by the vendor.
     issuer: Mapped[str | None] = mapped_column(String(160))
 

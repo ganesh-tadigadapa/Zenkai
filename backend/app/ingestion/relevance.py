@@ -2,7 +2,7 @@
 
 Most of what a real feed carries is not. AWS's announcement feed is a hundred
 product releases; a jobs feed is mostly senior roles. Without this stage, going
-live means filling the catalogue with things no student can apply to — which is
+live means filling the catalogue with things no student can apply to - which is
 worse than an empty catalogue, because it teaches people not to trust it.
 
 The gate is deliberately conservative: an item is rejected unless there is
@@ -137,7 +137,7 @@ def assess(
     # A typed catalogue endpoint has already answered this question. When an
     # adapter reads `?type=certifications`, every record it returns is a
     # certification by construction, and a text heuristic cannot improve on
-    # that — it can only get it wrong. This is an adapter asserting a known
+    # that - it can only get it wrong. This is an adapter asserting a known
     # fact about its source, not a way around the gate: only adapters set it,
     # and a feed can never claim it.
     if catalogue:
@@ -192,7 +192,7 @@ def assess(
 
     # Release-note language in the *title* settles it. "X now supports Y" is an
     # announcement whatever nouns appear beside it, and a bare noun is too weak
-    # to overturn that — "now supports credential testing" is about passwords,
+    # to overturn that - "now supports credential testing" is about passwords,
     # not qualifications. An unambiguous signal ("applications are open") still
     # wins, because a programme announcement can legitimately be phrased that
     # way.
@@ -215,7 +215,7 @@ def assess(
         )
 
     # Supporting signals reinforce; they never establish on their own. A page
-    # can state eligibility and a price without being an opportunity — that
+    # can state eligibility and a price without being an opportunity - that
     # describes most product documentation. At least one strong signal is
     # required before anything is accepted.
     if category is None:

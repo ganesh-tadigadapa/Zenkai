@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     ADMIN_TOKEN: str = "dev-admin-token"
 
     # The demo identity used when a request carries no session token, and the
-    # password it is seeded with. Development convenience only — see
+    # password it is seeded with. Development convenience only - see
     # `allow_demo_fallback`.
     DEMO_USER_EMAIL: str = "student@zenkai.dev"
     DEMO_USER_PASSWORD: str = "zenkai-demo-2026"

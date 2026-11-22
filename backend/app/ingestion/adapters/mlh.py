@@ -2,7 +2,7 @@
 
 `mlh.com/seasons/<year>/events` is MLH's official hackathon calendar. The page
 embeds its event list as JSON for its own front end, so reading that is reading
-the same structured data the page displays — one request, no crawling of the
+the same structured data the page displays - one request, no crawling of the
 individual event sites.
 
 Only upcoming events are taken. Each carries its dates, format (in person,

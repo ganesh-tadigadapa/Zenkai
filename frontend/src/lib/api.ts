@@ -41,13 +41,13 @@ interface RequestOptions extends RequestInit {
    * Seconds to cache in Next's data cache.
    *
    * Defaults to 0. Most endpoints embed per-user fields (`is_saved`, `match`),
-   * and the data cache is shared across requests — caching those would leak one
+   * and the data cache is shared across requests - caching those would leak one
    * user's state to another. Only genuinely shared, user-independent data
    * (categories, facet counts) opts into caching.
    */
   revalidate?: number;
   admin?: boolean;
-  /** Skip session forwarding — for sign-up and sign-in. */
+  /** Skip session forwarding - for sign-up and sign-in. */
   anonymous?: boolean;
 }
 

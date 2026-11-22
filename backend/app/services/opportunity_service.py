@@ -191,7 +191,7 @@ def new_today(db: Session, user: User | None, limit: int = 6):
     q = _public(OpportunityQuery(sort="newest", limit=limit))
     rows, _ = repo.search(db, q)
     fresh = [r for r in rows if _aware(r.discovered_at) >= cutoff][:limit]
-    if not fresh:  # seeded databases can be older than 24h — fall back to newest
+    if not fresh:  # seeded databases can be older than 24h - fall back to newest
         fresh = rows[:limit]
     prefs = user.preferences if user else None
     saved = saved_ids(db, user.id if user else None)

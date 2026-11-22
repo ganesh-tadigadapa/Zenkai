@@ -173,7 +173,7 @@ def test_url_fixes_only_replace_with_https_urls():
 
 
 def test_the_replaced_search_results_url_is_gone():
-    """Google STEP pointed at a careers search page — the exact bug this fixes."""
+    """Google STEP pointed at a careers search page - the exact bug this fixes."""
     step = next(s for s in ALL_SEEDS if s["title"] == "Google STEP Internship")
     resolved = URL_FIXES["Google STEP Internship"]["url"]
     assert "?q=" in step["url"], "seed no longer holds the original search URL"

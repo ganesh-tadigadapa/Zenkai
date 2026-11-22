@@ -158,7 +158,7 @@ export function OpportunityRow({ opportunity }: { opportunity: Opportunity }) {
       </div>
 
       <div className="relative z-10 flex shrink-0 items-center gap-2">
-        {/* The countdown is the point of this row — keep it at every width. */}
+        {/* The countdown is the point of this row - keep it at every width. */}
         <DeadlineBadge opportunity={opportunity} />
         <SaveButton opportunityId={opportunity.id} saved={opportunity.is_saved} />
       </div>

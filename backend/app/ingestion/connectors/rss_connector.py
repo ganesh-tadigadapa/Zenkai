@@ -6,7 +6,7 @@ something tolerated.
 
 The connector's only job is to turn a registered ``Source`` into
 ``RawDocument`` objects. It does not decide whether an entry is an opportunity
-— that is the relevance gate's job, one stage later — so nothing here
+(that is the relevance gate's job, one stage later), so nothing here
 interprets what it retrieved.
 """
 from __future__ import annotations
@@ -58,8 +58,8 @@ class RSSConnector(SourceConnector):
             raise FetchFailed(f"{source.url} did not serve a readable feed: {exc}") from exc
 
         if feed.format != source.discovery_method and source.discovery_method in {"rss", "atom"}:
-            # Not an error — plenty of sources are registered as one and serve
-            # the other — but worth knowing when the registry drifts.
+            # Not an error - plenty of sources are registered as one and serve
+            # the other - but worth knowing when the registry drifts.
             logger.info(
                 "%s is registered as %s but served %s",
                 source.name,

@@ -27,7 +27,7 @@ export function OpportunityGrid({
       className={cx(
         "grid gap-4",
         // The feed sits beside a filter rail, so the third column only earns its
-        // place on genuinely wide screens — otherwise cards get too narrow to
+        // place on genuinely wide screens - otherwise cards get too narrow to
         // hold a title and its badges on one line each.
         columns === 3 ? "sm:grid-cols-2 2xl:grid-cols-3" : "sm:grid-cols-2",
         className,

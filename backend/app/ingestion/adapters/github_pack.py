@@ -1,7 +1,7 @@
 """GitHub Student Developer Pack offers page.
 
-`education.github.com/pack/offers` lists every partner offer in the pack — the
-tools, credits and courses free to verified students — one card per partner.
+`education.github.com/pack/offers` lists every partner offer in the pack - the
+tools, credits and courses free to verified students - one card per partner.
 robots.txt publishes no rules. One request reads the whole page; partner sites
 are never fetched.
 

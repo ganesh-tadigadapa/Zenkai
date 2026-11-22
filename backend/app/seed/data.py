@@ -1,6 +1,6 @@
 """Curated opportunity catalogue.
 
-EDITORIAL RULES — every record in this file must satisfy all of them:
+EDITORIAL RULES - every record in this file must satisfy all of them:
 
   * The organisation is real and the programme genuinely exists.
   * ``url``/``source_url`` point at the organisation's own official page.
@@ -20,10 +20,10 @@ EDITORIAL RULES — every record in this file must satisfy all of them:
 Every record is stored with ``data_origin=SEED``.
 
 ``status`` values:
-  * ``curated``      — written by hand against the official page. This is the
+  * ``curated`` - written by hand against the official page. This is the
                        strongest claim a hand-built catalogue can make: nobody
                        re-checks it afterwards, and the UI says so.
-  * ``needs_review`` — details change often, or could not be confidently
+  * ``needs_review`` - details change often, or could not be confidently
                        established at curation time. Shown to students clearly
                        labelled, and queued for a reviewer.
 

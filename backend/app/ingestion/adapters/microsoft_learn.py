@@ -9,11 +9,11 @@ from a source scoped to that collection.
 
 Deliberately *not* inferred, because the API does not state it:
 
-* **cost** — every Microsoft exam has a fee in practice, but the catalogue does
+* **cost** - every Microsoft exam has a fee in practice, but the catalogue does
   not publish one, so this stays UNKNOWN. Guessing a price nobody published is
   the same mistake whether or not the guess is likely to be right.
-* **proctoring and assessment** — likewise unstated, so likewise UNKNOWN.
-* **validity** — `renewal_frequency_in_days` is empty on all 151 records, so
+* **proctoring and assessment** - likewise unstated, so likewise UNKNOWN.
+* **validity** - `renewal_frequency_in_days` is empty on all 151 records, so
   nothing is written.
 """
 from __future__ import annotations
@@ -30,7 +30,7 @@ from app.models.source import Source
 
 #: Microsoft's `certification_type` values, mapped to what a holder actually
 #: has. All of these are credentials awarded on passing an exam, which is a
-#: professional certification — unlike a course completion certificate.
+#: professional certification - unlike a course completion certificate.
 CREDENTIAL_TYPE_BY_KIND: dict[str, CredentialType] = {
     "role-based": CredentialType.PROFESSIONAL_CERTIFICATION,
     "fundamentals": CredentialType.PROFESSIONAL_CERTIFICATION,

@@ -5,7 +5,7 @@ import { cx } from "@/lib/format";
 
 /**
  * The Zenkai mark: a radar sweep. Concentric rings with a single sweep arm and
- * one detected blip — the product's idea in one glyph.
+ * one detected blip - the product's idea in one glyph.
  */
 export function LogoMark({ className }: { className?: string }) {
   return (

@@ -157,7 +157,7 @@ def list_sources(db: Session = Depends(db_session)):
     summary="Recent read attempts for a source",
 )
 def source_checks(source_id: str, db: Session = Depends(db_session), limit: int = 20):
-    """Includes the failures — a connector that never works should be visible."""
+    """Includes the failures - a connector that never works should be visible."""
     return list(
         db.scalars(
             select(SourceCheck)

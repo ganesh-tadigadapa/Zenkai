@@ -1,7 +1,7 @@
 """Per-provider adapters for official APIs.
 
 Feeds share a format; APIs do not. Every catalogue has its own shape, so a
-generic "API connector" can only do the fetching — turning one provider's JSON
+generic "API connector" can only do the fetching - turning one provider's JSON
 into candidates needs provider-specific code.
 
 An adapter is that code, and nothing else. It maps fields that are present and

@@ -7,9 +7,9 @@ themes, prize pool and whether it is online.
 
 Deliberately *not* inferred:
 
-* **cost** — entry is free on almost every Devpost hackathon, but the API does
+* **cost** - entry is free on almost every Devpost hackathon, but the API does
   not say so, so it stays UNKNOWN rather than being assumed.
-* **eligibility** — set per hackathon in its rules, which this endpoint does
+* **eligibility** - set per hackathon in its rules, which this endpoint does
   not carry.
 """
 from __future__ import annotations
