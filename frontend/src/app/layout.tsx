@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 
+import { Nemo } from "@/components/nemo/Nemo";
 import { BRAND, STORAGE_KEYS } from "@/lib/brand";
 
 import "./globals.css";
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         {children}
+        <Nemo />
       </body>
     </html>
   );

@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 
 import { api, ApiError } from "./api";
 import { clearSessionCookie, setSessionCookie } from "./auth/session";
+import type { NemoReply } from "./types";
 
 export interface ActionResult {
   ok: boolean;
@@ -208,6 +209,19 @@ export async function editOpportunityAction(
     revalidatePath("/admin");
     revalidateFeeds();
     return { ok: true, message: "Changes saved." };
+  } catch (error) {
+    return fail(error);
+  }
+}
+
+/* --- Nemo ---------------------------------------------------------------- */
+
+/** One message to Nemo. Read-only, so nothing is revalidated. */
+export async function askNemoAction(
+  message: string,
+): Promise<ActionResult & { answer?: NemoReply }> {
+  try {
+    return { ok: true, answer: await api.nemo(message.slice(0, 500)) };
   } catch (error) {
     return fail(error);
   }

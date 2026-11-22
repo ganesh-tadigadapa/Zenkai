@@ -12,6 +12,7 @@ import type {
   DashboardPayload,
   DeadlinesPayload,
   Facets,
+  NemoReply,
   Opportunity,
   OpportunityDetail,
   Page,
@@ -163,6 +164,12 @@ export const api = {
         body: JSON.stringify(body),
       }),
   },
+
+  nemo: (message: string) =>
+    request<NemoReply>("/api/v1/nemo/chat", {
+      method: "POST",
+      body: JSON.stringify({ message }),
+    }),
 
   opportunities: (params: Parameters<typeof qs>[0] = {}) =>
     request<Page<Opportunity>>(`/api/v1/opportunities${qs(params)}`),

@@ -355,3 +355,13 @@ export interface SourceRecord {
   /** "Not monitored yet." when nothing has ever read it. */
   monitoring_summary: string;
 }
+
+/** One answer from Nemo, the guide in the corner. */
+export interface NemoReply {
+  reply: string;
+  opportunities: Opportunity[];
+  /** The same search on the browse page, when the answer was a search. */
+  browse_url: string | null;
+  /** Quick replies; each is a complete message, since Nemo keeps no memory. */
+  suggestions: string[];
+}

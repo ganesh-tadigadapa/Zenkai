@@ -20,6 +20,7 @@ Live: **https://getzenkai.vercel.app**
 - Lets you search and filter by category, cost, deadline and remote, then sends you to the official page to apply
 - If you add your degree, skills and interests, every listing gets a 0-100 match score with the reasons behind it
 - Saved list, a deadlines page (today / this week / later) and a personal overview page
+- Nemo, a chat guide in the corner of every page. Ask in plain words ("free Python certifications", "remote internships closing this week") and it searches the catalogue for you, or gives quick tips on getting started, resumes and interviews. It's rule-based rather than an AI model, so it costs nothing to run and can only point at listings that really exist
 
 You don't need an account to browse. "Get started" drops you into a guest account with no email or password, and you can attach an email and password later from the Profile page if you want to keep it. A guest account only lives in the browser that created it, so if you sign out before saving it, it's gone.
 

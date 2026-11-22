@@ -193,3 +193,17 @@ export const IconBolt = (p: IconProps) => (
     <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
   </Icon>
 );
+
+export const IconChat = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M21 12a8 8 0 0 1-11.6 7.14L4 20l.9-4.6A8 8 0 1 1 21 12Z" />
+    <path d="M8.5 11h.01M12 11h.01M15.5 11h.01" strokeWidth={2.5} />
+  </Icon>
+);
+
+export const IconSend = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M5 12h13" />
+    <path d="m13 6 6 6-6 6" />
+  </Icon>
+);
