@@ -2,12 +2,14 @@ import Link from "next/link";
 
 import { Logo } from "@/components/layout/Logo";
 import { ThemeToggle } from "@/components/layout/ThemeToggle";
+import { WarmUp } from "@/components/layout/WarmUp";
 import { BRAND } from "@/lib/brand";
 
 /** A quiet, centred shell for sign-in and sign-up. No sidebar, no chrome. */
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-dvh flex-col bg-bg">
+      <WarmUp />
       <header className="flex items-center justify-between px-5 py-5 sm:px-8">
         <Logo />
         <ThemeToggle />

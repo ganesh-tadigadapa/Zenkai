@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Instrument_Serif } from "next/font/google";
 
 import { Logo } from "@/components/layout/Logo";
+import { WarmUp } from "@/components/layout/WarmUp";
 import { PrimaryCta, BrowseCta } from "@/components/marketing/CallsToAction";
 import { DeadlineVisual } from "@/components/marketing/DeadlineVisual";
 import { LandingHeader } from "@/components/marketing/LandingHeader";
@@ -49,6 +50,7 @@ const FEATURES = [
 export default function LandingPage() {
   return (
     <div className={`${serif.variable} min-h-dvh overflow-x-clip bg-bg`}>
+      <WarmUp />
       <LandingHeader />
 
       <main id="main">
