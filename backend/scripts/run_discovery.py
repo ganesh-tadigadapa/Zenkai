@@ -16,6 +16,7 @@ from app.ingestion.scheduler import is_due
 from app.models.enums import SourceType
 from app.models.source import Source
 from app.seed.run import seed_sources
+from app.services.housekeeping import tidy
 from app.services.opportunity_service import expire_passed_deadlines
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -76,6 +77,16 @@ def main(argv: list[str]) -> int:
         closed = expire_passed_deadlines(db)
         db.commit()
         print(f"\nClosed {closed} opportunities whose deadline has passed.")
+
+        # Trim what has aged out, so the free database never fills up. A
+        # failure here is reported but never fails the run: the listings
+        # above are already saved.
+        try:
+            print(f"Tidied {tidy(db)}.")
+            db.commit()
+        except Exception as exc:  # noqa: BLE001
+            db.rollback()
+            print(f"::warning::tidying the database failed: {exc}")
     return 0
 
 
