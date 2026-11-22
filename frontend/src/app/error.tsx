@@ -7,10 +7,10 @@ import { IconAlert } from "@/components/ui/Icons";
 
 export default function GlobalError({
   error,
-  reset,
+  retry,
 }: {
   error: Error & { digest?: string };
-  reset: () => void;
+  retry: () => void;
 }) {
   useEffect(() => {
     console.error("Zenkai render error:", error);
@@ -27,13 +27,13 @@ export default function GlobalError({
         </span>
         <h1 className="text-[15px] font-semibold text-text">Something went wrong</h1>
         <p className="mt-2 text-[13px] leading-relaxed text-muted">
-          The page could not be rendered. The most common cause in development is the Zenkai API
-          not running on the configured NEXT_PUBLIC_API_URL.
+          Zenkai could not load this page. If the site has been quiet for a while its server may
+          still be waking up, which takes up to a minute. Try again in a few seconds.
         </p>
         {error.digest ? (
           <p className="mt-2 font-mono text-[11px] text-faint">Reference: {error.digest}</p>
         ) : null}
-        <Button onClick={reset} className="mt-5">
+        <Button onClick={retry} className="mt-5">
           Try again
         </Button>
       </div>

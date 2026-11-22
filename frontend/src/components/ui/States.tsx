@@ -47,7 +47,7 @@ export function EmptyState({
 export function ErrorState({
   title = "Could not load opportunities",
   message,
-  hint = "Check that the Zenkai API is running on the configured NEXT_PUBLIC_API_URL.",
+  hint = "The server may be waking up after a quiet spell. Refresh in a few seconds.",
 }: {
   title?: string;
   message?: string;

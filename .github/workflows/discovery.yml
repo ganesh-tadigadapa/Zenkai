@@ -69,3 +69,23 @@ jobs:
           print("host resolves")
       - run: pip install -r requirements.txt
       - run: python -m scripts.run_discovery
+
+  # GitHub switches off scheduled workflows in a repository that has had no
+  # commits for 60 days. Re-enabling an already-enabled workflow resets that
+  # clock, so doing it on every run keeps discovery and keep-warm going for
+  # as long as the repository exists, with nobody needing to touch it.
+  stay-enabled:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Reset the inactivity clock
+        run: |
+          for workflow in discovery.yml keep-warm.yml; do
+            gh api --method PUT "repos/${{ github.repository }}/actions/workflows/$workflow/enable" \
+              && echo "$workflow stays enabled" \
+              || echo "::warning::could not re-enable $workflow"
+          done

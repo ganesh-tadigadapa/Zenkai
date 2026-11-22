@@ -37,6 +37,14 @@ const ADMIN_TOKEN = process.env.ZENKAI_ADMIN_TOKEN ?? "dev-admin-token";
  */
 const SIGNED_OUT_REVALIDATE = 60;
 
+/**
+ * The longest any API call may take. A sleeping free instance wakes in 30-60s,
+ * so this leaves room for that, but a server that is stuck fails here and shows
+ * the error page with "Try again" instead of hanging until the platform kills
+ * the request.
+ */
+const REQUEST_TIMEOUT_MS = 75_000;
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -78,6 +86,7 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   const ttl = Math.max(revalidate, signedOutRead ? SIGNED_OUT_REVALIDATE : 0);
 
   const response = await fetch(url, {
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     ...init,
     headers: {
       "Content-Type": "application/json",
