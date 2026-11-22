@@ -546,3 +546,24 @@ def test_a_closed_verdict_cannot_outlive_the_date_behind_it(db):
     assert rows
     assert "expired" not in {r.verification_status for r in rows}
     assert all(r.deadline is None for r in rows)
+
+
+def test_an_unchanged_listing_reuses_its_stored_evidence(db):
+    """Re-reading the same text must not store it again, but every sighting is still recorded."""
+    source = make_source(db)
+    run_once(db, source, RSS_BODY)
+    run_once(db, source, RSS_BODY)
+
+    raw = db.query(RawSourceDocument).all()
+    assert len(raw) == 1
+    provenance = db.query(OpportunityProvenance).all()
+    assert len(provenance) == 2
+    assert {p.raw_document_id for p in provenance} == {raw[0].id}
+
+
+def test_changed_text_is_stored_as_new_evidence(db):
+    source = make_source(db)
+    run_once(db, source, RSS_BODY)
+    run_once(db, source, RSS_BODY.replace("paid summer internship", "paid summer internship in London"))
+
+    assert db.query(RawSourceDocument).count() == 2

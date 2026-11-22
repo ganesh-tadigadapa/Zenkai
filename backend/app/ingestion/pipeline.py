@@ -242,16 +242,33 @@ class IngestionPipeline:
 
         Only non-secret context is recorded: no headers, cookies or
         authorization values ever reach this table.
+
+        Most of a scheduled run is listings we already hold, word for word.
+        Those point at the copy stored the first time rather than adding the
+        same text again every six hours, which on a free database adds up fast.
+        Each sighting still gets its own provenance row.
         """
         if source is None:
             return None
+        digest = content_digest(document.text)
+        existing = db.scalars(
+            select(RawSourceDocument)
+            .where(
+                RawSourceDocument.url == document.url,
+                RawSourceDocument.content_hash == digest,
+                RawSourceDocument.source_id == source.id,
+            )
+            .limit(1)
+        ).first()
+        if existing is not None:
+            return existing
         raw = RawSourceDocument(
             source_id=source.id,
             check_id=check.id if check else None,
             url=document.url,
             title=document.title,
             content=document.text,
-            content_hash=content_digest(document.text),
+            content_hash=digest,
             retrieved_at=document.fetched_at or datetime.now(timezone.utc),
             request_metadata={
                 key: value
