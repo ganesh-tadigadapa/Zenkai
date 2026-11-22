@@ -257,11 +257,13 @@ SOURCES = [
         access_notes="Same endpoint as Unstop internships, filtered to open scholarships.",
     ),
     dict(
-        # Verified 2026-10-15: 200, ~13 MB, 17,000+ postings, 4,800 active.
+        # Verified 2026-11-22: 200, ~13 MB, 17,600 postings, 5,100 active. The
+        # repo was renamed from Summer2026-Internships; the old path redirects
+        # for now, but there is no reason to rely on that.
         name="SimplifyJobs internships",
         organization="SimplifyJobs",
-        url="https://raw.githubusercontent.com/SimplifyJobs/Summer2026-Internships/dev/.github/scripts/listings.json",
-        official_url="https://github.com/SimplifyJobs/Summer2026-Internships",
+        url="https://raw.githubusercontent.com/SimplifyJobs/Summer2027-Internships/dev/.github/scripts/listings.json",
+        official_url="https://github.com/SimplifyJobs/Summer2027-Internships",
         source_type="official_api",
         category="internships",
         authority="established_platform",
@@ -273,7 +275,7 @@ SOURCES = [
         access_notes=(
             "Data file of a public GitHub repository, served from "
             "raw.githubusercontent.com for exactly this kind of reading. The "
-            "1,000 newest active postings are taken; links go to employers' own "
+            "2,000 newest active postings are taken; links go to employers' own "
             "application pages."
         ),
     ),
@@ -336,6 +338,26 @@ SOURCES = [
         access_notes=(
             "Same endpoint as Unstop internships, filtered to open competitions: "
             "case studies, quizzes, coding and business contests."
+        ),
+    ),
+    dict(
+        # Verified 2026-11-22: 200, 96 open workshops, none of which also
+        # appear under competitions. Same endpoint; robots.txt allows it.
+        name="Unstop workshops",
+        organization="Unstop",
+        url="https://unstop.com/api/public/opportunity/search-result?opportunity=workshops&oppstatus=open&per_page=30",
+        official_url="https://unstop.com/workshops",
+        source_type="official_api",
+        category="programs",
+        authority="established_platform",
+        discovery_method="official_api",
+        check_frequency="normal",
+        trust_level=3,
+        check_frequency_minutes=1440,
+        robots_allowed=True,
+        access_notes=(
+            "Same endpoint as Unstop internships, filtered to open workshops: "
+            "talks, bootcamps and hands-on sessions run by colleges and companies."
         ),
     ),
     dict(

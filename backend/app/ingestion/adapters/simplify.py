@@ -23,9 +23,9 @@ from app.ai.base import RawDocument
 from app.ingestion.adapters.base import ApiAdapter
 from app.models.source import Source
 
-#: About a fifth of the ~4,800 active postings: the newest, which are the
-#: ones still most likely to be open.
-MAX_LISTINGS = 1000
+#: Roughly the newest 40% of the ~5,100 active postings - the ones still most
+#: likely to be open. Older ones are usually filled even when still flagged.
+MAX_LISTINGS = 2000
 
 
 class SimplifyInternshipsAdapter(ApiAdapter):

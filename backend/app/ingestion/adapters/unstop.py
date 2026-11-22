@@ -27,6 +27,8 @@ TYPE_BY_LISTING = {
     "hackathons": "hackathon",
     "scholarships": "scholarship",
     "competitions": "competition",
+    # Talks and hands-on sessions you register for; closest to a programme.
+    "workshops": "program",
 }
 
 PAY_PERIOD = {"monthly": "month", "weekly": "week", "daily": "day", "yearly": "year", "hourly": "hour"}

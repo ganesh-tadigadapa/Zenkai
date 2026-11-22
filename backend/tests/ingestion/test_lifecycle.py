@@ -252,6 +252,25 @@ def unstop_body(records, page=1, last=1) -> str:
     return json.dumps({"data": {"data": records, "current_page": page, "last_page": last}})
 
 
+def test_unstop_workshops_are_filed_as_programs(db):
+    url = UNSTOP_URL.replace("internships", "workshops")
+    workshop = {
+        "id": 1790001,
+        "title": "Quantum Computing with Qiskit Workshop",
+        "seo_url": "https://unstop.com/workshops/quantum-computing-qiskit-1790001",
+        "region": "online",
+        "isPaid": False,
+        "organisation": {"name": "Example College"},
+        "regnRequirements": {"end_regn_dt": "2030-01-10T00:00:00+05:30"},
+    }
+    source = make_source(db, name="Unstop workshops", url=url, category="programs")
+    [document] = list(APIConnector(fetcher=FakeFetcher({url: unstop_body([workshop])})).fetch(source))
+
+    assert document.metadata["opportunity_type"] == "program"
+    assert document.metadata["catalogue"] == "programs"
+    assert document.metadata["location"] == "Online"
+
+
 def test_unstop_internships_carry_deadline_stipend_and_skills(db):
     source = make_source(db, name="Unstop internships", url=UNSTOP_URL, category="internships")
     [document] = list(APIConnector(fetcher=FakeFetcher({UNSTOP_URL: unstop_body([UNSTOP_INTERNSHIP])})).fetch(source))
@@ -281,7 +300,7 @@ def test_unstop_pages_are_followed_to_the_last(db):
 # --- SimplifyJobs --------------------------------------------------------------
 
 SIMPLIFY_URL = (
-    "https://raw.githubusercontent.com/SimplifyJobs/Summer2026-Internships/dev/.github/scripts/listings.json"
+    "https://raw.githubusercontent.com/SimplifyJobs/Summer2027-Internships/dev/.github/scripts/listings.json"
 )
 
 
