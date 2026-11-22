@@ -4,6 +4,7 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 
 from app.api.v1 import api_router
 from app.core.config import settings
@@ -29,6 +30,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# A page of opportunities is mostly repeated JSON keys; it shrinks to about a
+# fifth, which is most of the transfer time on a free instance.
+app.add_middleware(GZipMiddleware, minimum_size=1024)
 
 app.include_router(api_router)
 

@@ -25,6 +25,17 @@ import type {
 export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const ADMIN_TOKEN = process.env.ZENKAI_ADMIN_TOKEN ?? "dev-admin-token";
 
+/**
+ * How long a signed-out visitor's GET may be served from the shared cache.
+ *
+ * The cache key includes headers, and a signed-out request carries no
+ * Authorization header, so every signed-out visitor shares one copy and a
+ * signed-in one never sees it. A minute is short enough that a newly
+ * published listing shows up almost straight away, and long enough that a
+ * burst of visitors costs the API one request instead of hundreds.
+ */
+const SIGNED_OUT_REVALIDATE = 60;
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -44,6 +55,10 @@ interface RequestOptions extends RequestInit {
    * and the data cache is shared across requests - caching those would leak one
    * user's state to another. Only genuinely shared, user-independent data
    * (categories, facet counts) opts into caching.
+   *
+   * Signed-out reads are the exception: with no session there is nothing
+   * per-user in the response, so they get a short shared cache (see
+   * SIGNED_OUT_REVALIDATE) whatever this says.
    */
   revalidate?: number;
   admin?: boolean;
@@ -58,6 +73,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
   // Forward the caller's session unless the request is deliberately anonymous
   // (sign-up and sign-in, which have no session yet).
   const token = anonymous ? null : await getSessionToken();
+  const signedOutRead = !token && !admin && (!init.method || init.method === "GET");
+  const ttl = Math.max(revalidate, signedOutRead ? SIGNED_OUT_REVALIDATE : 0);
 
   const response = await fetch(url, {
     ...init,
@@ -71,8 +88,8 @@ async function request<T>(path: string, options: RequestOptions = {}): Promise<T
     },
     ...(init.method && init.method !== "GET"
       ? { cache: "no-store" as const }
-      : revalidate > 0
-        ? { next: { revalidate } }
+      : ttl > 0
+        ? { next: { revalidate: ttl } }
         : { cache: "no-store" as const }),
   });
 
