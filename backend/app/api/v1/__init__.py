@@ -5,6 +5,7 @@ from app.api.v1.routers import (
     auth,
     dashboard,
     deadlines,
+    nemo,
     opportunities,
     profile,
     saved,
@@ -20,5 +21,6 @@ api_router.include_router(saved.router)
 api_router.include_router(deadlines.router)
 api_router.include_router(profile.router)
 api_router.include_router(admin.router)
+api_router.include_router(nemo.router)
 
 __all__ = ["api_router"]
