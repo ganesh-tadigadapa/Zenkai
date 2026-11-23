@@ -1,0 +1,379 @@
+=====================================================
+   ZENKAI - SUPER SIMPLE VIVA NOTES
+   (Frontend + Backend)
+=====================================================
+
+
+-----------------------------------------------------
+PART 0: THE PROJECT IN 30 SECONDS
+-----------------------------------------------------
+
+Zenkai = one website where students find:
+  internships, hackathons, certifications,
+  scholarships, programs, free student tools.
+
+Problem  : these are scattered on 100 different websites.
+Solution : Zenkai collects them automatically and shows
+           them in one place, with deadlines and a
+           "% match" for each student.
+
+
+-----------------------------------------------------
+PART 1: THINK OF IT LIKE A RESTAURANT
+-----------------------------------------------------
+
+  Customer      = Student's browser
+  Waiter        = FRONTEND  (the website you see)
+  Kitchen       = BACKEND   (the logic / brain)
+  Store room    = DATABASE  (where all data is kept)
+  Delivery van  = DISCOVERY (brings new items every 6 hrs)
+
+  Customer never goes into the kitchen.
+  Customer talks to the waiter, waiter talks to the kitchen.
+
+  Same here:
+    Browser -> Frontend -> Backend -> Database
+
+  Where each part lives (hosting):
+    Frontend  -> Vercel
+    Backend   -> Render
+    Database  -> Neon (PostgreSQL)
+    Discovery -> GitHub Actions (runs every 6 hours)
+
+
+=====================================================
+           PART 2: FRONTEND (folder: frontend/)
+=====================================================
+
+-----------------------------------------------------
+2.1 Tools used (one line each)
+-----------------------------------------------------
+  React       -> builds the screen from small blocks
+                 (button, card, menu) called COMPONENTS.
+  Next.js     -> React + extra powers: pages/URLs,
+                 runs code on server, login cookies.
+  TypeScript  -> JavaScript with rules, catches mistakes early.
+  Tailwind    -> styling using short class names,
+                 e.g. "p-4 rounded-lg text-sm".
+  Vercel      -> where the website is hosted.
+
+-----------------------------------------------------
+2.2 Five ideas you MUST know
+-----------------------------------------------------
+
+1) COMPONENT
+   A reusable piece of screen. Like a LEGO block.
+   Example: SaveButton, OpportunityCard.
+
+2) FOLDER = URL
+   Folder names inside src/app become website links.
+     app/page.tsx               -> /            (home)
+     app/(auth)/login           -> /login
+     app/(app)/opportunities    -> /opportunities
+     app/(private)/saved        -> /saved
+   Folders in (brackets) are hidden from the URL.
+   They just group pages together.
+   [slug] = any value. One file shows every opportunity.
+
+3) SERVER vs CLIENT component
+   Server  = runs on server, gets data, sends ready page.
+             Safe for secrets. Cannot handle clicks.
+   Client  = has "use client" at top. Runs in browser.
+             Needed for clicks, typing, toggles.
+   Simple rule: show data -> server. click/type -> client.
+
+4) SERVER ACTIONS
+   Server functions you call from a button or form.
+   Used for login, signup, save, update profile.
+   All of them are in ONE file: lib/actions.ts
+
+5) LOGIN COOKIE
+   After login, the backend gives a "token" (like a
+   movie ticket). The website keeps it in a cookie.
+   The cookie is "httpOnly" = hackers' JavaScript
+   can't read it. Every request shows this ticket
+   to the backend.
+
+-----------------------------------------------------
+2.3 Which file does what (only the important ones)
+-----------------------------------------------------
+  lib/api.ts          -> the ONLY place that talks to backend.
+  lib/actions.ts      -> login, signup, logout, save,
+                         update profile, admin approve/reject.
+  lib/session.ts      -> save / read / delete login cookie.
+  lib/require-user.ts -> "who is logged in?" If no one,
+                         send them to /login.
+  lib/types.ts        -> shape of data (what an Opportunity looks like).
+  lib/format.ts       -> makes text nice: "3 days left", "Free".
+  proxy.ts            -> security guard at the gate. Private page
+                         + no cookie = go to /login.
+
+  app/layout.tsx           -> wrapper for all pages (fonts, title, theme).
+  app/page.tsx             -> home / landing page.
+  opportunities/page.tsx   -> list page with search + filters.
+  opportunities/[slug]     -> details of one opportunity.
+  (private)/layout.tsx     -> login check for all private pages.
+  (private)/dashboard      -> home after login.
+  (private)/saved          -> bookmarked items.
+  (private)/deadlines      -> closing today / this week.
+  (private)/profile        -> your skills & interests.
+  (private)/admin          -> admin approves new items.
+
+  components/              -> all the small UI blocks
+                              (cards, buttons, filters, sidebar).
+
+-----------------------------------------------------
+2.4 One feature, start to end (Save button)
+-----------------------------------------------------
+  1. You click Save.
+  2. Icon turns "Saved" instantly (optimistic UI - shows
+     result before server replies, feels fast).
+  3. Server action tells the backend "save this".
+  4. Pages refresh with fresh data.
+  5. If it failed, an error shows.
+
+
+=====================================================
+           PART 3: BACKEND (folder: backend/)
+=====================================================
+
+-----------------------------------------------------
+3.1 Tools used (one line each)
+-----------------------------------------------------
+  Python       -> the language.
+  FastAPI      -> makes API URLs easily, e.g.
+                  GET /api/v1/opportunities
+                  Also gives free docs page at /docs.
+  Uvicorn      -> the server that runs FastAPI.
+  SQLAlchemy   -> talk to the database using Python
+                  instead of writing raw SQL. (ORM)
+  Pydantic     -> checks incoming/outgoing data is correct
+                  (email is an email, number is a number).
+  PostgreSQL   -> the database (tables, rows).
+  Argon2       -> scrambles passwords safely (hashing).
+  httpx        -> fetches other websites (for discovery).
+  pytest       -> runs tests.
+  Render       -> where the backend is hosted.
+
+-----------------------------------------------------
+3.2 What is an API? (very common question)
+-----------------------------------------------------
+  API = a menu of URLs the frontend can call.
+  Frontend asks -> backend answers in JSON.
+
+  Methods:
+    GET    -> read      (get opportunities)
+    POST   -> create    (login, save)
+    PUT    -> update    (update profile)
+    DELETE -> remove    (unsave)
+
+  JSON looks like: {"title": "AWS Cert", "free": true}
+
+-----------------------------------------------------
+3.3 Backend layers (like floors of a building)
+-----------------------------------------------------
+  Request comes in
+        |
+  ROUTERS      (api/v1/routers/)   -> the door. Receives the request.
+        |
+  SCHEMAS      (schemas/)          -> checks the data (Pydantic).
+        |
+  SERVICES     (services/)         -> the brain. Real logic.
+        |
+  REPOSITORIES (repositories/)     -> fetches from DB.
+        |
+  MODELS       (models/)           -> tables in the DB.
+        |
+  DATABASE (PostgreSQL)
+
+  Why layers? Each part does one job. Easy to change & test.
+
+-----------------------------------------------------
+3.4 Which file does what (only the important ones)
+-----------------------------------------------------
+  main.py              -> starting point. Creates the app,
+                          turns on CORS, adds all routes,
+                          /health check.
+  core/config.py       -> settings (DB link, secrets) from .env.
+  core/database.py     -> connects to the database.
+  core/security.py     -> password hashing + login tokens.
+  api/deps.py          -> helpers: "get DB", "get logged-in user",
+                          "must be admin".
+
+  ROUTERS (the URL endpoints):
+    auth.py           -> signup, login, guest, logout, change password
+    opportunities.py  -> list, search, filter, one opportunity
+    saved.py          -> save / unsave / list saved
+    deadlines.py      -> closing today / this week / later
+    dashboard.py      -> stats + recommended list
+    profile.py        -> read / update preferences
+    admin.py          -> approve / reject / edit, review queue
+
+  SERVICES (the logic):
+    auth_service.py        -> signup/login logic
+    matching.py            -> calculates "% match"
+    deadline_service.py    -> groups by deadline
+    opportunity_service.py -> list/search logic
+
+  models/              -> DB tables: User, Opportunity,
+                          Organization, Source, Saved items...
+  ingestion/           -> the DISCOVERY robot (see 3.6)
+  seed/                -> starting sample data for the DB
+  run_discovery.py     -> runs the discovery robot
+  tests/               -> automatic tests
+
+-----------------------------------------------------
+3.5 How login works (backend side)
+-----------------------------------------------------
+  SIGNUP
+   1. Password is hashed with Argon2
+      (turned into scrambled text, can't be reversed).
+   2. Only the hash is saved. Real password is never saved.
+
+  LOGIN
+   1. Hash the typed password, compare with saved hash.
+   2. Match -> make a random token (the "ticket").
+   3. Save only a SHA-256 hash of the token in DB.
+      (So even if DB leaks, tokens can't be used.)
+   4. Send token to frontend -> stored in cookie.
+
+  LOGOUT
+   Token is deleted from DB -> ticket is dead instantly.
+
+  Why not JWT? Our tokens are stored in DB, so we can
+  cancel them anytime (logout, password change).
+  JWT can't be cancelled easily.
+
+-----------------------------------------------------
+3.6 DISCOVERY - how new opportunities come in
+-----------------------------------------------------
+  Every 6 hours, GitHub Actions runs a robot:
+
+   1. FETCH      -> read official sites/feeds
+                    (Devpost, MLH, Unstop, Microsoft Learn,
+                     GitHub Student Pack, etc.)
+   2. EXTRACT    -> pull out title, deadline, cost, link
+   3. DEDUPLICATE-> skip if we already have it
+   4. CLASSIFY   -> decide category (hackathon? internship?)
+   5. VERIFY     -> mark as "Needs verification"
+   6. SAVE       -> into database
+   7. ADMIN      -> admin approves or rejects
+
+  Also closes items whose deadline has passed.
+  Files: ingestion/pipeline.py (main flow),
+         ingestion/adapters/ (one file per website).
+
+  Note: "ai/stub_client.py" uses simple keyword rules,
+  NOT a real AI. (Example: word "hackathon" -> hackathon.)
+
+-----------------------------------------------------
+3.7 How "% match" works (matching.py)
+-----------------------------------------------------
+  Simple points system, max 100:
+    + 30  if category is one you like
+    + 25  if your interests match
+    + 20  if your skills match
+    + 10  for location / eligibility
+    + 10  if deadline is still open
+    +  5  if it's free
+  It also gives reasons ("Matches your Python skill").
+  Not AI, just fixed rules.
+
+
+=====================================================
+   PART 4: HOW EVERYTHING CONNECTS (draw this!)
+=====================================================
+
+  Student opens /opportunities
+     |
+  Frontend (Next.js) page runs on server
+     |  calls lib/api.ts  ->  GET /api/v1/opportunities
+     |  (with login token in header)
+     v
+  Backend (FastAPI) router -> service -> database
+     |
+     v  sends back JSON list
+  Frontend makes cards -> shows the page to student
+
+
+=====================================================
+   PART 5: QUICK VIVA Q&A
+=====================================================
+
+Q: What is your project?
+A: A website that collects student opportunities from many
+   sites into one place, with filters, deadlines, saving
+   and a personal match score.
+
+Q: Tech stack?
+A: Frontend: Next.js, React, TypeScript, Tailwind (on Vercel).
+   Backend: Python FastAPI, SQLAlchemy, Pydantic (on Render).
+   Database: PostgreSQL (on Neon).
+   Automation: GitHub Actions every 6 hours.
+
+Q: Frontend vs Backend?
+A: Frontend = what you see. Backend = logic + data behind it.
+
+Q: Why Next.js over plain React?
+A: Gives page routing, server rendering (faster + SEO),
+   and server actions out of the box.
+
+Q: Why FastAPI?
+A: Fast, simple, auto checks data with Pydantic, and makes
+   API docs automatically at /docs.
+
+Q: What is an ORM (SQLAlchemy)?
+A: Lets us use Python classes instead of SQL queries.
+   One class = one table. One object = one row.
+
+Q: What is Pydantic?
+A: Checks data is the right type/format before using it.
+
+Q: What is CORS?
+A: Browser safety rule. Backend only allows our own website's
+   domain to call it.
+
+Q: How are passwords stored?
+A: Hashed with Argon2. Never stored as plain text.
+
+Q: How do you keep users logged in?
+A: Random token stored in an httpOnly cookie (30 days).
+   DB stores only its hash. Logout deletes it.
+
+Q: How are private pages protected?
+A: proxy.ts checks the cookie exists, then the private
+   layout asks the backend if the token is valid.
+   Backend also checks the token on every request.
+
+Q: Server vs client component?
+A: Server = gets data, no clicks. Client ("use client") =
+   runs in browser, handles clicks.
+
+Q: How do new opportunities get added?
+A: A discovery robot runs every 6 hours on GitHub Actions,
+   reads official sites, cleans data, removes duplicates,
+   saves them as "needs verification" for admin review.
+
+Q: How is match % calculated?
+A: Fixed rule-based points from the student's profile.
+
+Q: Is it using AI?
+A: No real AI now. Uses keyword rules. The code is built so a
+   real AI can be plugged in later (ai/base.py).
+
+Q: Why does the frontend have /api/health?
+A: Free Render server sleeps after 15 minutes. A scheduled job
+   pings it to keep the backend awake.
+
+Q: What is REST / JSON?
+A: REST = URLs + GET/POST/PUT/DELETE. JSON = data format.
+
+Q: How do you test?
+A: pytest for backend tests. ESLint checks frontend code.
+   GitHub Actions runs checks (ci.yml) on every push.
+
+=====================================================
+  TIP: Learn PART 1 (restaurant), PART 3.3 (layers),
+  PART 3.5 (login) and PART 3.6 (discovery). These 4
+  answer most viva questions.
+=====================================================

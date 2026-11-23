@@ -1,0 +1,369 @@
+=====================================================================
+  ZENKAI - FRONTEND (WEBSITE) VIVA NOTES
+  Folder: frontend/
+=====================================================================
+
+---------------------------------------------------------------------
+1. WHAT THE WEBSITE DOES (say this first in viva)
+---------------------------------------------------------------------
+Zenkai is a website for students. It shows opportunities in one place:
+internships, hackathons, certifications, scholarships, programs and
+student tech benefits.
+
+A student can:
+  - browse and search opportunities, and filter them
+  - open one opportunity to see full details and the official link
+  - sign up / log in / continue as a guest
+  - save opportunities (bookmark)
+  - see deadlines that are closing soon
+  - fill a profile (skills, interests), so the site shows a "% match"
+  - admins can approve / reject new opportunities
+
+The website does NOT talk to the database directly.
+    Browser  ->  Next.js website (Vercel)  ->  FastAPI backend (Render)  ->  PostgreSQL DB
+The website only asks the backend for data and shows it.
+
+---------------------------------------------------------------------
+2. THE TECH STACK - WHAT EACH THING IS, IN ONE LINE
+---------------------------------------------------------------------
+HTML        - the structure of a page (headings, buttons, text).
+CSS         - the look of a page (colours, spacing, fonts).
+JavaScript  - makes the page do things (clicks, fetching data).
+
+TypeScript  - JavaScript + "types". You say "this variable is a number"
+              and mistakes are caught before running the code.
+              Files end in .ts / .tsx.
+
+React (v19) - a library to build the UI from small reusable pieces
+              called COMPONENTS (e.g. a Button, a Card).
+              You write them in JSX = HTML-like code inside JavaScript.
+
+Next.js (v16) - a framework built on top of React. React only builds
+              the UI; Next.js adds: page routing (URLs), running code on
+              the server, login cookies, caching, and building/deploying.
+
+Tailwind CSS (v4) - a way of styling by writing small class names
+              directly in the HTML, like  className="rounded-lg p-4 text-sm"
+              instead of writing a separate CSS file for everything.
+
+ESLint      - a tool that checks code for mistakes and bad style.
+Node.js/npm - Node runs JavaScript outside the browser. npm installs the
+              libraries listed in package.json.
+Vercel      - the hosting company where the website is deployed.
+
+---------------------------------------------------------------------
+3. THE 6 CORE IDEAS YOU MUST KNOW
+---------------------------------------------------------------------
+
+(1) COMPONENT
+    A function that returns UI. Reusable like a LEGO block.
+      function SaveButton() { return <button>Save</button>; }
+    PROPS = inputs you pass to a component, like function arguments.
+      <SaveButton saved={true} />
+    STATE = data inside a component that can change (useState).
+      When state changes, React re-draws that part of the screen.
+
+(2) FILE-BASED ROUTING (Next.js "App Router")
+    The folder structure inside src/app/ becomes the website URLs.
+      src/app/page.tsx                       ->  "/"  (home page)
+      src/app/(auth)/login/page.tsx          ->  "/login"
+      src/app/(app)/opportunities/page.tsx   ->  "/opportunities"
+      src/app/(app)/opportunities/[slug]/... ->  "/opportunities/aws-cert"
+    - page.tsx    = the actual page
+    - layout.tsx  = common wrapper around pages (header, sidebar)
+    - loading.tsx = skeleton shown while page data is loading
+    - error.tsx   = shown when something crashes
+    - not-found.tsx = 404 page
+    - [slug]      = DYNAMIC route; the part in brackets can be any value.
+    - (app), (auth), (private) = ROUTE GROUPS. Brackets mean they do NOT
+      appear in the URL. They are only used to group pages so they can
+      share one layout.
+
+(3) SERVER COMPONENTS vs CLIENT COMPONENTS  (very common viva question)
+    Server component (the default):
+      - runs on the server, sends ready HTML to the browser
+      - can fetch data and read cookies / secret keys safely
+      - cannot use clicks or useState
+      - Example: the opportunities page fetches the list on the server.
+    Client component (file starts with "use client"):
+      - runs in the browser
+      - needed for interaction: clicks, typing, dropdowns, useState
+      - Example: SaveButton, ThemeToggle, SortSelect, AuthForm.
+    Why mix them? Server = fast first load + secrets stay safe.
+                  Client = only for the interactive bits.
+
+(4) SERVER ACTIONS ("use server")
+    Functions that run on the server but can be called straight from a
+    form or a button in the browser. No need to write a separate API.
+    In this project ALL changes (login, signup, save, update profile,
+    approve/reject) go through  src/lib/actions.ts.
+    After a change, revalidatePath("/saved") tells Next.js
+    "this page's data is old, rebuild it" so the user sees fresh data.
+
+(5) LOGIN / SESSION USING A COOKIE
+    - User logs in -> backend returns a TOKEN (like a ticket).
+    - Website stores the token in a COOKIE named "zenkai_session".
+    - Cookie is httpOnly = browser JavaScript CANNOT read it.
+      This protects against XSS (hacker script stealing the token).
+    - sameSite="lax" = helps block CSRF (other sites faking requests).
+    - secure = only sent over HTTPS in production.
+    - Every request to the backend sends the token as a header:
+          Authorization: Bearer <token>
+    - Cookie lasts 30 days.
+
+(6) DATA FETCHING + CACHING
+    - The website calls the backend with fetch() from the server.
+    - Personal data (saved, match %) is NOT cached, so one user never
+      sees another user's data.
+    - Public data (categories, filter counts) is cached for 120 seconds
+      to make pages faster.
+
+---------------------------------------------------------------------
+4. WHICH FILE IS USED FOR WHICH FEATURE  (the important map)
+---------------------------------------------------------------------
+
+--- Config files (frontend/) ---
+package.json        - list of libraries + commands (npm run dev / build).
+tsconfig.json       - TypeScript settings. "@/..." means "src/...".
+next.config.ts      - Next.js settings.
+postcss.config.mjs  - plugs Tailwind into the CSS build.
+eslint.config.mjs   - code-checking rules.
+.env.local          - secret settings: backend URL + admin token.
+                      (NOT pushed to GitHub.)
+
+--- src/lib/  = the BRAIN (logic, no UI) ---
+api.ts          - talks to the backend. Every backend call is here
+                  (login, opportunities list, saved, profile, admin).
+                  Adds the login token to each request. Handles errors.
+actions.ts      - server actions: login, signup, guest, logout,
+                  save/unsave, update profile, change password,
+                  admin approve/reject/edit.
+session.ts      - read / set / delete the login cookie.
+require-user.ts - "who is logged in?" Asks backend to check the token.
+                  requireUser() kicks you to /login if not logged in.
+types.ts        - TypeScript shapes of the data (what an Opportunity,
+                  Profile etc. looks like). Copies the backend's shapes.
+format.ts       - turns raw data into nice text: "3 days left",
+                  "Free for students", dates, labels.
+brand.ts        - app name, tagline, URL in one place.
+
+--- src/proxy.ts  = the GATEKEEPER (middleware) ---
+Runs before every page loads. If you open a private page
+(/dashboard, /saved, /deadlines, /profile, /admin) WITHOUT a login
+cookie, it redirects you to /login?next=/saved, so after login you
+go back to where you wanted.
+It only checks "does a cookie exist". The real check is in
+(private)/layout.tsx, which asks the backend if the token is valid.
+
+--- src/app/  = the PAGES ---
+layout.tsx            - root wrapper for EVERY page: fonts, page title
+                        and SEO info, dark/light theme script.
+globals.css           - colours for light + dark mode, Tailwind setup.
+page.tsx              - the landing / home page (marketing page).
+error.tsx             - "Something went wrong" + Try again button.
+not-found.tsx         - 404 page.
+
+(auth)/login, (auth)/signup   - login and signup pages.
+(auth)/layout.tsx             - simple centred design, no sidebar.
+
+(app)/layout.tsx              - main app shell: top bar + sidebar.
+(app)/opportunities/page.tsx  - BROWSE page: search, filters, sort,
+                                pagination. Filters are kept in the URL
+                                (?category=internships&sort=deadline)
+                                so you can share the link.
+(app)/opportunities/[slug]/page.tsx - DETAIL page of one opportunity:
+                                description, eligibility, deadline,
+                                "% match" reasons, official link, Save.
+
+(app)/(private)/layout.tsx    - LOGIN GUARD for all pages below.
+(private)/dashboard   - home after login: stats, recommended, new
+                        today, closing soon.
+(private)/saved       - your bookmarked opportunities.
+(private)/deadlines   - grouped: today / this week / upcoming.
+(private)/profile     - edit preferences (skills, interests, degree)
+                        + change password.
+(private)/admin       - admin review queue: approve / reject / edit.
+
+api/health/route.ts   - a small API endpoint /api/health. A GitHub
+                        Action calls it regularly to wake up the backend
+                        (free Render server sleeps after 15 minutes).
+
+--- src/components/  = reusable UI pieces ---
+opportunity/  - OpportunityCard (one card), OpportunityGrid (list of
+                cards), SaveButton, badges (Free / 3 days left etc.)
+filters/      - FilterPanel (side filters), SortSelect, Pagination,
+                ActiveFilters (chips showing active filters).
+layout/       - Topbar, Sidebar, UserMenu, ThemeToggle, Logo.
+auth/         - AuthForm (login/signup form), GuestButton.
+search/       - GlobalSearch box.
+profile/      - ProfileForm, AccountPanel.
+admin/        - ReviewCard, ReviewActions (approve/reject buttons).
+ui/           - basic blocks: Button, Badge, Icons, loading skeletons.
+intro/        - the animated intro on first visit.
+
+---------------------------------------------------------------------
+5. HOW 3 MAIN FEATURES WORK STEP BY STEP
+---------------------------------------------------------------------
+
+A) LOGIN
+  1. User types email + password in AuthForm (client component).
+  2. Form calls loginAction() in actions.ts (server action).
+  3. loginAction calls api.auth.login() -> backend checks password.
+  4. Backend returns a token. setSessionCookie() saves it as an
+     httpOnly cookie.
+  5. redirect() sends the user to /dashboard (or the "next" page).
+  Security: safeNext() only allows redirects inside our own site,
+  so nobody can craft a link that sends users to a fake site
+  (this attack is called an "open redirect").
+
+B) SAVING AN OPPORTUNITY (bookmark)
+  1. User clicks SaveButton (client component).
+  2. useOptimistic flips the icon to "Saved" IMMEDIATELY, before the
+     server replies -> feels instant. This is "optimistic UI".
+  3. toggleSaveAction() runs on the server -> calls backend.
+  4. revalidatePath() refreshes saved/dashboard/deadlines pages.
+  5. If it fails, an error message is shown.
+
+C) BROWSING WITH FILTERS
+  1. User picks a filter or sort (client component).
+  2. It changes the URL, e.g. /opportunities?category=hackathons
+  3. The page (server component) reads the URL, calls
+     api.opportunities() with those filters.
+  4. While waiting, <Suspense> shows a skeleton loader.
+  5. Results come back and cards are shown, 24 per page.
+
+---------------------------------------------------------------------
+6. REACT HOOKS USED IN THIS PROJECT (simple meaning)
+---------------------------------------------------------------------
+useState        - store a value that can change (e.g. error message).
+useEffect       - run code after the page shows (e.g. on load).
+useTransition   - run a slow update without freezing the screen;
+                  gives "isPending" to show loading.
+useOptimistic   - show the expected result instantly before server
+                  confirms (Save button).
+useActionState  - connect a form to a server action and get its result
+                  (login/signup form errors).
+useFormStatus   - know if a form is currently submitting.
+useRouter       - change page from code (router.push).
+useSearchParams - read the ?query=part of the URL.
+usePathname     - read the current URL path.
+
+---------------------------------------------------------------------
+7. OTHER THINGS THEY MAY ASK
+---------------------------------------------------------------------
+Dark mode   - colours are CSS variables in globals.css. Light and dark
+              have different values. ThemeToggle sets data-theme="dark"
+              on the page and remembers it in localStorage. A tiny
+              script in layout.tsx applies it BEFORE the page shows, so
+              the screen doesn't flash white.
+SEO         - "metadata" in layout.tsx and pages sets the page title,
+              description and link-preview info (Open Graph).
+Responsive  - Tailwind prefixes like sm: md: lg: change layout on bigger
+              screens. Filter sidebar only shows on large screens.
+Env vars    - NEXT_PUBLIC_API_URL = backend address.
+              ZENKAI_ADMIN_TOKEN = secret, only used on the server.
+              Rule: only vars starting with NEXT_PUBLIC_ can reach the
+              browser.
+Deployment  - pushed to GitHub -> Vercel builds it automatically
+              (npm run build) with Root Directory = "frontend".
+Accessibility - "Skip to content" link, aria-labels on icon buttons.
+
+---------------------------------------------------------------------
+8. LIKELY VIVA QUESTIONS + SHORT ANSWERS
+---------------------------------------------------------------------
+Q: Why Next.js and not plain React?
+A: React only builds UI. Next.js gives routing, server-side rendering
+   (faster first load, better SEO), server actions, cookies and easy
+   deployment on Vercel.
+
+Q: What is SSR (server-side rendering)?
+A: The server builds the HTML page with data already filled in and
+   sends it. The user sees content quickly; Google can read it too.
+   Opposite: CSR (client-side rendering) where the browser builds it.
+
+Q: Server component vs client component?
+A: Server runs on the server, can fetch data and use secrets, no
+   clicks. Client has "use client", runs in the browser, handles clicks
+   and state. We use server by default and client only when needed.
+
+Q: What is a component / props / state?
+A: Component = reusable UI function. Props = inputs from parent.
+   State = changing data inside a component; change -> re-render.
+
+Q: What is JSX?
+A: HTML-like syntax written inside JavaScript. It becomes React code.
+
+Q: Why TypeScript?
+A: Catches mistakes before running (wrong type, missing field) and
+   gives autocomplete. types.ts matches the backend data shape.
+
+Q: Why Tailwind?
+A: Fast styling with small classes, no huge CSS files, consistent
+   design, easy dark mode and responsive design.
+
+Q: How is login handled? Where is the token stored?
+A: Token from backend stored in an httpOnly cookie. JavaScript can't
+   read it, so XSS can't steal it. Sent to backend as a Bearer token.
+
+Q: How do you protect private pages?
+A: Two layers. proxy.ts (middleware) redirects if there is no cookie.
+   (private)/layout.tsx asks the backend whether the token is really
+   valid, and redirects to /login if not.
+
+Q: What is middleware?
+A: Code that runs before a request reaches a page. Here: proxy.ts.
+
+Q: What is a server action?
+A: A server function you can call directly from a form/button.
+   All our data changes are in lib/actions.ts.
+
+Q: What is revalidatePath?
+A: Tells Next.js the cached page is old, so it fetches fresh data
+   next time.
+
+Q: What is a dynamic route?
+A: A route with [brackets], like opportunities/[slug]. One file
+   handles every opportunity's detail page.
+
+Q: What is a route group?
+A: A folder name in (brackets). Groups pages to share a layout but
+   doesn't appear in the URL.
+
+Q: What is Suspense / loading.tsx?
+A: Shows a loading skeleton while data is being fetched, then swaps
+   in the real content (streaming).
+
+Q: What is optimistic UI?
+A: Showing the result immediately before the server confirms
+   (Save button), then fixing it if the server fails.
+
+Q: Why put filters in the URL?
+A: The view can be shared/bookmarked, and the back button works.
+
+Q: How does the frontend talk to the backend?
+A: Using fetch() over HTTPS to the FastAPI REST API, all inside
+   lib/api.ts. Data comes back as JSON.
+
+Q: What is REST API / JSON?
+A: REST = backend URLs for data, using GET (read), POST (create),
+   PUT (update), DELETE (remove). JSON = text format for data
+   like {"title": "AWS Cert", "free": true}.
+
+Q: What is CORS?
+A: A browser rule: a site can call another domain's API only if that
+   API allows it. The backend allows our Vercel domain.
+
+Q: Why the /api/health route?
+A: Free backend server sleeps after 15 min; a scheduled GitHub Action
+   pings this route to keep it awake so users don't wait 30-60 sec.
+
+Q: How is "% match" calculated?
+A: The BACKEND calculates it from the user's profile (category,
+   interests, skills, location, deadline) using fixed rules. The
+   frontend only displays the score and reasons.
+
+Q: What is npm run dev / build / start?
+A: dev = run locally with live reload (localhost:3000).
+   build = make the optimized production version.
+   start = run that production version.
+=====================================================================
